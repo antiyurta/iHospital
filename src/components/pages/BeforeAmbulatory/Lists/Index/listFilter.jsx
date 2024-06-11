@@ -27,13 +27,8 @@ const ListFilter = ({ meta, appointmentsLength, getList, otherParams, children }
       }
    };
 
-   // useEffect(() => {
-   //    console.log('end1');
-   //    get(1, currentLimit, today, today);
-   // }, []);
-
    useEffect(() => {
-      otherParams && get(currentPage, currentLimit, start, end);
+      get(currentPage, currentLimit, start, end);
    }, [otherParams]);
 
    return (
