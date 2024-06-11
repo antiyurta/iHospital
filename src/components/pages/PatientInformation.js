@@ -14,16 +14,12 @@ import {
 // common
 import { getAge } from '@Comman/common';
 import { getGender } from '@Utils/config/xypField';
-//apiF
-import CountryApi from '@ApiServices/reference/country';
+//api
 import localFileApi from '@ApiServices/file/local-file/local-file.api';
 //extends
 const { Search } = Input;
 
 function PatientInformation({ handlesearch = true, patient, handleTypeChange, OCS, type }) {
-   const [citizens, setCitizens] = useState([]);
-   const [provices, setProvices] = useState([]);
-   const [towns, setTowns] = useState([]);
    const [isLoadingImage, setIsLoadingImage] = useState(false);
    const [imageUrl, setImageUrl] = useState('');
    //
@@ -34,76 +30,6 @@ function PatientInformation({ handlesearch = true, patient, handleTypeChange, OC
       handleTypeChange(value);
    };
 
-   const getAddress = (countryId, aimagId, soumId, committee, building, address) => {
-      var message = '';
-      if (countryId != undefined) {
-         const country = citizens.filter((citizen) => citizen.id === countryId);
-         if (country.length > 0) {
-            message += country[0].name + ' ';
-         } else {
-            message += '';
-         }
-      }
-      if (aimagId != undefined) {
-         const aimag = provices.filter((provice) => provice.id === aimagId);
-         if (aimag.length > 0) {
-            message += aimag[0].name + ' ';
-         } else {
-            message += '';
-         }
-      }
-      if (soumId != undefined) {
-         const soum = towns.filter((town) => town.id === soumId);
-         if (soum.length > 0) {
-            message += soum[0].name + ' ';
-         } else {
-            message += '';
-         }
-      }
-      if (message && committee != null && building != null && address != null) {
-         return <p>{message + committee + ' ' + building + ' ' + address}</p>;
-      }
-      return;
-   };
-   const getCitizens = async () => {
-      await CountryApi.getByPageFilter({
-         params: {
-            type: 1
-         }
-      })
-         .then((response) => {
-            setCitizens(response.data.response?.data);
-         })
-         .catch((error) => {
-            console.log(error);
-         });
-   };
-   const getProvices = async () => {
-      await CountryApi.getByPageFilter({
-         params: {
-            type: 2
-         }
-      })
-         .then((response) => {
-            setProvices(response.data.response?.data);
-         })
-         .catch((error) => {
-            console.log(error);
-         });
-   };
-   const getTowns = async () => {
-      await CountryApi.getByPageFilter({
-         params: {
-            type: 3
-         }
-      })
-         .then((response) => {
-            setTowns(response.data.response?.data);
-         })
-         .catch((error) => {
-            console.log(error);
-         });
-   };
    const getPatientImage = async () => {
       setIsLoadingImage(true);
       await localFileApi
@@ -133,11 +59,6 @@ function PatientInformation({ handlesearch = true, patient, handleTypeChange, OC
       return womanSymbol;
    }, [patient]);
 
-   useEffect(() => {
-      getCitizens();
-      getProvices();
-      getTowns();
-   }, []);
    useEffect(() => {
       patient.imageId && getPatientImage();
       !patient.imageId && setImageUrl(ImageIcon);
@@ -176,7 +97,7 @@ function PatientInformation({ handlesearch = true, patient, handleTypeChange, OC
                         src={genderSymbolIcon}
                         alt="symbol"
                      />
-                     <p>{`${getGender(patient?.gender || null)} | ${getAge(patient?.registerNumber || null)}`}</p>
+                     <p>{`${getGender(patient?.gender) || ''} | ${getAge(patient?.registerNumber) || ''}`}</p>
                   </div>
                   <div className="flex flex-row gap-3">
                      <img
@@ -199,14 +120,9 @@ function PatientInformation({ handlesearch = true, patient, handleTypeChange, OC
                </div>
                <div className="flex flex-row gap-3">
                   <img src={mapSymbol} alt="mapSymbol" />
-                  {getAddress(
-                     patient?.countryId,
-                     patient?.aimagId,
-                     patient?.soumId,
-                     patient?.committee,
-                     patient?.building,
-                     patient?.address
-                  )}
+                  <p>{patient?.aimagCityName}</p>
+                  <p>{patient?.soumDistrictName}</p>
+                  <p>{patient?.bagKhorooName}</p>
                </div>
                {OCS ? (
                   <Radio.Group

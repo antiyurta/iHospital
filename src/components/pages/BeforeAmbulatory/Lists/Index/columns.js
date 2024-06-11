@@ -66,8 +66,8 @@ const getTypeInfo = (type, begin, end) => {
    } else if (type === 2) {
       return <TypeInfo bgColor="#eab308" textColor="black" text={'Шууд'} />;
    } else if (type === 3) {
-      const beginTime = begin.substring(0, 5);
-      const endTime = end.substring(0, 5);
+      const beginTime = begin?.substring(0, 5) || null;
+      const endTime = end?.substring(0, 5) || null;
       if (beginTime && endTime) {
          return <TypeInfo bgColor="#5cb85c" textColor="white" text={beginTime + '-' + endTime} />;
       }
