@@ -9,8 +9,8 @@ import {
    selectCurrentAddHics,
    selectCurrentEmrData,
    selectCurrentHicsSeal,
-   setAddHics,
-   setEmrData,
+   // setAddHics,
+   // setEmrData,
    setHicsSeal
 } from '@Features/emrReducer';
 import { selectPatient } from '@Features/patientReducer';
@@ -32,7 +32,7 @@ const EmrTimer = ({ startDate, endDate, inspection }) => {
    const dispatch = useDispatch();
    const location = useLocation();
    const [form] = Form.useForm();
-   const [swapFormHics] = Form.useForm();
+   // const [swapFormHics] = Form.useForm();
    const [isDisable, setDisable] = useState(true);
    ///
    const hicsSeal = useSelector(selectCurrentHicsSeal);
@@ -44,8 +44,8 @@ const EmrTimer = ({ startDate, endDate, inspection }) => {
    const isInsurance = useSelector(selectCurrentInsurance);
    const [isOpenModal, setIsOpenModal] = useState(false);
    // tuslamj uilcihge solih
-   const [isOpenModalSwap, setOpenModalSwap] = useState(false);
-   const [hicsSupports, setHicsSupports] = useState([]);
+   // const [isOpenModalSwap, setOpenModalSwap] = useState(false);
+   // const [hicsSupports, setHicsSupports] = useState([]);
 
    // uzlegin temdeglel tatah
    const getInspectionNote = async () => {
@@ -184,54 +184,54 @@ const EmrTimer = ({ startDate, endDate, inspection }) => {
          });
    };
 
-   const getHicsService = async () => {
-      await healtInsurance.getHicsService().then(({ data: { code, description, result } }) => {
-         if (code === 200) {
-            const currentGroupId = hicsSeal.hicsServiceId.toString().substring(0, 3);
-            if (currentGroupId) {
-               setHicsSupports(
-                  result.filter(
-                     (hicsService) =>
-                        [Number(currentGroupId)].includes(hicsService.groupId) &&
-                        hicsService.id != hicsSeal.hicsServiceId
-                  )
-               );
-               setOpenModalSwap(true);
-            }
-         } else {
-            openNofi('error', 'Амжилттгүй', description);
-         }
-      });
-   };
+   // const getHicsService = async () => {
+   //    await healtInsurance.getHicsService().then(({ data: { code, description, result } }) => {
+   //       if (code === 200) {
+   //          const currentGroupId = (hicsSeal.hicsServiceId || '')?.toString().substring(0, 3);
+   //          if (currentGroupId) {
+   //             setHicsSupports(
+   //                result.filter(
+   //                   (hicsService) =>
+   //                      [Number(currentGroupId)].includes(hicsService.groupId) &&
+   //                      hicsService.id != hicsSeal.hicsServiceId
+   //                )
+   //             );
+   //             setOpenModalSwap(true);
+   //          }
+   //       } else {
+   //          openNofi('error', 'Амжилттгүй', description);
+   //       }
+   //    });
+   // };
 
-   const createAddHics = async (startCode) => {
-      return await insuranceApi
-         .createAddHics({
-            checkupId: 1,
-            departName: hicsSeal.department.name,
-            departNo: hicsSeal.departNo,
-            hicsSealId: hicsSeal.id,
-            startDate: new Date(),
-            startCode: startCode
-         })
-         .then(({ data: { response } }) => response);
-   };
+   // const createAddHics = async (startCode) => {
+   //    return await insuranceApi
+   //       .createAddHics({
+   //          checkupId: 1,
+   //          departName: hicsSeal.department.name,
+   //          departNo: hicsSeal.departNo,
+   //          hicsSealId: hicsSeal.id,
+   //          startDate: new Date(),
+   //          startCode: startCode
+   //       })
+   //       .then(({ data: { response } }) => response);
+   // };
 
-   const deleteAddHics = async () => {
-      addHics.id &&
-         (await insuranceApi.deleteAddHics(addHics.id).then(() => {
-            dispatch(setAddHics(null));
-         }));
-   };
+   // const deleteAddHics = async () => {
+   //    addHics.id &&
+   //       (await insuranceApi.deleteAddHics(addHics.id).then(() => {
+   //          dispatch(setAddHics(null));
+   //       }));
+   // };
 
-   const updateHicsSeal = async (startCode, hicsServiceId) => {
-      await insuranceApi.requestHicsSeal(hicsSeal.id, {
-         hicsServiceId: hicsServiceId,
-         startAt: new Date(),
-         hicsStartCode: startCode,
-         diagnosis: null
-      });
-   };
+   // const updateHicsSeal = async (startCode, hicsServiceId) => {
+   //    await insuranceApi.requestHicsSeal(hicsSeal.id, {
+   //       hicsServiceId: hicsServiceId,
+   //       startAt: new Date(),
+   //       hicsStartCode: startCode,
+   //       diagnosis: null
+   //    });
+   // };
 
    const patchAppointment = async (data) => {
       try {
@@ -247,56 +247,57 @@ const EmrTimer = ({ startDate, endDate, inspection }) => {
       }
    };
 
-   const updateHics = async (result, hicsServiceId) => {
-      try {
-         let newAddHicsId = null;
-         if (hicsServiceId === 20120) {
-            const addHicsResponse = await createAddHics(result.code);
-            await patchAppointment({
-               addHicsId: addHicsResponse.id
-            }).then(() => {
-               newAddHicsId = addHicsResponse.id;
-            });
-         } else {
-            const oldHicsServiceId = hicsSeal.hicsServiceId;
-            if (oldHicsServiceId === 20120) {
-               await patchAppointment({
-                  addHicsId: null
-               }).then(async (response) => {
-                  if (response.success) {
-                     await deleteAddHics();
-                  }
-               });
-            }
-         }
-         await updateHicsSeal(result.code, hicsServiceId);
-         dispatch(
-            setEmrData({
-               ...incomeEmrData,
-               addHicsId: newAddHicsId,
-               startDate: new Date()
-            })
-         );
-         navigate(0);
-      } catch (error) {
-         message.error(error);
-      }
-   };
-   const swapAmbulatory = async (values) => {
-      await healtInsurance
-         .postStartHics({
-            patientRegno: currentPatient.registerNumber,
-            patientFingerprint: values.fingerprint,
-            hicsServiceId: values?.hicsServiceId
-         })
-         .then(async ({ data }) => {
-            if (data.code === 400) {
-               openNofi('error', 'Амжилтгүй', data.description);
-            } else if (data.code === 200) {
-               updateHics(data.result, values.hicsServiceId);
-            }
-         });
-   };
+   // const updateHics = async (result, hicsServiceId) => {
+   //    try {
+   //       let newAddHicsId = null;
+   //       if (hicsServiceId === 20120) {
+   //          const addHicsResponse = await createAddHics(result.code);
+   //          await patchAppointment({
+   //             addHicsId: addHicsResponse.id
+   //          }).then(() => {
+   //             newAddHicsId = addHicsResponse.id;
+   //          });
+   //       } else {
+   //          const oldHicsServiceId = hicsSeal.hicsServiceId;
+   //          if (oldHicsServiceId === 20120) {
+   //             await patchAppointment({
+   //                addHicsId: null
+   //             }).then(async (response) => {
+   //                if (response.success) {
+   //                   await deleteAddHics();
+   //                }
+   //             });
+   //          }
+   //       }
+   //       await updateHicsSeal(result.code, hicsServiceId);
+   //       dispatch(
+   //          setEmrData({
+   //             ...incomeEmrData,
+   //             addHicsId: newAddHicsId,
+   //             startDate: new Date()
+   //          })
+   //       );
+   //       navigate(0);
+   //    } catch (error) {
+   //       message.error(error);
+   //    }
+   // };
+
+   // const swapAmbulatory = async (values) => {
+   //    await healtInsurance
+   //       .postStartHics({
+   //          patientRegno: currentPatient.registerNumber,
+   //          patientFingerprint: values.fingerprint,
+   //          hicsServiceId: values?.hicsServiceId
+   //       })
+   //       .then(async ({ data }) => {
+   //          if (data.code === 400) {
+   //             openNofi('error', 'Амжилтгүй', data.description);
+   //          } else if (data.code === 200) {
+   //             updateHics(data.result, values.hicsServiceId);
+   //          }
+   //       });
+   // };
 
    return (
       <>
@@ -328,7 +329,7 @@ const EmrTimer = ({ startDate, endDate, inspection }) => {
                >
                   Үзлэг дуусах
                </Button>
-               <Button
+               {/* <Button
                   title="Т.Ү дугаар солих"
                   disabled={hicsSeal?.hicsSealCode ? true : false}
                   className="w-auto px-2"
@@ -336,10 +337,10 @@ const EmrTimer = ({ startDate, endDate, inspection }) => {
                   onClick={() => {
                      getHicsService();
                   }}
-               />
+               /> */}
             </div>
          </div>
-         <Modal
+         {/* <Modal
             title="Тусламж үйлчилгээг солих"
             open={isOpenModalSwap}
             onCancel={() => {
@@ -392,7 +393,7 @@ const EmrTimer = ({ startDate, endDate, inspection }) => {
                   </Form.Item>
                </div>
             </Form>
-         </Modal>
+         </Modal> */}
          <Modal
             title="Үзлэгийн төрөл"
             open={isOpenModal}
@@ -500,3 +501,4 @@ const EmrTimer = ({ startDate, endDate, inspection }) => {
    );
 };
 export default EmrTimer;
+

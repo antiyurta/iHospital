@@ -115,7 +115,12 @@ function Finger(props) {
    }, [isOpenFingerModal]);
    return (
       <>
-         <Button danger={isDanger} type="primary" onClick={() => setIsOpenFingerModal(true)}>
+         <Button
+            className={props?.btnClass || ''}
+            danger={isDanger}
+            type="primary"
+            onClick={() => setIsOpenFingerModal(true)}
+         >
             {text}
          </Button>
          <Modal

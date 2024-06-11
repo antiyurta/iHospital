@@ -27,7 +27,8 @@ import {
    SendEditMedicalLink,
    SentAddHicsService,
    SendDirectService,
-   SendFormData
+   SendFormData,
+   SwitchSupport
 } from './DrawerComps';
 
 //defaults
@@ -38,13 +39,16 @@ import insuranceApi from '@ApiServices/healt-insurance/insurance';
 import healthInsuranceApi from '@ApiServices/healt-insurance/healtInsurance';
 
 import { HEALTH_SERVCES_DESCRIPTION, HEALTH_SERVICES_TITLE as HST } from './enum-utils';
-import { setHicsSeal } from '@Features/emrReducer';
+import { setAddHics, setEmrData, setHicsSeal } from '@Features/emrReducer';
 import { useDispatch } from 'react-redux';
+import appointmentApi from '@ApiServices/appointment/api-appointment-service';
+import { useNavigate } from 'react-router-dom';
 
 // style css
 import './style.css';
 
-const SentService = ({ patient, hicsSeal, parentHicsSeal, inspectionNoteId }) => {
+const SentService = ({ patient, hicsSeal, parentHicsSeal, inspectionNoteId, incomeEmrData, addHics }) => {
+   const navigate = useNavigate();
    const dispatch = useDispatch();
    const [insuranceForm] = Form.useForm();
 
@@ -52,6 +56,8 @@ const SentService = ({ patient, hicsSeal, parentHicsSeal, inspectionNoteId }) =>
    const [isDisabled, setDisabled] = useState(false);
    const [insuranceServiceItems, setInsuranceServiceItems] = useState([]);
    const [chooseService, setChooseService] = useState(HST.saveHics);
+
+   const { appointmentType, appointmentId } = incomeEmrData;
 
    const onClose = () => setOpen(false);
 
@@ -65,6 +71,49 @@ const SentService = ({ patient, hicsSeal, parentHicsSeal, inspectionNoteId }) =>
       const lowerCaseValue = value.toLowerCase();
       const filter = defaultServiceItems().filter((item) => item.title.toLowerCase().includes(lowerCaseValue));
       setInsuranceServiceItems(filter);
+   };
+
+   const createAddHics = async (startCode) => {
+      return await insuranceApi
+         .createAddHics({
+            checkupId: 1,
+            departName: hicsSeal.department.name,
+            departNo: hicsSeal.departNo,
+            hicsSealId: hicsSeal.id,
+            startDate: new Date(),
+            startCode: startCode
+         })
+         .then(({ data: { response } }) => response);
+   };
+
+   const patchAppointment = async (data) => {
+      try {
+         const apiMap = {
+            0: appointmentApi.patchAppointment,
+            1: appointmentApi.patchPreOrder
+         };
+         const selectedApi = apiMap[appointmentType];
+         if (!selectedApi) throw new Error('Unknown service type');
+         return await selectedApi(appointmentId, data).then(({ data }) => data);
+      } catch (error) {
+         message.error(error);
+      }
+   };
+
+   const deleteAddHics = async () => {
+      addHics.id &&
+         (await insuranceApi.deleteAddHics(addHics.id).then(() => {
+            dispatch(setAddHics(null));
+         }));
+   };
+
+   const updateHicsSeal = async (startCode, hicsServiceId) => {
+      await insuranceApi.requestHicsSeal(hicsSeal.id, {
+         hicsServiceId: hicsServiceId,
+         startAt: new Date(),
+         hicsStartCode: startCode,
+         diagnosis: null
+      });
    };
 
    const sentService = async (values) => {
@@ -132,6 +181,41 @@ const SentService = ({ patient, hicsSeal, parentHicsSeal, inspectionNoteId }) =>
          };
          const apiMap = {
             [HST.savePrescription]: healthInsuranceApi.savePrescription,
+            [HST.switchSupport]: async ({ hicsServiceId, fingerprint }) => {
+               try {
+                  let newAddHicsId = null;
+                  if (hicsServiceId === 20120) {
+                     const addHicsResponse = await createAddHics(fingerprint);
+                     await patchAppointment({
+                        addHicsId: addHicsResponse.id
+                     }).then(() => {
+                        newAddHicsId = addHicsResponse.id;
+                     });
+                  } else {
+                     const oldHicsServiceId = hicsSeal.hicsServiceId;
+                     if (oldHicsServiceId === 20120) {
+                        await patchAppointment({
+                           addHicsId: null
+                        }).then(async (response) => {
+                           if (response.success) {
+                              await deleteAddHics();
+                           }
+                        });
+                     }
+                  }
+                  await updateHicsSeal(fingerprint, hicsServiceId);
+                  dispatch(
+                     setEmrData({
+                        ...incomeEmrData,
+                        addHicsId: newAddHicsId,
+                        startDate: new Date()
+                     })
+                  );
+                  navigate(0);
+               } catch (error) {
+                  message.error(error);
+               }
+            },
             [HST.sendHics]: healthInsuranceApi.sendHicsService,
             [HST.setApproval]: healthInsuranceApi.postApproval,
             [HST.setPatientSheet]: healthInsuranceApi.setPatientSheet,
@@ -236,6 +320,7 @@ const SentService = ({ patient, hicsSeal, parentHicsSeal, inspectionNoteId }) =>
    const getForms = () => {
       const formMap = {
          [HST.savePrescription]: <SendPrescription form={insuranceForm} />,
+         [HST.switchSupport]: <SwitchSupport form={insuranceForm} />,
          [HST.sendHics]: <SendHics form={insuranceForm} />,
          [HST.setApproval]: <SendApproval form={insuranceForm} />,
          [HST.setPatientSheet]: <SendPatientSheet form={insuranceForm} />,
@@ -347,3 +432,4 @@ const SentService = ({ patient, hicsSeal, parentHicsSeal, inspectionNoteId }) =>
 };
 
 export default SentService;
+

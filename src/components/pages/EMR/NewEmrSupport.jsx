@@ -9,13 +9,14 @@ import SentService from './Insurance/sent-service';
 import DocumentIndex from './NewEmrSupport/document/Index';
 //redux
 import { selectPatient } from '@Features/patientReducer';
-import { selectCurrentEmrData, selectCurrentHicsSeal } from '@Features/emrReducer';
+import { selectCurrentAddHics, selectCurrentEmrData, selectCurrentHicsSeal } from '@Features/emrReducer';
 
 const NewEmrSupport = () => {
    const navigate = useNavigate();
    const currentPatient = useSelector(selectPatient);
    const incomeEmrData = useSelector(selectCurrentEmrData);
    const hicsSeal = useSelector(selectCurrentHicsSeal);
+   const addHics = useSelector(selectCurrentAddHics);
    const [isOpenModalHics, setIsOpenModalHics] = useState(false);
    const [isOpenModalRequests, setIsOpenModalRequests] = useState(false);
    return (
@@ -48,6 +49,8 @@ const NewEmrSupport = () => {
                hicsSeal={hicsSeal}
                parentHicsSeal={incomeEmrData.parentHicsSeal}
                inspectionNoteId={incomeEmrData.inspectionNoteId}
+               incomeEmrData={incomeEmrData}
+               addHics={addHics}
             />
          </Modal>
          <Modal
@@ -91,3 +94,4 @@ const NewEmrSupport = () => {
    );
 };
 export default NewEmrSupport;
+
