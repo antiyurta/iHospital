@@ -312,7 +312,6 @@ const InternalOrder = (props) => {
    useEffect(() => {
       // replaceOtsData([], 0);
       if (IncomeOTSData?.services?.length > 0) {
-         console.log('asdasdasd', IncomeOTSData);
          orderForm.setFieldValue('services', IncomeOTSData.services);
       } else {
          orderForm.resetFields();
@@ -417,10 +416,14 @@ const InternalOrder = (props) => {
                               const newServices = services.filter(
                                  (service) => !service.requestId && !service.invoiceId
                               );
-                              if (addHics?.checkupId >= 1) {
-                                 updateHics('addHics', newServices);
+                              if (addHics.id && hicsSeal.id) {
+                                 if (addHics?.checkupId >= 1) {
+                                    updateHics('addHics', newServices);
+                                 } else {
+                                    updateHics('hicsSeal', newServices);
+                                 }
                               } else {
-                                 updateHics('hicsSeal', newServices);
+                                 save(services);
                               }
                               dispatch(delOtsData());
                            }
