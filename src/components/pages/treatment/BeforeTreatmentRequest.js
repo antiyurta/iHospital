@@ -1,49 +1,40 @@
-import {
-   ClockCircleOutlined,
-   EditOutlined,
-   MinusOutlined,
-   PlusOutlined,
-   ReloadOutlined,
-   StarOutlined
-} from '@ant-design/icons';
-import { Button, Card, DatePicker, Empty, message, Popconfirm, Table } from 'antd';
-import mnMN from 'antd/es/calendar/locale/mn_MN';
+import React, { useState } from 'react';
+import { EditOutlined, MinusOutlined, PlusOutlined, StarOutlined } from '@ant-design/icons';
+import { Card, Empty, message, Popconfirm, Table } from 'antd';
 import moment from 'moment';
-import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { selectCurrentToken } from '../../../features/authReducer';
-import { Get, getAge, openNofi, Patch } from '../../common';
-const { RangePicker } = DatePicker;
+import dayjs from 'dayjs';
+//comp
+import { getAge, openNofi } from '../../common';
+import { ListPatientInfo, TypeInfo } from '../../ListInjection';
+import ListFilter from '../BeforeAmbulatory/Lists/Index/listFilter';
+import { getTypeInfo } from '../BeforeAmbulatory/Lists/Index/columns';
+import ScheduleTypeInfo from '../BeforeAmbulatory/Lists/Index/scheduleTypeInfo';
+//api
+import TreatmentRequestApi from '@ApiServices/service/treatment.api';
+
 function BeforeTreatmentRequest() {
-   const today = new Date();
-   const token = useSelector(selectCurrentToken);
    const [spinner, setSpinner] = useState(false);
-   const [start, setStart] = useState('');
-   const [end, setEnd] = useState('');
    const [treatments, setTreatments] = useState([]);
-   const [meta, setMeta] = useState({});
-   const getTreatmentRequest = async (page, pageSize, start, end) => {
+   const [meta, setMeta] = useState({
+      page: 1,
+      limit: 10
+   });
+   const getTreatmentRequest = async (page, limit, start, end) => {
       setSpinner(true);
-      start = moment(start).set({ hour: 0, minute: 0, second: 0 });
-      end = moment(end).set({ hour: 23, minute: 59, second: 59 });
-      const conf = {
-         headers: {},
-         params: {
-            page: page,
-            limit: pageSize,
-            startDate: moment(start).format('YYYY-MM-DD HH:mm'),
-            endDate: moment(end).format('YYYY-MM-DD HH:mm')
-         }
-      };
-      setStart(start);
-      setEnd(end);
-      const response = await Get('service/treatmentRequest', token, conf);
-      console.log(response);
-      if (response.data) {
-         setTreatments(response.data);
-         setMeta(response.meta);
-      }
-      setSpinner(false);
+      await TreatmentRequestApi.getRequest({
+         page: page,
+         limit: limit,
+         startDate: dayjs(start).format('YYYY-MM-DD HH:mm'),
+         endDate: dayjs(end).format('YYYY-MM-DD HH:mm')
+      })
+         .then(({ data: { response } }) => {
+            console.log('res', response);
+            setTreatments(response.data);
+            setMeta(response.meta);
+         })
+         .finally(() => {
+            setSpinner(false);
+         });
    };
    const getUsageTypeInfo = (type) => {
       if (type === 'IN') {
@@ -66,19 +57,6 @@ function BeforeTreatmentRequest() {
          return 'Эмэгтэй';
       }
    };
-   const getTypeInfo = (begin, end) => {
-      if (begin === undefined && end === undefined) {
-         return <p className="bg-[#f0ad4e] text-white">Шууд</p>;
-      } else {
-         return (
-            <div className="bg-[#5cb85c] text-white">
-               <span>{begin}</span>
-               <ClockCircleOutlined className="mx-1.5" />
-               <span>{end}</span>
-            </div>
-         );
-      }
-   };
    const sumDoneCount = async (id, count, isPayment, usageType) => {
       if (usageType === 'OUT' && !isPayment) {
          openNofi('warning', 'ТӨЛБӨР', 'Төлбөр төлөгдөөгүй');
@@ -87,11 +65,11 @@ function BeforeTreatmentRequest() {
             headers: {},
             params: {}
          };
-         const response = await Patch('service/treatmentRequest/' + id, token, conf, {
-            doneCount: count + 1
-         });
+         // const response = await Patch('service/treatmentRequest/' + id, token, conf, {
+         //    doneCount: count + 1
+         // });
          if (response === 200) {
-            getTreatmentRequest(1, 10, start, end);
+            // getTreatmentRequest(1, 10, start, end);
          }
       }
    };
@@ -99,8 +77,13 @@ function BeforeTreatmentRequest() {
       {
          title: 'Төрөл',
          dataIndex: 'usageType',
+         width: 110,
          render: (text) => {
-            return getUsageTypeInfo(text);
+            return text === 'IN' ? (
+               <TypeInfo bgColor="#5cb85c" textColor="black" text={'Хэвтэн'} />
+            ) : (
+               <TypeInfo bgColor="#5cb85c" textColor="white" text={'Амбулатори'} />
+            );
          }
       },
       {
@@ -118,26 +101,16 @@ function BeforeTreatmentRequest() {
          }
       },
       {
-         title: 'Орох цаг',
-         render: (_, row) => {
-            return getTypeInfo(row.treatmentSlots?.startTime?.substr(0, 5), row.treatmentSlots?.endTime?.substr(0, 5));
-         }
+         title: 'Үзлэгийн цаг',
+         dataIndex: 'treatmentSlots',
+         width: 120,
+         render: (slot, row) => getTypeInfo(row.type, slot?.startTime, slot?.endTime)
       },
       {
-         title: 'Картын №',
-         dataIndex: ['patient', 'cardNumber']
-      },
-      {
-         title: 'Овог',
-         dataIndex: ['patient', 'lastName']
-      },
-      {
-         title: 'Нэр',
-         dataIndex: ['patient', 'firstName']
-      },
-      {
-         title: 'Регистр №',
-         dataIndex: ['patient', 'registerNumber']
+         title: 'Өвчтөн',
+         dataIndex: 'patient',
+         width: 170,
+         render: (patient) => <ListPatientInfo patientData={patient} />
       },
       {
          title: 'Нас',
@@ -207,73 +180,35 @@ function BeforeTreatmentRequest() {
          }
       }
    ];
-   useEffect(() => {
-      getTreatmentRequest(1, 10, today, today);
-   }, []);
    return (
       <div className="w-full bg-[#f5f6f7] p-3">
-         <Card title={'Эмийн бус эмчилгээ жагсаалт'} bordered={false} className="header-solid max-h-max rounded-md">
-            <div className="flex flex-wrap">
-               <div className="basis-1/3">
-                  <RangePicker
-                     onChange={(e) => {
-                        if (e != null) {
-                           getTreatmentRequest(1, 10, e[0], e[1]);
-                        }
-                     }}
-                     locale={mnMN}
-                  />
-               </div>
-               <div className="w-full py-2">
-                  <div className="flex float-left">
-                     {/* <div className="p-1 mx-1 text-sm text-white bg-[#dd4b39] rounded-lg dark:bg-blue-200 dark:text-blue-800" role="alert">
-                                        <span className="font-medium mx-1">Яаралтай</span>
-                                    </div> */}
-                     <div
-                        className="p-1 mx-1 text-sm text-white bg-[#f0ad4e] rounded-lg dark:bg-blue-200 dark:text-blue-800"
-                        role="alert"
-                     >
-                        <span className="font-medium mx-1">Шууд</span>
-                     </div>
-                     <div
-                        className="p-1 mx-1 text-sm text-white bg-[#5cb85c] rounded-lg dark:bg-blue-200 dark:text-blue-800"
-                        role="alert"
-                     >
-                        <span className="font-medium mx-1">Урьдчилсан захиалга</span>
-                     </div>
-                     {/* <div className="p-1 mx-1 text-sm text-white bg-[#5bc0de] rounded-lg dark:bg-blue-200 dark:text-blue-800" role="alert">
-                                        <span className="font-medium mx-1">Урьдчилан сэргийлэх</span>
-                                    </div> */}
-                  </div>
-                  <div className="float-right">
-                     <Button title="Сэргээх" type="primary" onClick={() => getTreatmentRequest(1, 10, start, end)}>
-                        <ReloadOutlined // spin={!spinner}
-                        />
-                     </Button>
-                  </div>
-               </div>
-               <div className="w-full py-2">
-                  <Table
-                     rowKey={'id'}
-                     bordered
-                     locale={{ emptyText: <Empty description={'Хоосон'} /> }}
-                     loading={{
-                        spinning: spinner,
-                        tip: 'Уншиж байна....'
-                     }}
-                     columns={columns}
-                     dataSource={treatments}
-                     pagination={{
-                        simple: true,
-                        pageSize: 10,
-                        total: meta.itemCount,
-                        current: meta.page,
-                        onChange: (page, pageSize) => getTreatmentRequest(page, pageSize, start, end)
-                     }}
-                  />
-               </div>
-            </div>
-         </Card>
+         <div className="flex flex-col gap-3">
+            <ScheduleTypeInfo />
+            <ListFilter meta={meta} appointmentsLength={treatments?.length || 0} getList={getTreatmentRequest} />
+            <Card
+               bordered={false}
+               className="header-solid rounded-md"
+               bodyStyle={{
+                  padding: 8
+               }}
+            >
+               <Table
+                  rowKey={'id'}
+                  scroll={{
+                     y: 665
+                  }}
+                  bordered
+                  locale={{ emptyText: <Empty description={'Хоосон'} /> }}
+                  loading={{
+                     spinning: spinner,
+                     tip: 'Уншиж байна....'
+                  }}
+                  columns={columns}
+                  dataSource={treatments}
+                  pagination={false}
+               />
+            </Card>
+         </div>
       </div>
    );
 }

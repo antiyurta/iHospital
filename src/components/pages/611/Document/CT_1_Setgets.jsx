@@ -47,7 +47,7 @@ const CT_1_Setgets = (props) => {
                               <Checkbox value={'q3-2'}>
                                  Хэвийн бус
                                  <Input
-                                    className="amaraInput w-10"
+                                    className=" w-10"
                                     value={formData?.['q3-2-1']}
                                     style={{ textAlign: 'center' }}
                                  />
@@ -63,10 +63,10 @@ const CT_1_Setgets = (props) => {
                         <th colSpan={4}>Амьсгалын эрхтэн тогтолцоо</th>
                      </tr>
                      <tr>
-                        <th className="w-[220px]">
+                        <th id="child" className="w-[220px]">
                            {' '}
                            Амьсгал 1 минутанд
-                           <Input value={formData?.q4} />
+                           <Input className="w-10" value={formData?.q4} />
                            удаа
                         </th>
                         <th colSpan={3}>
@@ -111,18 +111,23 @@ const CT_1_Setgets = (props) => {
                <Table bordered className="story mb-0">
                   <thead>
                      <tr className="border-t-0">
-                        <th>
-                           Судасны цохилт 1 минутанд
-                           <Input className="amaraInput w-10" value={formData?.q6} style={{ textAlign: 'center' }} />
-                           удаа
-                           <th>
-                              Хүчдэл дүүрэлт
-                              <Input className="amaraInput w-10" value={formData?.q7} style={{ textAlign: 'center' }} />
-                           </th>
+                        <th id="child">
+                           <div>
+                              <p>
+                                 {' '}
+                                 Судасны цохилт 1 минутанд
+                                 <Input className=" w-10" value={formData?.q6} style={{ textAlign: 'center' }} />
+                                 удаа
+                              </p>
+                              <p>
+                                 Хүчдэл дүүрэлт
+                                 <Input className=" w-10" value={formData?.q7} style={{ textAlign: 'center' }} />
+                              </p>
+                           </div>
                         </th>
                         <th>
-                           <th>Тогшилтоор:</th>
-                           Зүрхний хил
+                           <p>Тогшилтоор:</p>
+                           <p id="child">Зүрхний хил</p>
                            <Checkbox.Group value={formData?.q8}>
                               <Checkbox className="ml-2" value={'q8-1'}>
                                  Хэвийн
@@ -149,8 +154,8 @@ const CT_1_Setgets = (props) => {
                            </Checkbox.Group>
                         </th>
                         <th>
-                           <th>Чагналтаар::</th>
-                           Зүрхний авиа
+                           <p>Чагналтаар::</p>
+                           <p id="child">Зүрхний авиа</p>
                            <Checkbox.Group value={formData?.q9}>
                               <Checkbox value={'q9-1'} className="ml-2">
                                  Тод
@@ -161,15 +166,13 @@ const CT_1_Setgets = (props) => {
                               <Checkbox value={'q9-5'}>Жигд бус </Checkbox>
                               <Checkbox value={'q9-6'}>Хэм алдалттай</Checkbox>
                            </Checkbox.Group>
-                           <th>
+                           <th id="child">
                               АД баруун талд
-                              <Input className="amaraInput w-8" value={formData?.q10} style={{ textAlign: 'center' }} />
-                              /
+                              <Input className=" w-8" value={formData?.q10} style={{ textAlign: 'center' }} />
                            </th>
-                           <th>
+                           <th id="child">
                               Зүүн талд
-                              <Input className="amaraInput w-8" value={formData?.q11} style={{ textAlign: 'center' }} />
-                              /
+                              <Input className=" w-8" value={formData?.q11} style={{ textAlign: 'center' }} />
                            </th>
                         </th>
                      </tr>
@@ -200,7 +203,7 @@ const CT_1_Setgets = (props) => {
                               <Checkbox value={'q13-3'} className="">
                                  Эмзэглэлтэй (байрлал
                                  <Input
-                                    className="amaraInput w-8"
+                                    className=" w-8"
                                     value={formData?.['q13-3-1']}
                                     style={{ textAlign: 'center' }}
                                  />
@@ -227,8 +230,8 @@ const CT_1_Setgets = (props) => {
                            <Checkbox.Group value={formData?.q14}>
                               <Checkbox value={'q14-1'}>Хэвийн</Checkbox>
                               <Checkbox value={'q14-2'}>
-                                 Буурсан
-                                 <p>
+                                 <p className="flex items-center gap-2">
+                                    <p>Буурсан</p>
                                     <span className="text-[11px]">
                                        (
                                        <Checkbox.Group value={formData?.['q14-2-1']} className="inline">
@@ -260,21 +263,15 @@ const CT_1_Setgets = (props) => {
                <Table bordered className="story mb-0">
                   <thead>
                      <tr className="border-t-0">
-                        <th>
-                           <th className="w-full">
-                              Бусад
-                              <Input
-                                 className="amaraInput w-[670px]"
-                                 value={formData?.q16}
-                                 style={{ textAlign: 'center' }}
-                              />
-                           </th>
-                           Сэтгэцийн байдал:
-                           <Input
-                              className="amaraInput w-[600px] mb-1"
-                              value={formData?.q17}
-                              style={{ textAlign: 'center' }}
-                           />
+                        <th id="child">
+                           <p className="w-full" id="child">
+                              Бусад:
+                              <Input className=" w-[650px] ml-2" value={formData?.q16} />
+                           </p>
+                           <p>
+                              Сэтгэцийн байдал:
+                              <Input className=" w-[600px] mb-1 ml-2" value={formData?.q17} />
+                           </p>
                         </th>
                      </tr>
                      <tr>
@@ -302,7 +299,7 @@ const CT_1_Setgets = (props) => {
                         <tr className="border-t-0 h-12">
                            <th>
                               <p className="mt-5">
-                                 <Input className="amaraInput w-full " style={{ textAlign: 'center' }} />
+                                 <Input className=" w-full " style={{ textAlign: 'center' }} />
                               </p>
                            </th>
                         </tr>
@@ -331,7 +328,7 @@ const CT_1_Setgets = (props) => {
                      <tr className=" border-t-0 h-12">
                         <th>
                            <p className="mt-5">
-                              <Input className="amaraInput w-full " style={{ textAlign: 'center' }} />
+                              <Input className=" w-full " style={{ textAlign: 'center' }} />
                            </p>
                         </th>
                      </tr>
@@ -343,7 +340,7 @@ const CT_1_Setgets = (props) => {
                         <tr className="border-t-0 h-12">
                            <th>
                               <p className="mt-5">
-                                 <Input className="amaraInput w-full " style={{ textAlign: 'center' }} />
+                                 <Input className=" w-full " style={{ textAlign: 'center' }} />
                               </p>
                            </th>
                         </tr>
@@ -370,7 +367,7 @@ const CT_1_Setgets = (props) => {
                         <tr className="border-t-0 h-12">
                            <th>
                               <p className="mt-5">
-                                 <Input className="amaraInput w-full " style={{ textAlign: 'center' }} />
+                                 <Input className=" w-full " style={{ textAlign: 'center' }} />
                               </p>
                            </th>
                         </tr>
@@ -386,7 +383,7 @@ const CT_1_Setgets = (props) => {
                      <tr className=" h-12">
                         <th>
                            <p className="mt-5">
-                              <Input className="amaraInput w-full " style={{ textAlign: 'center' }} />
+                              <Input className=" w-full " style={{ textAlign: 'center' }} />
                            </p>
                         </th>
                      </tr>
@@ -398,7 +395,7 @@ const CT_1_Setgets = (props) => {
                         <tr className="border-t-0 h-12">
                            <th>
                               <p className="mt-5">
-                                 <Input className="amaraInput w-full " style={{ textAlign: 'center' }} />
+                                 <Input className=" w-full " style={{ textAlign: 'center' }} />
                               </p>
                            </th>
                         </tr>
@@ -424,7 +421,7 @@ const CT_1_Setgets = (props) => {
                         <tr className="border-t-0 h-12">
                            <th>
                               <p className="mt-5">
-                                 <Input className="amaraInput w-full " style={{ textAlign: 'center' }} />
+                                 <Input className=" w-full " style={{ textAlign: 'center' }} />
                               </p>
                            </th>
                         </tr>
@@ -435,9 +432,9 @@ const CT_1_Setgets = (props) => {
                   <thead>
                      <tr className="border-t-0 h-20">
                         <th>
-                           <p>
-                              Хам шинжийн онош
-                              <p className="ml-2 underline">{`: ${formData?.q22}`}</p>
+                           <p className="flex items-center">
+                              <p>Хам шинжийн онош</p>
+                              <p className="ml-2 underline" id="child">{`: ${formData?.q22}`}</p>
                            </p>
                         </th>
                      </tr>
@@ -447,9 +444,9 @@ const CT_1_Setgets = (props) => {
                   <thead>
                      <tr className="border-t-0 h-24">
                         <th>
-                           <p>
-                              Эмчилгээ сувилгааны заалт
-                              <p className="ml-2 underline">{`: ${formData?.q23}`}</p>
+                           <p className="flex items-center">
+                              <p>Эмчилгээ сувилгааны заалт</p>
+                              <p className="ml-2 underline" id="child">{`: ${formData?.q23}`}</p>
                            </p>
                         </th>
                      </tr>
