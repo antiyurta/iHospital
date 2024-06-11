@@ -1,24 +1,24 @@
 import React, { useState } from 'react';
 import { Modal } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
+import dayjs from 'dayjs';
 import Appointment from '../Appointment/Index';
 import reInspectionIcon from './NewOrder/reinspectionIcon.svg';
 //redux
 import { selectCurrentOtsData, setOtsData } from '@Features/emrReducer';
-import moment from 'moment';
 
-function Reinspection({ selectedPatient, appointmentId, hicsSealId }) {
+function Reinspection({ isInsurance, selectedPatient, appointmentId, hicsSeal }) {
    const dispatch = useDispatch();
    const incomeOtsData = useSelector(selectCurrentOtsData);
    const [isOpenMOdal, setIsOpenModal] = useState(false);
    const setOTS = async (info, _doctor, res) => {
-      const data = {
+      let data = {
          description: undefined,
          isCito: false,
          name: info?.structureName,
          oPrice: 0,
          price: 0,
-         requestDate: moment().format('YYYY-MM-DD'),
+         requestDate: dayjs().format('YYYY-MM-DD'),
          specimen: undefined,
          type: 9,
          invoiceId: res.invoiceId,
@@ -47,6 +47,7 @@ function Reinspection({ selectedPatient, appointmentId, hicsSealId }) {
             title="Давтан үзлэгын цаг"
             width={'80%'}
             open={isOpenMOdal}
+            destroyOnClose
             onCancel={() => setIsOpenModal(false)}
             onOk={() => {
                setIsOpenModal(false);
@@ -60,11 +61,11 @@ function Reinspection({ selectedPatient, appointmentId, hicsSealId }) {
          >
             <Appointment
                selectedPatient={selectedPatient}
-               invoiceData={{
-                  isCheckInsurance: false,
-                  hicsSealId: hicsSealId
-               }}
                type={1}
+               invoiceData={{
+                  isCheckInsurance: !isInsurance,
+                  hicsSealId: hicsSeal.id
+               }}
                handleClick={setOTS}
                prevAppointmentId={appointmentId}
                isExtraGrud={{

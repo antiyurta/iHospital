@@ -497,20 +497,24 @@ function Invoice() {
                      />
                   </Card>
                </div>
-               <Card
-                  bordered={false}
-                  title={<h6 className="font-semibold m-0">Үйлчилгээний Жагсаалт</h6>}
-                  className="header-solid max-h-max rounded-md"
-                  bodyStyle={{ paddingTop: 0, paddingBottom: 16 }}
-               >
-                  <Order
-                     isDoctor={false}
-                     selectedPatient={selectedPatient}
-                     usageType="OUT"
-                     categories={categories}
-                     save={saveOrder}
-                  />
-               </Card>
+               {selectedPatient.id ? (
+                  <Card
+                     bordered={false}
+                     title={<h6 className="font-semibold m-0">Үйлчилгээний Жагсаалт</h6>}
+                     className="header-solid max-h-max rounded-md"
+                     bodyStyle={{ paddingTop: 0, paddingBottom: 16 }}
+                  >
+                     <Order
+                        isDoctor={false}
+                        selectedPatient={selectedPatient}
+                        usageType="OUT"
+                        categories={categories}
+                        save={saveOrder}
+                     />
+                  </Card>
+               ) : (
+                  <Result title="Үйлчлүүлэгч сонгох" />
+               )}
             </div>
          </Modal>
          <Schedule

@@ -312,33 +312,22 @@ const EmrTimer = ({ startDate, endDate, inspection }) => {
             />
             <p>{`${dayjs(startDate).format('YYYY/MM/DD hh:mm')} эхэлсэн`}</p>
             {endDate ? <p>{`${dayjs(endDate).format('YYYY/MM/DD hh:mm')} дууссан`}</p> : null}
-            <div className="flex flex-row gap-2">
-               <Button
-                  disabled={isDisable}
-                  danger
-                  onClick={() => {
-                     setIsOpenModal(true);
-                  }}
-                  icon={
-                     <ClockCircleOutlined
-                        style={{
-                           fontWeight: 700
-                        }}
-                     />
-                  }
-               >
-                  Үзлэг дуусах
-               </Button>
-               {/* <Button
-                  title="Т.Ү дугаар солих"
-                  disabled={hicsSeal?.hicsSealCode ? true : false}
-                  className="w-auto px-2"
-                  icon={<SwapOutlined />}
-                  onClick={() => {
-                     getHicsService();
-                  }}
-               /> */}
-            </div>
+            <Button
+               disabled={isDisable}
+               danger
+               onClick={() => {
+                  setIsOpenModal(true);
+               }}
+               icon={
+                  <ClockCircleOutlined
+                     style={{
+                        fontWeight: 700
+                     }}
+                  />
+               }
+            >
+               Үзлэг дуусах
+            </Button>
          </div>
          {/* <Modal
             title="Тусламж үйлчилгээг солих"
@@ -501,4 +490,3 @@ const EmrTimer = ({ startDate, endDate, inspection }) => {
    );
 };
 export default EmrTimer;
-

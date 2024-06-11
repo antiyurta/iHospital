@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Appointment from '@Pages/Appointment/Index';
 //api
 import regularApi from '@ApiServices/regular.api';
+import invoiceApi from '@ApiServices/payment/invoice';
 //redux
 import { selectCurrentEmrData, selectCurrentOtsData, setOtsData } from '@Features/emrReducer';
 
@@ -83,7 +84,7 @@ function OrderTable(props) {
       try {
          setLoading(true);
          const currentService = form.getFieldValue(['services', index]);
-         if (currentService.requestId && currentService.invoiceId) {
+         if (currentService.requestId || currentService.invoiceId) {
             if (currentService.type === 1 || currentService.type === 2 || currentService.type === 9) {
                const selectedUrl = urlMapPost[currentService.type];
                if (!selectedUrl) throw new Error('Unknown service type');
@@ -94,8 +95,8 @@ function OrderTable(props) {
                      description: 'TEST YM'
                   })
                   .then(async () => {
-                     await regularApi.delete(selectedUrl, currentService.requestId);
-                     await regularApi.delete('payment/invoice', currentService.invoiceId);
+                     currentService.requestId && (await regularApi.delete(selectedUrl, currentService.requestId));
+                     currentService.invoiceId && (await invoiceApi.delete(currentService.invoiceId));
                      setLoading(false);
                      return true;
                   });
@@ -110,11 +111,10 @@ function OrderTable(props) {
       return false;
    };
    const createOtsRequest = async (service, formIndex) => {
-      console.log('service', service);
       if (!service.invoiceId && !service.requestId) {
          setLoading(true);
-         return await regularApi
-            .post('payment/invoice', {
+         return await invoiceApi
+            .post({
                patientId: selectedPatient.id,
                amount: service.oPrice,
                type: service.type,
@@ -123,7 +123,6 @@ function OrderTable(props) {
             .then(async ({ data: { response } }) => {
                try {
                   form.setFieldValue(['services', formIndex, 'invoiceId'], response.id);
-                  console.log(response);
                   setInvoiceData({
                      invoiceId: response.id,
                      type: service.type,
@@ -324,11 +323,11 @@ function OrderTable(props) {
                         }
                      >
                         {({ getFieldValue }) => {
-                           const drgCode = getFieldValue(['services', index, 'sealData', 'drgCode']);
+                           const serviceId = getFieldValue(['services', index, 'sealData', 'serviceId']);
                            return (
                               <OrderForm
                                  rules={
-                                    drgCode
+                                    serviceId
                                        ? [
                                             {
                                                required: true,

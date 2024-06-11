@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ClockCircleOutlined, CloseCircleOutlined, SearchOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
-import { Alert, Button, Card, Descriptions, Form, Modal, Radio, Select, Switch, Table } from 'antd';
+import { Alert, Button, Card, Descriptions, Form, Modal, Radio, Select, Spin, Switch, Table, message } from 'antd';
 import { useSelector } from 'react-redux';
 //comp
 import List from './List';
@@ -18,18 +18,13 @@ import EmployeeApi from '@ApiServices/organization/employee';
 import StructureApi from '@ApiServices/organization/structure';
 import InsuranceApi from '@ApiServices/healt-insurance/healtInsurance';
 import AppointmentApi from '@ApiServices/appointment/api-appointment-service';
-//utils
-import { xrayTreatmentIds } from '@Utils/config/insurance';
-
-const hicsIdMap = {
-   2: xrayTreatmentIds
-};
 
 function Index({ selectedPatient, type, invoiceData, handleClick, prevAppointmentId, isExtraGrud }) {
    const [isOpenModalInspectionType, setIsOpenModalInspectionType] = useState(false);
    const incomeEmrData = useSelector(selectCurrentEmrData);
    const isInsurance = useSelector(selectCurrentInsurance);
    const today = new Date();
+   const [isLoadingList, setLoadingList] = useState(false);
    const [selectedDate, setSelectedDate] = useState('');
    const [filterForm] = Form.useForm();
    const [structures, setStructures] = useState([]);
@@ -53,6 +48,8 @@ function Index({ selectedPatient, type, invoiceData, handleClick, prevAppointmen
    const [notInsuranceInfo, setNotInsuranceInfo] = useState([]);
    // tsahialga hiih uildel
    const orderAppointment = (info) => {
+      setLoadingList(true);
+      // const { schedule, ...otherInfo } = info;
       setIsSent(false);
       setIsUrgent(info.isUrgent);
       setSelectedInfo(info);
@@ -177,38 +174,45 @@ function Index({ selectedPatient, type, invoiceData, handleClick, prevAppointmen
       });
    };
    const appointmentRequest = async () => {
-      setIsConfirmLoading(true);
-      setGetIsSlot({ state: false, slotType: 0 });
-      if (type === 2 || type === 3) {
-         /** type 3 bol xray 2 bol treatment */
-         await ServiceApi.patch(invoiceData.invoiceId, {
-            ...selectedInfo,
-            appointmentId: invoiceData.appointmentId || null,
-            doctorId: selectedDoctor.id,
-            patientId: selectedPatient.id,
-            type: invoiceData.type
-         }).then((response) => {
-            if (response.status === 200) {
-               setAppointmentModal(false);
-               handleClick(true, invoiceData.invoiceId, selectedInfo);
-               setGetIsSlot({ state: true, slotType: 0 });
-            }
-         });
-      } else {
-         if (incomeEmrData.usageType === 'IN') {
-            setIsOpenModalInspectionType(true);
-         } else {
-            createAppointment({
-               inspectionType: null
+      try {
+         setIsConfirmLoading(true);
+         setGetIsSlot({ state: false, slotType: 0 });
+         if (type === 2 || type === 3) {
+            /** type 3 bol xray 2 bol treatment */
+            await ServiceApi.patch(invoiceData.invoiceId, {
+               ...selectedInfo,
+               appointmentId: invoiceData.appointmentId || null,
+               doctorId: selectedDoctor.id,
+               patientId: selectedPatient.id,
+               type: invoiceData.type
+            }).then((response) => {
+               if (response.status === 200) {
+                  setAppointmentModal(false);
+                  handleClick(true, invoiceData.invoiceId, selectedInfo);
+                  setGetIsSlot({ state: true, slotType: 0 });
+               }
             });
+         } else {
+            if (incomeEmrData.usageType === 'IN') {
+               setIsOpenModalInspectionType(true);
+            } else {
+               createAppointment({
+                  inspectionType: null
+               });
+            }
          }
+         setLoadingList(false);
+         setIsConfirmLoading(false);
+      } catch (error) {
+         message.error(error);
+         console.log('error', error);
       }
-      setIsConfirmLoading(false);
    };
    // uffect
    useEffect(() => {
       getStructures();
    }, [type]);
+
    return (
       <>
          <div className="flex flex-col gap-4">
@@ -320,14 +324,16 @@ function Index({ selectedPatient, type, invoiceData, handleClick, prevAppointmen
                   </div>
                </Form>
             </Card>
-            <List
-               schedules={schedules}
-               type={type}
-               selectedPatient={selectedPatient}
-               orderAppointment={orderAppointment}
-               isGetSlots={getIsSlot}
-               isExtraGrud={isExtraGrud}
-            />
+            <Spin spinning={isLoadingList}>
+               <List
+                  schedules={schedules}
+                  type={type}
+                  selectedPatient={selectedPatient}
+                  orderAppointment={orderAppointment}
+                  isGetSlots={getIsSlot}
+                  isExtraGrud={isExtraGrud}
+               />
+            </Spin>
          </div>
          <Modal
             title="Үзлэгийн төрөл сонгох"
@@ -368,12 +374,14 @@ function Index({ selectedPatient, type, invoiceData, handleClick, prevAppointmen
             title="Цаг захиалах"
             open={appointmentModal}
             okButtonProps={{
-               disabled: isSent
+               disabled: isSent,
+               loading: isConfirmLoading
             }}
             onOk={() => {
                isUrgent ? urgentRequest() : appointmentRequest();
             }}
             onCancel={() => {
+               setLoadingList(false);
                setAppointmentModal(false);
                setStateInsurance(false);
             }}

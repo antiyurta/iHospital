@@ -58,6 +58,7 @@ function List(props) {
    const [selectedScheduleId, setSelectedScheduleId] = useState(Number);
    const [selectedSlot, setSelectedSlot] = useState();
    const [isOpenChangeModal, setIsOpenChangeModal] = useState(false);
+   const [isLoadingSlot, setLoadingSlot] = useState(false);
    const [isLoadingChangeLoading, setIsLoadingChangeLoading] = useState(false);
    const [isOpenCancelModal, setIsOpenCancelModal] = useState(false);
    const [isLoadingCancelLoading, setIsLoadingCancelLoading] = useState(false);
@@ -115,7 +116,7 @@ function List(props) {
          })
             .then((response) => {
                if (response.status === 200) {
-                  message.success('Амжилттай цаг солилоо.');
+                  message.success('Амжилттай цаг устгалаа.');
                } else {
                   message.warn('Алдаатай хүсэлт');
                }
@@ -154,6 +155,7 @@ function List(props) {
    const getSlots = async (scheduleId, state) => {
       // 0 bol huwiar setleh
       // 1 bol tsag solih ued huwiar setleh
+      setLoadingSlot(true);
       if (state === 0) {
          setSlots([]); // engiin tsag shuurdeh
       } else {
@@ -174,6 +176,7 @@ function List(props) {
                   setFilteredSlots(response.data);
                }
             });
+            setLoadingSlot(false);
          } catch (error) {
             message.error(error.message || 'An error occurred');
          }
@@ -237,6 +240,7 @@ function List(props) {
                                        <Table
                                           rowKey="id"
                                           bordered
+                                          loading={isLoadingSlot}
                                           columns={[
                                              {
                                                 title: 'Цаг',
@@ -341,7 +345,8 @@ function List(props) {
                                                                            },
                                                                            slotId: row.id,
                                                                            cabinetId: schedule.cabinetId,
-                                                                           appointmentWorkDate: key
+                                                                           appointmentWorkDate: key,
+                                                                           schedule: schedule
                                                                         });
                                                                      } else {
                                                                         openNofi(

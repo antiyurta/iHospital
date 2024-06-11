@@ -514,7 +514,20 @@ function Index({ type, isDoctor, isSurgeyBoss }) {
             onOk={() =>
                startFormHics
                   .validateFields()
-                  .then(startAmbulatory)
+                  .then((values) => {
+                     if (values.hicsServiceId === 20110 || values.hicsServiceId === 20120) {
+                        startAmbulatory(values);
+                     } else {
+                        CreateHicsSeal(
+                           selectedRow,
+                           {
+                              code: null,
+                              hicsServiceId: values.hicsServiceId
+                           },
+                           Number(values.hicsServiceId.toString().substring(0, 3))
+                        );
+                     }
+                  })
                   .catch(({ errorFields }) => {
                      errorFields?.map((error) => message.error(error.errors[0]));
                   })
@@ -539,7 +552,7 @@ function Index({ type, isDoctor, isSurgeyBoss }) {
                         <Input />
                      </Finger>
                   </div>
-                  {!selectedRow?.hicsSeal?.hicsServiceId ? (
+                  {selectedRow?.hicsSeal?.hicsServiceId === 20120 ? null : (
                      <Form.Item
                         label="Т.Ү-ний дугаар"
                         name="hicsServiceId"
@@ -557,7 +570,7 @@ function Index({ type, isDoctor, isSurgeyBoss }) {
                            }))}
                         />
                      </Form.Item>
-                  ) : null}
+                  )}
                </div>
             </Form>
          </Modal>
