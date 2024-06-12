@@ -19,6 +19,7 @@ import dayjs from 'dayjs';
 
 const RegisterPatient = ({ patientId, onFinish }) => {
    const [form] = Form.useForm();
+   const registerType = Form.useWatch('registerType', form);
    const [isLoading, setIsLoading] = useState(false);
    const [current, setCurrent] = useState(0);
 
@@ -28,6 +29,18 @@ const RegisterPatient = ({ patientId, onFinish }) => {
          icon: <AuditOutlined />,
          content: (
             <>
+               <Form.Item
+                  name="registerType"
+                  className="white-radio"
+                  label="Бүртгэлийн төрөл"
+                  rules={[{ required: true, message: 'Бүртгэлийн төрөлөө сонгоно уу.' }]}
+               >
+                  <Radio.Group>
+                     <Radio.Button value="citizen">Иргэн</Radio.Button>
+                     <Radio.Button value="children">Хүүхэд</Radio.Button>
+                     <Radio.Button value="foreignCitizen">Гадны иргэн</Radio.Button>
+                  </Radio.Group>
+               </Form.Item>
                <Form.Item name="regnum" label="Pегистр" rules={[{ required: true, message: 'Регистр оруулна уу!' }]}>
                   <Input />
                </Form.Item>
@@ -39,11 +52,18 @@ const RegisterPatient = ({ patientId, onFinish }) => {
                >
                   <Radio.Group>
                      <Radio.Button value={0}>Үйлчилүүлэгчээр бөглүүлэх</Radio.Button>
-                     <Radio.Button value={1}>OTP</Radio.Button>
-                     <Radio.Button value={2}>Тоон гарын үсэг</Radio.Button>
-                     <Radio.Button value={3}>Хурууны хээ</Radio.Button>
+                     <Radio.Button value={1} disabled={form.getFieldValue('registerType') !== 'citizen'}>
+                        OTP
+                     </Radio.Button>
+                     <Radio.Button value={2} disabled={form.getFieldValue('registerType') !== 'citizen'}>
+                        Тоон гарын үсэг
+                     </Radio.Button>
+                     <Radio.Button value={3} disabled={form.getFieldValue('registerType') !== 'citizen'}>
+                        Хурууны хээ
+                     </Radio.Button>
                   </Radio.Group>
                </Form.Item>
+               {/* registerType == 'citizen' &&  */}
             </>
          )
       },
