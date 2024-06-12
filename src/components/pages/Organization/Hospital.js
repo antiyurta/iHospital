@@ -1,135 +1,16 @@
 import '../../../style/Hospital.css';
-import React, { Suspense, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal, Form, Input, message } from 'antd';
 
 import UTable from '../../UTable';
 import { Patch } from '../../common';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
-import apiInsuranceService from '../../../services/healt-insurance/insurance';
-import jwtInterceopter from '../../jwtInterceopter';
-
-const columnBranch = [
-   {
-      label: 'Салбарын мэдээлэл (Заавал биш)',
-      isView: true,
-      input: 'title',
-      col: 24
-   },
-   {
-      index: 'branchList_hospitalName',
-      extraIndex: 'branchList',
-      label: 'Нэр',
-      isView: true,
-      input: 'input',
-      col: 12
-   },
-   {
-      index: 'branchList_branchId',
-      extraIndex: 'branchList',
-      label: 'Дугаар (ID)',
-      isView: true,
-      input: 'numberInput',
-      col: 12
-   },
-   {
-      index: 'branchList_hsPhone',
-      extraIndex: 'branchList',
-      label: 'Утас(1)',
-      isView: true,
-      input: 'input',
-      col: 12
-   },
-   {
-      index: 'branchList_hsPersonPhone',
-      extraIndex: 'branchList',
-      label: 'Утас(2)',
-      isView: true,
-      input: 'input',
-      col: 12
-   },
-   {
-      index: 'branchList_hsEmail',
-      extraIndex: 'branchList',
-      label: 'Имэйл хаяг',
-      isView: true,
-      input: 'input',
-      col: 12
-   },
-   {
-      index: 'branchList_hsSocial',
-      extraIndex: 'branchList',
-      label: 'Салбарын сошиал хаяг',
-      isView: true,
-      input: 'input',
-      col: 12
-   },
-   {
-      index: 'branchList_address',
-      extraIndex: 'branchList',
-      label: 'Хаяг, байршил',
-      isView: true,
-      input: 'input',
-      col: 12
-   },
-   {
-      index: 'branchList_hsLng',
-      extraIndex: 'branchList',
-      label: 'Уртраг',
-      isView: true,
-      input: 'numberInput',
-      col: 12
-   },
-   {
-      index: 'branchList_hsLat',
-      extraIndex: 'branchList',
-      label: 'Өргөрөг',
-      isView: true,
-      input: 'numberInput',
-      col: 12
-   },
-
-   {
-      index: 'branchList_hsTimetable',
-      extraIndex: 'branchList',
-      label: 'Цагийн хуваарь',
-      isView: true,
-      input: 'input',
-      col: 12
-   },
-   {
-      index: 'branchList_hsCapacity',
-      extraIndex: 'branchList',
-      label: 'Нийт орны тоо',
-      isView: true,
-      input: 'numberInput',
-      col: 12
-   },
-   {
-      index: 'branchList_status',
-      extraIndex: 'branchList',
-      label: 'Төлөв',
-      isView: true,
-      input: 'switch',
-      col: 12
-   },
-   {
-      index: 'branchList_numberOfBeds',
-      extraIndex: 'branchList',
-      label: 'Сул орны тоо',
-      isView: true,
-      input: 'numberInput',
-      col: 12
-   },
-   {
-      index: 'branchList_hsIntroduction',
-      extraIndex: 'branchList',
-      label: 'Товч танилцуулга',
-      isView: false,
-      input: 'textarea',
-      col: 12
-   }
-];
+import insuranceApi from '../../../services/healt-insurance/insurance';
+import healtInsuranceApi from '@ApiServices/healt-insurance/healtInsurance';
+import zoneApi from '@ApiServices/reference/zone';
+import provinceApi from '@ApiServices/reference/province';
+import districtApi from '@ApiServices/reference/district';
 
 function Hospital() {
    const token = useSelector(selectCurrentToken);
@@ -138,25 +19,56 @@ function Hospital() {
    const [selectedRow, setSelectedRow] = useState({});
    const [isRefresh, setIsRefresh] = useState(true);
    const [operationList, setOperationList] = useState([]);
-
+   const [zoneList, setZoneList] = useState([]);
+   const [provinceList, setProvinceList] = useState([]);
+   const [districtList, setDistrictList] = useState([]);
+   const fetchOperationList = async () => {
+      try {
+         const res = await healtInsuranceApi.getHospitalOperation();
+         const operations = res.data.result || [];
+         setOperationList(
+            operations.map((op) => ({
+               id: op.id,
+               label: op.name,
+               value: op.id
+            }))
+         );
+      } catch (error) {
+         console.error('Error fetching operation list:', error);
+      }
+   };
+   const fetchZoneList = async () => {
+      try {
+         const res = await zoneApi.get();
+         const zone = res.data.response || [];
+         setZoneList(zone);
+      } catch (error) {
+         console.error('Error fetching zone list:', error);
+      }
+   };
+   const fetchProvinceList = async () => {
+      try {
+         const res = await provinceApi.get();
+         const province = res.data.response || [];
+         setProvinceList(province);
+      } catch (error) {
+         console.error('Error fetching province list:', error);
+      }
+   };
+   const fetchDistrictList = async () => {
+      try {
+         const res = await districtApi.get();
+         const district = res.data.response || [];
+         setDistrictList(district);
+      } catch (error) {
+         console.error('Error fetching district list:', error);
+      }
+   };
    useEffect(() => {
-      const fetchOperationList = async () => {
-         try {
-            const res = await jwtInterceopter.get('health-insurance/hospital-operation');
-            const operations = res.data.result || [];
-            setOperationList(
-               operations.map((op) => ({
-                  id: op.id,
-                  label: op.name,
-                  value: op.id
-               }))
-            );
-         } catch (error) {
-            console.error('Error fetching operation list:', error);
-         }
-      };
-
       fetchOperationList();
+      // fetchZoneList();
+      // fetchProvinceList();
+      fetchDistrictList();
    }, []);
 
    const column = [
@@ -165,6 +77,16 @@ function Hospital() {
          label: 'Нэр',
          isView: true,
          input: 'input',
+         col: 12
+      },
+      {
+         index: 'districtCode',
+         label: 'Бүсчлэл',
+         isView: true,
+         input: 'select',
+         inputData: districtList,
+         relValueIndex: 'code',
+         relIndex: 'name',
          col: 12
       },
       {
@@ -203,7 +125,7 @@ function Hospital() {
             },
             {
                validator: async (_, email) => {
-                  if (email.length < 10) {
+                  if (email?.length < 10) {
                      return Promise.reject(new Error(''));
                   }
                }
@@ -266,7 +188,7 @@ function Hospital() {
          index: 'hsTimetable',
          label: 'Цагийн хуваарь',
          isView: false,
-         input: 'date',
+         input: 'input',
          col: 12
       },
       {
@@ -320,29 +242,161 @@ function Hospital() {
          child: true
       },
       {
-         label: 'Үйл ажиллагааны чиглэлийн мэдээлэл',
+         index: 'branchList',
+         label: 'Салбар нэмэх',
          isView: false,
-         input: 'title',
+         input: 'formList',
+         childrenColumns: [
+            {
+               index: 'branchId',
+               label: 'Салбарын дугаар',
+               input: 'input',
+               isView: false,
+               col: 12
+            },
+            {
+               index: 'hospitalName',
+               label: 'Салбарын нэр',
+               input: 'input',
+               isView: false,
+               col: 12
+            },
+            {
+               index: 'hsPhone',
+               label: 'Холбогдох утасны дугаар',
+               input: 'input',
+               isView: false,
+               col: 12
+            },
+            {
+               index: 'hsPersonPhone',
+               label: 'Холбоо барих хүний дугаар',
+               input: 'input',
+               isView: false,
+               col: 12
+            },
+            {
+               index: 'hsEmail',
+               label: 'Салбарын имэйл хаяг',
+               input: 'input',
+               isView: false,
+               col: 12
+            },
+            {
+               index: 'hsSocial',
+               label: 'Салбарын сошиал хаяг',
+               input: 'input',
+               isView: false,
+               col: 12
+            },
+            {
+               index: 'address',
+               label: 'Салбарын хаяг, байршил',
+               input: 'input',
+               isView: false,
+               col: 24
+            },
+            {
+               index: 'hsLat',
+               label: 'Салбарын өргөрөг',
+               input: 'input',
+               isView: false,
+               col: 12
+            },
+            {
+               index: 'hsLng',
+               label: 'Салбарын уртраг',
+               input: 'input',
+               isView: false,
+               col: 12
+            },
+            {
+               index: 'hsTimetable',
+               label: 'Салбарын цагийн хуваарь',
+               input: 'input',
+               isView: false,
+               col: 12
+            },
+            {
+               index: 'hsCapacity',
+               label: 'Салбарын нийт орны тоо',
+               input: 'numberInput',
+               isView: false,
+               col: 12
+            },
+            {
+               index: 'status',
+               label: 'Төлөв /0-идэвхгүй, 1-идэвхтэй/',
+               input: 'select',
+               inputData: [
+                  {
+                     label: 'идэвхгүй',
+                     value: 0
+                  },
+                  {
+                     label: 'идэвхтэй',
+                     value: 1
+                  }
+               ],
+               relValueIndex: 'value',
+               relIndex: 'label',
+               isView: false,
+               col: 12
+            },
+            {
+               index: 'numberOfBeds',
+               label: 'Салбарын сул орны тоо',
+               input: 'numberInput',
+               isView: false,
+               col: 12
+            },
+            {
+               index: 'hsIntroduction',
+               label: 'Салбарын товч танилцуулга',
+               input: 'textarea',
+               isView: false,
+               col: 24
+            }
+         ],
          col: 24
       },
       {
-         index: 'operationList_id',
-         extraIndex: 'operationList',
-         label: 'Чиглэлийн дугаар',
-         inputData: operationList,
+         index: 'operationList',
+         label: 'Үйл ажиллагааны чиглэлийн мэдээлэл',
          isView: false,
-         input: 'select',
-         col: 15,
-         relValueIndex: 'value',
-         relIndex: 'label'
-      },
-      {
-         index: 'operationList_status',
-         extraIndex: 'operationList',
-         label: 'Төлөв',
-         isView: false,
-         input: 'switch',
-         col: 9
+         input: 'formList',
+         childrenColumns: [
+            {
+               index: 'id',
+               label: 'Үйл ажиллагааны чиглэлийн дугаар',
+               input: 'select',
+               inputData: operationList,
+               isView: false,
+               relValueIndex: 'id',
+               relIndex: 'label',
+               col: 24
+            },
+            {
+               index: 'status',
+               label: 'Төлөв /0-идэвхгүй, 1-идэвхтэй/',
+               input: 'select',
+               inputData: [
+                  {
+                     label: 'идэвхгүй',
+                     value: 0
+                  },
+                  {
+                     label: 'идэвхтэй',
+                     value: 1
+                  }
+               ],
+               relValueIndex: 'value',
+               relIndex: 'label',
+               isView: false,
+               col: 12
+            }
+         ],
+         col: 24
       }
    ];
 
@@ -366,7 +420,7 @@ function Hospital() {
       }
    };
    const insuranceSyncFunction = async () => {
-      await apiInsuranceService.createHicsExams().then(({ data }) => {
+      await insuranceApi.createHicsExams().then(({ data }) => {
          if (data.code == 200) {
             message.success(data.description);
          } else {
@@ -380,12 +434,12 @@ function Hospital() {
          <UTable
             title={'Байгууллага'}
             url={'organization/hospital'}
-            column={[...column, ...columnBranch]}
+            column={column}
             isCreate={true}
             isRead={true}
             isUpdate={true}
             isDelete={true}
-            width="50%"
+            width="30%"
             isInsurance={true}
             insuranceSync={true}
             insuranceFunction={insuranceFunction}

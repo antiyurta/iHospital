@@ -174,8 +174,8 @@ class HealthInsurance {
       return await jwtInterceopter.post('health-insurance/edit-medical-link', data);
    }
    /** 4.59 Эмнэлгийн үйл ажиллагааны чиглэлийн мэдээллийг лавлах сервис */
-   async getHospitalOperation() {
-      return await jwtInterceopter.get('sadas');
+   async getHospitalOperation(params) {
+      return await jwtInterceopter.get('health-insurance/hospital-operation', { params });
    }
    /** 4.60 Дархлаажуулалтын мэдээллийг регистрийн дугаараа шалгах сервис */
    async getVaccineByRegno(regNo) {
