@@ -690,7 +690,7 @@ function UTable(props) {
                form={form}
                layout="vertical"
                initialValues={props.initialValues}
-               // onValuesChange={handleFormValuesChange}
+               onValuesChange={props.onValuesChange}
             >
                <Row gutter={[24, 6]}>
                   {props.column.map((element, index) => {

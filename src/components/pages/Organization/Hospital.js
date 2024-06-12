@@ -1,5 +1,5 @@
 import '../../../style/Hospital.css';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Modal, Form, Input, message } from 'antd';
 
 import UTable from '../../UTable';
@@ -22,6 +22,22 @@ function Hospital() {
    const [zoneList, setZoneList] = useState([]);
    const [provinceList, setProvinceList] = useState([]);
    const [districtList, setDistrictList] = useState([]);
+   //
+   const [changedValues, setChangedValues] = useState({});
+
+   const filteredProvinceList = useMemo(() => {
+      if (changedValues.zoneId) {
+         return provinceList.filter((pro) => pro.zoneId === changedValues.zoneId);
+      }
+      return provinceList;
+   }, [changedValues]);
+   const filteredDistrictList = useMemo(() => {
+      if (changedValues.provinceId) {
+         return districtList.filter((dist) => dist.provinceId === changedValues.provinceId);
+      }
+      return districtList;
+   }, [changedValues]);
+
    const fetchOperationList = async () => {
       try {
          const res = await healtInsuranceApi.getHospitalOperation();
@@ -66,8 +82,8 @@ function Hospital() {
    };
    useEffect(() => {
       fetchOperationList();
-      // fetchZoneList();
-      // fetchProvinceList();
+      fetchZoneList();
+      fetchProvinceList();
       fetchDistrictList();
    }, []);
 
@@ -80,11 +96,31 @@ function Hospital() {
          col: 12
       },
       {
-         index: 'districtCode',
+         index: 'zoneId',
          label: 'Бүсчлэл',
          isView: true,
          input: 'select',
-         inputData: districtList,
+         inputData: zoneList,
+         relValueIndex: 'id',
+         relIndex: 'name',
+         col: 12
+      },
+      {
+         index: 'provinceId',
+         label: 'Аймаг/Хот',
+         isView: true,
+         input: 'select',
+         inputData: filteredProvinceList,
+         relValueIndex: 'id',
+         relIndex: 'name',
+         col: 12
+      },
+      {
+         index: 'districtCode',
+         label: 'Сум/Дүүрэг',
+         isView: true,
+         input: 'select',
+         inputData: filteredDistrictList,
          relValueIndex: 'code',
          relIndex: 'name',
          col: 12
@@ -434,6 +470,7 @@ function Hospital() {
          <UTable
             title={'Байгууллага'}
             url={'organization/hospital'}
+            onValuesChange={setChangedValues}
             column={column}
             isCreate={true}
             isRead={true}
