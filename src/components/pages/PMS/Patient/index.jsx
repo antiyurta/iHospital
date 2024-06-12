@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Form, Input, Radio, Steps, message } from 'antd';
+import { Button, Form, Input, Radio, Select, Steps, message } from 'antd';
 //common
 import { openNofi } from '@Comman/common';
 import Finger from '@Comman/Finger/Finger';
@@ -22,6 +22,7 @@ const RegisterPatient = ({ patientId, onFinish }) => {
    const registerType = Form.useWatch('registerType', form);
    const [isLoading, setIsLoading] = useState(false);
    const [current, setCurrent] = useState(0);
+   const [childrens, setChildrens] = useState([]);
 
    const steps = [
       {
@@ -41,28 +42,46 @@ const RegisterPatient = ({ patientId, onFinish }) => {
                      <Radio.Button value="foreignCitizen">Гадны иргэн</Radio.Button>
                   </Radio.Group>
                </Form.Item>
-               <Form.Item name="regnum" label="Pегистр" rules={[{ required: true, message: 'Регистр оруулна уу!' }]}>
+               <Form.Item
+                  name="regnum"
+                  label={registerType == 'children' ? 'Эцэг эхийн регистр' : 'Регистр'}
+                  rules={[{ required: true, message: 'Регистр оруулна уу!' }]}
+               >
                   <Input />
                </Form.Item>
-               <Form.Item
-                  name="authType"
-                  className="white-radio"
-                  label="Мэдээлэл татах төрөл"
-                  rules={[{ required: true, message: 'Мэдээлэл татах төрөлөө сонгоно уу!' }]}
-               >
-                  <Radio.Group>
-                     <Radio.Button value={0}>Үйлчилүүлэгчээр бөглүүлэх</Radio.Button>
-                     <Radio.Button value={1} disabled={form.getFieldValue('registerType') !== 'citizen'}>
-                        OTP
-                     </Radio.Button>
-                     <Radio.Button value={2} disabled={form.getFieldValue('registerType') !== 'citizen'}>
-                        Тоон гарын үсэг
-                     </Radio.Button>
-                     <Radio.Button value={3} disabled={form.getFieldValue('registerType') !== 'citizen'}>
-                        Хурууны хээ
-                     </Radio.Button>
-                  </Radio.Group>
-               </Form.Item>
+               {registerType == 'citizen' && (
+                  <Form.Item
+                     name="authType"
+                     className="white-radio"
+                     label="Мэдээлэл татах төрөл"
+                     rules={[{ required: true, message: 'Мэдээлэл татах төрөлөө сонгоно уу!' }]}
+                  >
+                     <Radio.Group>
+                        <Radio.Button value={0}>Үйлчилүүлэгчээр бөглүүлэх</Radio.Button>
+                        <Radio.Button value={1} disabled={form.getFieldValue('registerType') !== 'citizen'}>
+                           OTP
+                        </Radio.Button>
+                        <Radio.Button value={2} disabled={form.getFieldValue('registerType') !== 'citizen'}>
+                           Тоон гарын үсэг
+                        </Radio.Button>
+                        <Radio.Button value={3} disabled={form.getFieldValue('registerType') !== 'citizen'}>
+                           Хурууны хээ
+                        </Radio.Button>
+                     </Radio.Group>
+                  </Form.Item>
+               )}
+               {registerType == 'children' && (
+                  <Form.Item
+                     name="searchType"
+                     label="Эцэг/эх"
+                     rules={[{ required: true, message: 'Эцэг/эх эсэхийг сонгоно уу!' }]}
+                  >
+                     <Radio.Group>
+                        <Radio value={1}>Эцэг</Radio>
+                        <Radio value={2}>Эх</Radio>
+                     </Radio.Group>
+                  </Form.Item>
+               )}
                {/* registerType == 'citizen' &&  */}
             </>
          )
@@ -136,6 +155,13 @@ const RegisterPatient = ({ patientId, onFinish }) => {
                      </div>
                   </div>
                )}
+               {form.getFieldValue('registerType') == 'children' && (
+                  <Form.Item name="currentChildCivildId" label="Хүүхэд">
+                     <Select
+                        options={childrens.map((item) => ({ value: item?.civilId, label: item?.firstname }))}
+                     ></Select>
+                  </Form.Item>
+               )}
             </>
          )
       },
@@ -150,12 +176,12 @@ const RegisterPatient = ({ patientId, onFinish }) => {
       form
          .validateFields()
          .then(() => {
+            const registerType = form.getFieldValue('registerType');
             const authType = form.getFieldValue('authType');
             const regnum = form.getFieldValue('regnum');
             if (current === 0) {
-               if (authType == 1) {
-                  registerOtp(regnum);
-               }
+               authType == 1 && registerOtp(regnum);
+               registerType == 'children' && childrenInfo();
             } else if (current === 1) {
                if (authType === 0) {
                   // manual registration
@@ -180,6 +206,9 @@ const RegisterPatient = ({ patientId, onFinish }) => {
                         fingerprint: form.getFieldValue('operatorFinger')
                      }
                   });
+               }
+               if (registerType == 'children') {
+                  childByCivildId(form.getFieldValue('currentChildCivildId'));
                }
             }
             setCurrent(current + 1);
@@ -222,6 +251,18 @@ const RegisterPatient = ({ patientId, onFinish }) => {
          }
       });
    };
+   const childrenInfo = async () => {
+      const regnum = form.getFieldValue('regnum');
+      const searchType = form.getFieldValue('searchType');
+      xypApi.childrenInfo(regnum, searchType).then(({ data: { response } }) => {
+         if (response.return.resultCode != 0) {
+            openNofi('warning', 'ХУР-сервис', response.return.resultMessage);
+         } else {
+            setChildrens(response.return.response.listData);
+            openNofi('success', 'ХУР-сервис', response.return.resultMessage);
+         }
+      });
+   };
    const sentXyp = async (values) => {
       setIsLoading(true);
       await xypApi
@@ -255,7 +296,20 @@ const RegisterPatient = ({ patientId, onFinish }) => {
          })
          .finally(() => setIsLoading(false));
    };
-
+   const childByCivildId = (civilId) => {
+      const currentIndex = childrens.findIndex((item) => item?.civilId == civilId);
+      if (currentIndex > -1) {
+         const children = childrens[currentIndex];
+         form.setFieldsValue({
+            civilId,
+            familyName: children.lastname,
+            lastName: children.childLastname,
+            firstName: children.firstname,
+            registerNumber: children.regnum
+            // aimagCityName: Todo
+         });
+      }
+   };
    const getPatientById = async () => {
       form.resetFields();
       await patientApi
