@@ -226,7 +226,7 @@ class HealthInsurance {
    }
    /** 4.69 Иргэний жирэмсний хяналтын дэвтрийн мэдээллийг лавлах сервис */
    async getDataFormData(regno, serviceNo) {
-      return await jwtInterceopter.get('health-insurance/get-data-form-data', {
+      return await jwtInterceopter.get('health-insurance/data-form-data', {
          params: {
             regno,
             serviceNo

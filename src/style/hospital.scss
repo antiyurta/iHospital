@@ -279,7 +279,7 @@
 .ambo-list-user {
    display: flex;
    flex-direction: row;
-   gap: 3px;
+   gap: 6px;
    align-items: center;
    > .info {
       > p.name {
@@ -328,7 +328,7 @@
    height: 100%;
    border-radius: 8px;
    background-color: white;
-   justify-content: space-between;
+   // justify-content: space-between;
    padding: 8px;
    display: flex;
    flex-direction: column;
@@ -713,6 +713,7 @@
    .form-inputs {
       display: flex;
       flex-direction: column;
+      justify-content: center;
       width: 100%;
       padding: 8px;
       background: #f7f8fa;
