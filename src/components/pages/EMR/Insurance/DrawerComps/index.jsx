@@ -19,3 +19,4 @@ export * from './send-edit-medical-link';
 export * from './send-add-hics-service';
 export * from './send-direct-service';
 export * from './send-form-data';
+export * from './switch-support';

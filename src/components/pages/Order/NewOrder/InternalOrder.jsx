@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Form } from 'antd';
 import SetOrder from '../SetOrder';
 import { Examination } from '../Examination';
@@ -124,7 +124,8 @@ const InternalOrder = (props) => {
                      price: usageType === 'IN' ? item.inpatientPrice : item.price,
                      oPrice: usageType === 'IN' ? item.inpatientPrice : item.price,
                      requestDate: dayjs(new Date()).format('YYYY-MM-DD'),
-                     sealData: null
+                     sealData: null,
+                     approvalData: null
                   };
                   if (item.examCode) {
                      const currentSeal = addHics || hicsSeal;
@@ -311,7 +312,6 @@ const InternalOrder = (props) => {
    useEffect(() => {
       // replaceOtsData([], 0);
       if (IncomeOTSData?.services?.length > 0) {
-         console.log('asdasdasd', IncomeOTSData);
          orderForm.setFieldValue('services', IncomeOTSData.services);
       } else {
          orderForm.resetFields();
@@ -348,9 +348,10 @@ const InternalOrder = (props) => {
             {showDoctorInspection && <DoctorInspection handleclick={handleclick} />}
             {showReinspection && (
                <Reinspection
+                  isInsurance={IncomeEMRData.isInsurance}
                   selectedPatient={selectedPatient}
                   appointmentId={IncomeEMRData?.appointmentId}
-                  hicsSealId={hicsSeal.id}
+                  hicsSeal={hicsSeal}
                />
             )}
          </div>
@@ -397,11 +398,15 @@ const InternalOrder = (props) => {
                      .then((values) => {
                         if (isPackage) {
                            save(values.services);
-                           orderForm.resetFields();
                         } else {
                            const services = values.services || [];
                            const errors = services.filter(
-                              (service) => !service.orderTime && service.type !== 0 && !service.isCito
+                              (service) =>
+                                 !service.orderTime &&
+                                 service.type != 0 &&
+                                 service.type != 8 &&
+                                 service.type != 2 &&
+                                 !service.isCito
                            );
                            if (errors?.length > 0) {
                               errors?.map((error) => {
@@ -411,15 +416,19 @@ const InternalOrder = (props) => {
                               const newServices = services.filter(
                                  (service) => !service.requestId && !service.invoiceId
                               );
-                              if (addHics?.checkupId >= 1) {
-                                 updateHics('addHics', newServices);
+                              if (addHics.id && hicsSeal.id) {
+                                 if (addHics?.checkupId >= 1) {
+                                    updateHics('addHics', newServices);
+                                 } else {
+                                    updateHics('hicsSeal', newServices);
+                                 }
                               } else {
-                                 updateHics('hicsSeal', newServices);
+                                 save(services);
                               }
-                              orderForm.resetFields();
                               dispatch(delOtsData());
                            }
                         }
+                        orderForm.resetFields();
                      })
                      .catch((error) => {
                         console.log('er', error);

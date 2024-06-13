@@ -76,7 +76,11 @@ function Structure() {
          inputData: [
             {
                id: 201,
-               label: 201
+               label: '201-ambo'
+            },
+            {
+               id: 203,
+               label: '203-odrin'
             },
             {
                id: 205,

@@ -31,8 +31,16 @@ const Finger = (props) => {
 
    useEffect(() => {
       if (receivedDatas[`${rest.name}`]) {
-         console.log('end data=====>', rest);
-         form.setFieldValue(`${rest.name}`, receivedDatas[`${rest.name}`].result.image);
+         console.log('end data=====>', receivedDatas[`${rest.name}`].result);
+         if (typeof rest.name !== 'string') {
+            form.setFieldsValue({
+               [rest.name[0]]: {
+                  [rest.name[1]]: receivedDatas[`${rest.name}`].result.image
+               }
+            });
+         } else {
+            form.setFieldValue(`${rest.name}`, receivedDatas[`${rest.name}`].result.image);
+         }
       }
    }, [receivedDatas]);
 
@@ -108,3 +116,4 @@ const Finger = (props) => {
    );
 };
 export default Finger;
+

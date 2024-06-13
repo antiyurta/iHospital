@@ -14,7 +14,9 @@ import {
    DatePicker,
    InputNumber,
    Pagination,
-   Popconfirm
+   Popconfirm,
+   Space,
+   TimePicker
 } from 'antd';
 import Spinner from 'react-bootstrap/Spinner';
 import {
@@ -23,7 +25,8 @@ import {
    PlusOutlined,
    EyeOutlined,
    CheckOutlined,
-   CloseOutlined
+   CloseOutlined,
+   MinusCircleOutlined
 } from '@ant-design/icons';
 import { ScrollRef } from './common';
 import TextArea from 'antd/lib/input/TextArea';
@@ -87,17 +90,17 @@ function UTable(props) {
       setEditMode(true);
       setId(id);
       await jwtInterceopter.get(`${props.url}/${id}`).then(({ data: { response } }) => {
-         props.column.map((element) => {
-            if (element.input === 'date') {
-               response[`${element.index}`] = moment(response[`${element.index}`]);
-            }
+         // props.column.map((element) => {
+         //    if (element.input === 'date') {
+         //       response[`${element.index}`] = moment(response[`${element.index}`]);
+         //    }
 
-            if (element.extraIndex) {
-               response[element.index] = (response[element.extraIndex] || []).map(
-                  (res) => res[element.index.split('_')[1]]
-               )[0];
-            }
-         });
+         //    if (element.extraIndex) {
+         //       response[element.index] = (response[element.extraIndex] || []).map(
+         //          (res) => res[element.index.split('_')[1]]
+         //       )[0];
+         //    }
+         // });
          form.setFieldsValue(response);
          setIsModalVisible(true);
       });
@@ -208,11 +211,12 @@ function UTable(props) {
       setIsSwitch(e);
    };
 
-   const getInputs = (element, inputType) => {
+   const getInputs = (element, inputType, name) => {
+      const newName = name.concat([element.index]);
       switch (inputType) {
          case 'select':
             return (
-               <Form.Item label={element.label} name={element.index} rules={element.rules}>
+               <Form.Item label={element.label} name={newName} rules={element.rules}>
                   <Select
                      allowClear
                      showSearch
@@ -248,7 +252,7 @@ function UTable(props) {
             );
          case 'multipleSelect':
             return (
-               <Form.Item label={element.label} name={element.index} rules={element.rules}>
+               <Form.Item label={element.label} name={newName} rules={element.rules}>
                   <Select mode="multiple" allowClear placeholder={element.label}>
                      {element.inputData?.map((data, index) => {
                         return (
@@ -265,9 +269,45 @@ function UTable(props) {
             );
          case 'input':
             return (
-               <Form.Item label={element.label} name={element.index} rules={element.rules}>
+               <Form.Item label={element.label} name={newName} rules={element.rules}>
                   <Input placeholder={element.label} className="placeholder:text-xs" />
                </Form.Item>
+            );
+         case 'formList':
+            return (
+               <Form.List name={element.index}>
+                  {(fields, { add, remove }) => (
+                     <div className="flex flex-col gap-3 rounded-sm">
+                        {fields.map(({ key, name, ...restField }) => (
+                           <div key={key} className="bg-[#f5f6f7] p-2">
+                              <Row gutter={[24, 12]}>
+                                 {element.childrenColumns?.map((childElement, childIndex) => {
+                                    return (
+                                       <Col span={childElement.col} key={childIndex}>
+                                          {getInputs(childElement, childElement.input, [name])}
+                                       </Col>
+                                    );
+                                 })}
+                                 <Col span={24}>
+                                    <Button
+                                       danger
+                                       icon={<MinusCircleOutlined />}
+                                       onClick={() => {
+                                          remove(name);
+                                       }}
+                                    >
+                                       Хасах
+                                    </Button>
+                                 </Col>
+                              </Row>
+                           </div>
+                        ))}
+                        <Button className="w-full" type="primary" onClick={() => add()} icon={<PlusOutlined />}>
+                           {element.label}
+                        </Button>
+                     </div>
+                  )}
+               </Form.List>
             );
          case 'title':
             return <p className="w-full mx-auto text-center my-2 font-bold text-lg">{element.label}</p>;
@@ -276,28 +316,35 @@ function UTable(props) {
                <Form.Item label={element.label} name={element.index} rules={element.rules} valuePropName="checked">
                   <Switch
                      key={element.index}
-                     className={isSwitch && element.index === 'hasBranch' ? 'bg-sky-700' : 'bg-gray-400'}
+                     // className={isSwitch && element.index === 'hasBranch' ? 'bg-sky-700' : 'bg-sky-700'}
                      checkedChildren="Тийм"
                      unCheckedChildren="Үгүй"
-                     onChange={element.index === 'hasBranch' && handleSwitch}
+                     style={{}}
+                     // onChange={element.index === 'hasBranch' && handleSwitch}
                   />
                </Form.Item>
             );
          case 'numberInput':
             return (
-               <Form.Item label={element.label} name={element.index} rules={element.rules}>
+               <Form.Item label={element.label} name={newName} rules={element.rules}>
                   <InputNumber placeholder={element.label} onKeyPress={checkNumber} />
                </Form.Item>
             );
          case 'textarea':
             return (
-               <Form.Item label={element.label} name={element.index} rules={element.rules}>
+               <Form.Item label={element.label} name={newName} rules={element.rules}>
                   <TextArea placeholder={element.label} className="placeholder:text-xs" />
+               </Form.Item>
+            );
+         case 'timeRange':
+            return (
+               <Form.Item label={element.label} name={newName} rules={element.rules}>
+                  <TimePicker.RangePicker locale={mn} />
                </Form.Item>
             );
          case 'date':
             return (
-               <Form.Item label={element.label} name={element.index} rules={element.rules}>
+               <Form.Item label={element.label} name={newName} rules={element.rules}>
                   <DatePicker locale={mn} />
                </Form.Item>
             );
@@ -591,42 +638,41 @@ function UTable(props) {
                form
                   .validateFields()
                   .then((values) => {
-                     const branchVals = Object.entries(values).reduce(
-                        (acc, [key, value]) => {
-                           if (key.includes('branchList_')) {
-                              if (key === 'branchList_status' && typeof value === 'boolean') {
-                                 let convertedVal = !!value ? 1 : 0;
-                                 acc.branchList[key.split('_')[1]] = convertedVal;
-                              } else {
-                                 acc.branchList[key.split('_')[1]] = value;
-                              }
-                           } else if (key.includes('operationList_')) {
-                              if (key === 'operationList_status') {
-                                 let convertedVal = !!value ? 1 : 0;
-                                 acc.operationList[key.split('_')[1]] = convertedVal;
-                              } else {
-                                 acc.operationList[key.split('_')[1]] = value;
-                              }
-                           } else {
-                              if (key == 'hasBranch' || key == 'hasInsurance') {
-                                 let convertedVal = !!value ? 1 : 0;
-                                 acc.hasNoBranchVals[key] = convertedVal;
-                              } else {
-                                 acc.hasNoBranchVals[key] = value;
-                              }
-                           }
-                           return acc;
-                        },
-                        { hasNoBranchVals: {}, branchList: {}, operationList: {} }
-                     );
-
-                     const resultValues = {
-                        ...branchVals.hasNoBranchVals,
-                        branchList: !!branchVals.branchList ? [branchVals.branchList] : [],
-                        operationList: !!branchVals.operationList ? [branchVals.operationList] : {}
-                     };
-
-                     onFinish(!!branchVals.branchList ? resultValues : values);
+                     onFinish(values);
+                     // const branchVals = Object.entries(values).reduce(
+                     //    (acc, [key, value]) => {
+                     //       if (key.includes('branchList_')) {
+                     //          if (key === 'branchList_status' && typeof value === 'boolean') {
+                     //             let convertedVal = !!value ? 1 : 0;
+                     //             acc.branchList[key.split('_')[1]] = convertedVal;
+                     //          } else {
+                     //             acc.branchList[key.split('_')[1]] = value;
+                     //          }
+                     //       } else if (key.includes('operationList_')) {
+                     //          if (key === 'operationList_status') {
+                     //             let convertedVal = !!value ? 1 : 0;
+                     //             acc.operationList[key.split('_')[1]] = convertedVal;
+                     //          } else {
+                     //             acc.operationList[key.split('_')[1]] = value;
+                     //          }
+                     //       } else {
+                     //          if (key == 'hasBranch' || key == 'hasInsurance') {
+                     //             let convertedVal = !!value ? 1 : 0;
+                     //             acc.hasNoBranchVals[key] = convertedVal;
+                     //          } else {
+                     //             acc.hasNoBranchVals[key] = value;
+                     //          }
+                     //       }
+                     //       return acc;
+                     //    },
+                     //    { hasNoBranchVals: {}, branchList: {}, operationList: {} }
+                     // );
+                     // const resultValues = {
+                     //    ...branchVals.hasNoBranchVals,
+                     //    branchList: !!branchVals.branchList ? [branchVals.branchList] : [],
+                     //    operationList: !!branchVals.operationList ? [branchVals.operationList] : {}
+                     // };
+                     // onFinish(!!branchVals.branchList ? resultValues : values);
                   })
                   .catch((error) => {
                      onFinishFailed(error);
@@ -642,9 +688,9 @@ function UTable(props) {
          >
             <Form
                form={form}
-               wrapperCol={{ span: 14 }}
+               layout="vertical"
                initialValues={props.initialValues}
-               // onValuesChange={handleFormValuesChange}
+               onValuesChange={props.onValuesChange}
             >
                <Row gutter={[24, 6]}>
                   {props.column.map((element, index) => {
@@ -672,7 +718,8 @@ function UTable(props) {
                               {element.input === 'title' ? (
                                  <div className="text-center font-bold text-lg mb-2">{element.label}</div>
                               ) : (
-                                 getInputs(element, element.input, props.child || false)
+                                 // getInputs(element, element.input, props.child || false)
+                                 getInputs(element, element.input, [])
                               )}
                            </Suspense>
                         </Col>

@@ -1,5 +1,6 @@
 export const HEALTH_SERVICES_TITLE = {
    savePrescription: 'SAVE_PRESCRIPTION',
+   switchSupport: 'SWITCH_SUPPORT',
    cancelService: 'CANCEL_SERVICE',
    saveHics: 'SAVE_HICS',
    setApproval: 'SET_APPROVAL',
@@ -35,6 +36,7 @@ const HST = HEALTH_SERVICES_TITLE;
 export const HEALTH_SERVCES_DESCRIPTION = (title) =>
    ({
       [HST.savePrescription]: '4.6 Цахим жор үүсгэх сервис',
+      [HST.switchSupport]: '4.6.1 Тусламж үйлчилгээг солих',
       [HST.cancelService]: '4.17 Эрүүл мэндийн тусламж үйлчилгээг цуцлах',
       [HST.saveHics]: '4.29 Битүүмж үүсгэх сервис',
       [HST.sendHics]: '4.30 Төлбөрийн мэдээлэл илгээх сервис',

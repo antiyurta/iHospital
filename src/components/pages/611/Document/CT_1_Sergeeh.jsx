@@ -18,28 +18,32 @@ const CT_1_Sergeeh = (props) => {
                      <tr>
                         <th>
                            <th className="flex items-center gap-4">
-                              <p> Харилцах бэрхшээлтэй эсэх:</p>{' '}
+                              <p id="child"> Харилцах бэрхшээлтэй эсэх:</p>{' '}
                               <Checkbox.Group value={formData?.q1}>
                                  <Checkbox value={'q1-1'}>Тийм</Checkbox>
                                  <Checkbox value={'q1-2'}>Үгүй</Checkbox>
                               </Checkbox.Group>
                            </th>
                            <th className="flex items-center gap-4">
-                              <p>Залгих чадвар бэрхшээлтэй эсэх:</p>
+                              <p id="child">Залгих чадвар бэрхшээлтэй эсэх:</p>
                               <Checkbox.Group value={formData?.q2}>
                                  <Checkbox value={'q2-1'}>Тийм</Checkbox>
                                  <Checkbox value={'q2-2'}>Үгүй</Checkbox>
                               </Checkbox.Group>
                            </th>
-                           <th className="w-full ml-2">(Хэрвээ тийм бол хэл засалч бөглөнө )</th>
-                           <th className="flex items-center gap-4">
+                           <th className="w-full ml-2" id="child">
+                              (Хэрвээ тийм бол хэл засалч бөглөнө )
+                           </th>
+                           <th className="flex items-center gap-4" id="child">
                               Танин мэдэхүйн үйл ажиллагаа өөрчлөлттэй эсэх:
                               <Checkbox.Group value={formData?.q3}>
                                  <Checkbox value={'q3-1'}>Тийм</Checkbox>
                                  <Checkbox value={'q3-2'}>Үгүй</Checkbox>
                               </Checkbox.Group>
                            </th>
-                           <th className="w-full ml-2">(Хэрвээ тийм бол хөдөлмөр засалч бөглөнө)</th>
+                           <th className="w-full ml-2" id="child">
+                              (Хэрвээ тийм бол хөдөлмөр засалч бөглөнө)
+                           </th>
                         </th>
                      </tr>
                   </thead>
@@ -88,7 +92,7 @@ const CT_1_Sergeeh = (props) => {
                               </Checkbox>
                            </Checkbox.Group>
                            <th className="flex items-center">
-                              <th>Холголт цооролт: </th>
+                              <th id="child">Холголт цооролт: </th>
                               <Checkbox.Group value={formData?.q7}>
                                  <Checkbox className="ml-2" value={'q7-1'}>
                                     Тийм
@@ -97,7 +101,7 @@ const CT_1_Sergeeh = (props) => {
                               </Checkbox.Group>
                            </th>
                            <th className="flex items-center">
-                              <th>Тууралт: </th>
+                              <th id="child"> Тууралт: </th>
                               <Checkbox.Group value={formData?.q8}>
                                  <Checkbox className="ml-2" value={'q8-1'}>
                                     Тийм
@@ -106,7 +110,7 @@ const CT_1_Sergeeh = (props) => {
                               </Checkbox.Group>
                            </th>
                            <th className="flex items-center">
-                              <th>Хаван:</th>
+                              <th id="child">Хаван:</th>
                               <Checkbox.Group value={formData?.q9}>
                                  <Checkbox className="ml-2" value={'q9-1'}>
                                     Тийм
@@ -126,7 +130,7 @@ const CT_1_Sergeeh = (props) => {
                      </tr>
                      <tr>
                         <th>
-                           <th>
+                           <th id="child">
                               Амьсгал 1 минутанд
                               <Input
                                  className="amaraInput w-10"
@@ -134,7 +138,7 @@ const CT_1_Sergeeh = (props) => {
                                  style={{ textAlign: 'center' }}
                               />
                               удаа
-                              <th>
+                              <th id="child">
                                  Амьсгалд туслах булчин оролцож байгаа эсэх:
                                  <Checkbox.Group className="w-full" value={formData?.q11}>
                                     <Checkbox value={'q11-1'}>Тийм</Checkbox>
@@ -156,7 +160,7 @@ const CT_1_Sergeeh = (props) => {
                         </th>
                         <th colSpan={2}>
                            <th>
-                              <th>Цээжний 2 тал амьсгалд жигд оролцох байдал:</th>
+                              <th id="child">Цээжний 2 тал амьсгалд жигд оролцох байдал:</th>
                               <Checkbox.Group value={formData?.q14} className="flex items-center">
                                  <Checkbox className="ml-5" value={'q14-1'}>
                                     жигд
@@ -237,21 +241,27 @@ const CT_1_Sergeeh = (props) => {
                   <thead>
                      <tr className="border-t-0">
                         <th>
-                           <th>Судасны цохилт </th>1 минутанд
-                           <Input className="amaraInput w-10" value={formData?.q16} style={{ textAlign: 'center' }} />
-                           удаа
-                           <th>
+                           <p id="child">
+                              Судасны цохилт 1 минутанд
+                              <Input
+                                 className="amaraInput w-10"
+                                 value={formData?.q16}
+                                 style={{ textAlign: 'center' }}
+                              />
+                              удаа
+                           </p>
+                           <p id="child">
                               Хүчдэл дүүрэлт
                               <Input
                                  className="amaraInput w-20"
                                  value={formData?.q17}
                                  style={{ textAlign: 'center' }}
                               />
-                           </th>
+                           </p>
                         </th>
                         <th>
-                           <th>Тогшилтоор:</th>
-                           Зүрхний хил
+                           <p>Тогшилтоор:</p>
+                           <p id="child">Зүрхний хил</p>
                            <Checkbox.Group value={formData?.q18}>
                               <Checkbox className="ml-2" value={'q18-1'}>
                                  Хэвийн
@@ -278,8 +288,8 @@ const CT_1_Sergeeh = (props) => {
                            </Checkbox.Group>
                         </th>
                         <th>
-                           <th>Чагналтаар::</th>
-                           Зүрхний авиа
+                           <p>Чагналтаар::</p>
+                           <p id="child">Зүрхний авиа</p>
                            <Checkbox.Group value={formData?.q19}>
                               <Checkbox className="ml-2" value={'q19-1'}>
                                  {' '}
@@ -291,17 +301,13 @@ const CT_1_Sergeeh = (props) => {
                               <Checkbox value={'q19-5'}>Жигд бус </Checkbox>
                               <Checkbox value={'q19-6'}>Хэм алдалттай</Checkbox>
                            </Checkbox.Group>
-                           <th>
+                           <th id="child">
                               АД баруун талд
                               <Input className="amaraInput w-8" value={formData?.q20} style={{ textAlign: 'center' }} />
-                              /
-                              <Input className="amaraInput w-8" value={formData?.q21} style={{ textAlign: 'center' }} />
                            </th>
-                           <th>
+                           <th id="child">
                               Зүүн талд
                               <Input className="amaraInput w-8" value={formData?.q22} style={{ textAlign: 'center' }} />
-                              /
-                              <Input className="amaraInput w-8" value={formData?.q23} style={{ textAlign: 'center' }} />
                            </th>
                         </th>
                      </tr>
@@ -328,32 +334,34 @@ const CT_1_Sergeeh = (props) => {
                         </th>
                         <th colSpan={3}>
                            <p> Хэвлийн үзлэг:</p>
-                           <Checkbox.Group value={formData?.q25}>
-                              <p>Өнгөц тэмтрэлтээр </p>
-                              <Checkbox value={'q25-1'}>эмзэглэлгүй</Checkbox>
-                              <Checkbox value={'q25-2'}>
-                                 Эмзэглэлтэй (байрлал
-                                 <Input
-                                    className="amaraInput w-8"
-                                    value={formData?.['q25-2-1']}
-                                    style={{ textAlign: 'center' }}
-                                 />
-                                 )
-                              </Checkbox>
-                           </Checkbox.Group>
-                           <Checkbox.Group value={formData?.q26}>
-                              <p>Гүн тэмтрэлтээр</p>
-                              <Checkbox value={'q26-1'}>эмзэглэлгүй</Checkbox>
-                              <Checkbox value={'q26-2'}>
-                                 Эмзэглэлтэй (байрлал
-                                 <Input
-                                    className="amaraInput w-8"
-                                    value={formData?.['q26-2-1']}
-                                    style={{ textAlign: 'center' }}
-                                 />
-                                 )
-                              </Checkbox>
-                           </Checkbox.Group>
+                           <div className="flex flex-col">
+                              <Checkbox.Group value={formData?.q25}>
+                                 <p id="cls">Өнгөц тэмтрэлтээр </p>
+                                 <Checkbox value={'q25-1'}>эмзэглэлгүй</Checkbox>
+                                 <Checkbox value={'q25-2'}>
+                                    Эмзэглэлтэй (байрлал
+                                    <Input
+                                       className="amaraInput w-8"
+                                       value={formData?.['q25-2-1']}
+                                       style={{ textAlign: 'center' }}
+                                    />
+                                    )
+                                 </Checkbox>
+                              </Checkbox.Group>
+                              <Checkbox.Group value={formData?.q26}>
+                                 <p id="cls">Гүн тэмтрэлтээр</p>
+                                 <Checkbox value={'q26-1'}>эмзэглэлгүй</Checkbox>
+                                 <Checkbox value={'q26-2'}>
+                                    Эмзэглэлтэй (байрлал
+                                    <Input
+                                       className="amaraInput w-8"
+                                       value={formData?.['q26-2-1']}
+                                       style={{ textAlign: 'center' }}
+                                    />
+                                    )
+                                 </Checkbox>
+                              </Checkbox.Group>
+                           </div>
                            <Checkbox.Group value={formData?.q27}>
                               <Checkbox value={'q27-1'}>Зөөлөн гялтан цочрол үгүй</Checkbox>
                               <Checkbox value={'q27-2'}> Гялтан цочролын шинж илэрсэн</Checkbox>
@@ -373,7 +381,7 @@ const CT_1_Sergeeh = (props) => {
                      </tr>
                      <tr>
                         <th className="w-[20%]">
-                           <th>Шээх байдал</th>
+                           <th id="cls">Шээх байдал</th>
                            <Checkbox.Group value={formData?.q28}>
                               <Checkbox className="w-full ml-2" value={'q28-1'}>
                                  Өөрөө
@@ -383,7 +391,7 @@ const CT_1_Sergeeh = (props) => {
                               </Checkbox>
                               <Checkbox value={'q28-3'}>Цистосто мийн гуурсаар </Checkbox>
                            </Checkbox.Group>
-                           <th>Хоногийн шээсний гарц</th>
+                           <th id="cls">Хоногийн шээсний гарц</th>
                            <Checkbox.Group value={formData?.q29}>
                               <Checkbox className="w-full ml-2" value={'q29-1'}>
                                  Хэвийн
@@ -396,7 +404,7 @@ const CT_1_Sergeeh = (props) => {
                         </th>
                         <th className="w-[20%]">
                            <th>
-                              <th>Шээсний өнгө</th>
+                              <th id="cls">Шээсний өнгө</th>
                               <Checkbox.Group value={formData?.q30}>
                                  <Checkbox className="w-full ml-2" value={'q30-1'}>
                                     сүрлэн шар
@@ -412,7 +420,7 @@ const CT_1_Sergeeh = (props) => {
                                  </Checkbox>
                                  <Checkbox value={'q30-5'}>тунадасгүй</Checkbox>
                               </Checkbox.Group>
-                              <th>Шөнө шээдэг эсэх</th>
+                              <th id="cls">Шөнө шээдэг эсэх</th>
                               <Checkbox.Group value={formData?.q31}>
                                  <Checkbox className="w-full ml-2" value={'q31-1'}>
                                     тийм
@@ -423,21 +431,21 @@ const CT_1_Sergeeh = (props) => {
                         </th>
                         <th className="w-[20%]">
                            <th>
-                              <th>Шээс тасалддаг эсэх</th>
+                              <th id="cls">Шээс тасалддаг эсэх</th>
                               <Checkbox.Group value={formData?.q32}>
                                  <Checkbox className="w-full ml-2" value={'q32-1'}>
                                     тийм
                                  </Checkbox>
                                  <Checkbox value={'q32-2'}>үгүй </Checkbox>
                               </Checkbox.Group>
-                              <th>Дутуу шээдэг эсэх</th>
+                              <th id="cls">Дутуу шээдэг эсэх</th>
                               <Checkbox.Group value={formData?.q33}>
                                  <Checkbox className="w-full ml-2" value={'q33-1'}>
                                     тийм
                                  </Checkbox>
                                  <Checkbox value={'q33-2'}>үгүй </Checkbox>
                               </Checkbox.Group>
-                              <th>Дүлж шээдэг эсэх</th>
+                              <th id="cls">Дүлж шээдэг эсэх</th>
                               <Checkbox.Group value={formData?.q34}>
                                  <Checkbox className="w-full ml-2" value={'q34-1'}>
                                     тийм
@@ -448,14 +456,14 @@ const CT_1_Sergeeh = (props) => {
                         </th>
                         <th className="w-[20%]">
                            <th>
-                              <th>Шээхэд өвдөлттэй эсэх</th>
+                              <th id="cls">Шээхэд өвдөлттэй эсэх</th>
                               <Checkbox.Group value={formData?.q35}>
                                  <Checkbox className="w-full ml-2" value={'q35-1'}>
                                     тийм
                                  </Checkbox>
                                  <Checkbox value={'q35-2'}>үгүй </Checkbox>
                               </Checkbox.Group>
-                              <th>Бөөр тэмтрэлтээр </th>
+                              <th id="cls">Бөөр тэмтрэлтээр </th>
                               <Checkbox.Group value={formData?.q36}>
                                  <Checkbox className="w-full ml-2" value={'q36-1'}>
                                     эмзэглэлтэй
@@ -478,7 +486,9 @@ const CT_1_Sergeeh = (props) => {
                                     )
                                  </span>
                               </p>
-                              <th className="mt-2">Пастернацкий</th>
+                              <th className="mt-2" id="cls">
+                                 Пастернацкий
+                              </th>
                               <Checkbox.Group value={formData?.q37}>
                                  <Checkbox className="w-full ml-2" value={'q37-1'}>
                                     баруун
@@ -489,14 +499,14 @@ const CT_1_Sergeeh = (props) => {
                         </th>
                         <th>
                            <th>
-                              <th>Үе мөчний хэлбэр</th>
+                              <th id="cls">Үе мөчний хэлбэр</th>
                               <Checkbox.Group value={formData?.q38}>
                                  <Checkbox className="w-full ml-2" value={'q38-1'}>
                                     хэвийн
                                  </Checkbox>
                                  <Checkbox value={'q38-2'}>өөрчлөгдсөн </Checkbox>
                               </Checkbox.Group>
-                              <th>Үений хөдөлгөөн</th>
+                              <th id="cls">Үений хөдөлгөөн</th>
                               <Checkbox.Group value={formData?.q39}>
                                  <Checkbox className="w-full ml-2" value={'q39-1'}>
                                     идэвхтэй
@@ -516,13 +526,15 @@ const CT_1_Sergeeh = (props) => {
          <div className="page">
             <div className="subpage">
                <div className="flex flex-col">
-                  <th>Бага тархины үйл ажиллагаа</th>
-                  <th>Нистагм: + / - салганал: (тайван байхад/ хөдөлгөхөд) өсгий шилбэний сорил:------------------</th>
-                  <th>
+                  <th id="cls"> Бага тархины үйл ажиллагаа</th>
+                  <th id="cls">
+                     Нистагм: + / - салганал: (тайван байхад/ хөдөлгөхөд) өсгий шилбэний сорил:------------------
+                  </th>
+                  <th id="cls">
                      Хамар хурууын сорил: ----------------------- Тандем алхаа: --------------------------- Ромберг
                      сорил: -----------------
                   </th>
-                  <th>
+                  <th id="cls">
                      Солбисон хурдан хөдөлгөөн: ----------------------------------- Алхааны атакси:
                      -------------------------------------------
                   </th>
@@ -643,14 +655,14 @@ const CT_1_Sergeeh = (props) => {
                      <tr className="border-t-0">
                         <th rowSpan={14}>
                            <th className="flex flex-col">
-                              <th className="flex items-center gap-4">
+                              <th className="flex items-center gap-4" id="cls">
                                  I:
                                  <Checkbox.Group value={formData?.q43}>
                                     <Checkbox value={'43-1'}>Хэвийн</Checkbox>
                                     <Checkbox value={'43-2 '}>Хэвийн бус</Checkbox>
                                  </Checkbox.Group>
                               </th>
-                              <th>
+                              <th id="cls">
                                  Б
                                  <Input
                                     className="amaraInput w-10"
@@ -664,19 +676,19 @@ const CT_1_Sergeeh = (props) => {
                                     style={{ textAlign: 'center' }}
                                  />
                               </th>
-                              <th></th>
-                              <th>
+                              <th id="cls"></th>
+                              <th id="cls">
                                  II:
                                  <Input value={formData?.['q45-1']} />
                               </th>
-                              <th className="flex items-center gap-4">
-                                 <th>XXX:</th>
+                              <th id="cls" className="flex items-center gap-4">
+                                 <th id="cls">XXX:</th>
                                  <Checkbox.Group value={formData?.q46}>
                                     <Checkbox value={'q46-1'}>Хэвийн</Checkbox>
                                     <Checkbox value={'q46-2'}>Хэвийн бус</Checkbox>
                                  </Checkbox.Group>
                               </th>
-                              <th>
+                              <th id="cls">
                                  {' '}
                                  Б
                                  <Input
@@ -691,12 +703,12 @@ const CT_1_Sergeeh = (props) => {
                                     style={{ textAlign: 'center' }}
                                  />
                               </th>
-                              <th> Гэрлийн гурвал:</th>
+                              <th id="cls"> Гэрлийн гурвал:</th>
                               <Checkbox.Group value={formData?.q49}>
                                  <Checkbox value={'q49-1'}>Хэвийн</Checkbox>
                                  <Checkbox value={'q49-2'}>Хэвийн бус</Checkbox>
                               </Checkbox.Group>
-                              <th>
+                              <th id="cls">
                                  {' '}
                                  Б
                                  <Input
@@ -711,13 +723,13 @@ const CT_1_Sergeeh = (props) => {
                                     style={{ textAlign: 'center' }}
                                  />
                               </th>
-                              <th>
+                              <th id="cls">
                                  III-IV-VI:
                                  <Input value={formData?.['q51-1']} />
                               </th>
                               <th>
-                                 <th> Птоз:</th>
-                                 <th>
+                                 <th id="cls"> Птоз:</th>
+                                 <th id="cls">
                                     {' '}
                                     Б
                                     <Input
@@ -733,13 +745,13 @@ const CT_1_Sergeeh = (props) => {
                                     />
                                  </th>
                               </th>
-                              <th> Нистагм:</th>
+                              <th id="cls"> Нистагм:</th>
                               <Checkbox.Group value={formData?.q54}>
                                  <Checkbox value={'q54-1'}>Илрээгүй</Checkbox>
                                  <Checkbox value={'q54-2'}>Илэрсэн</Checkbox>
                               </Checkbox.Group>
                               <th className="flex items-center gap-4">
-                                 <th>Диплопи:</th>
+                                 <th id="cls">Диплопи:</th>
                                  <Checkbox.Group value={formData?.q55}>
                                     <Checkbox value={'q55-1'}>Эерэг</Checkbox>
                                     <Checkbox value={'q55-2'}>Сөрөг</Checkbox>
@@ -748,7 +760,7 @@ const CT_1_Sergeeh = (props) => {
                            </th>
                         </th>
                         <th rowSpan={4}>
-                           <th> VII:</th>
+                           <th id="cls"> VII:</th>
                            <Checkbox.Group value={formData?.q56}>
                               <Checkbox className="w-full ml-2" value={'q56-1'}>
                                  Хэвийн
@@ -756,29 +768,29 @@ const CT_1_Sergeeh = (props) => {
                               <Checkbox value={'q56-2'}>Хэвийн бус</Checkbox>
                            </Checkbox.Group>
                         </th>
-                        <th>Хэвийн бус бол : </th>
-                        <th>Б</th>
-                        <th>З</th>
+                        <th id="cls">Хэвийн бус бол: </th>
+                        <th id="cls">Б</th>
+                        <th id="cls">З</th>
                      </tr>
                      <tr>
-                        <th>Нүдний анилт</th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls">Нүдний анилт</th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                      <tr>
-                        <th>Духны атираа </th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls">Духны атираа </th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                      <tr>
-                        <th>Хамар уруулын нугалаа</th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls">Хамар уруулын нугалаа</th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                      <tr>
                         <th rowSpan={3}>
                            {' '}
-                           <th> VIII: </th>
+                           <th id="cls"> VIII: </th>
                            <Checkbox.Group value={formData?.q57}>
                               <Checkbox className="w-full ml-2 " value={'q57-1'}>
                                  Хэвийн
@@ -786,24 +798,24 @@ const CT_1_Sergeeh = (props) => {
                               <Checkbox value={'q57-2'}>Хэвийн бус</Checkbox>
                            </Checkbox.Group>
                         </th>
-                        <th>Хэвийн бус бол</th>
-                        <th>Б</th>
-                        <th>З</th>
+                        <th id="cls">Хэвийн бус бол</th>
+                        <th id="cls">Б</th>
+                        <th id="cls">З</th>
                      </tr>
                      <tr>
-                        <th>Сонсгол</th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls">Сонсгол</th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                      <tr>
-                        <th>Чих шуугих</th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls">Чих шуугих</th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                      <tr>
                         <th rowSpan={3}>
                            {' '}
-                           <th> IX, X: </th>
+                           <th id="cls"> IX, X: </th>
                            <Checkbox.Group value={formData?.q58}>
                               <Checkbox className="w-full ml-2" value={'q58-1'}>
                                  Хэвийн
@@ -811,19 +823,19 @@ const CT_1_Sergeeh = (props) => {
                               <Checkbox value={'q58-2'}>Хэвийн бус</Checkbox>
                            </Checkbox.Group>
                         </th>
-                        <th>Хэвийн бус бол</th>
-                        <th>Б</th>
-                        <th>З</th>
+                        <th id="cls">Хэвийн бус бол</th>
+                        <th id="cls">Б</th>
+                        <th id="cls">З</th>
                      </tr>
                      <tr>
-                        <th>Хүүхэн хэлний хазайлт</th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls">Хүүхэн хэлний хазайлт</th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                      <tr>
-                        <th>Залгиурын рефлекс</th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls">Залгиурын рефлекс</th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                      <tr>
                         <th colSpan={4}>
@@ -836,7 +848,7 @@ const CT_1_Sergeeh = (props) => {
                      <tr>
                         <th rowSpan={3}>
                            {' '}
-                           <th> XI:</th>
+                           <th id="cls"> XI:</th>
                            <Checkbox.Group value={formData?.q60}>
                               <Checkbox className="w-full ml-2" value={'q60-1'}>
                                  Хэвийн
@@ -844,19 +856,27 @@ const CT_1_Sergeeh = (props) => {
                               <Checkbox value={'q60-2'}>Хэвийн бус</Checkbox>
                            </Checkbox.Group>
                         </th>
-                        <th>Хэвийн бус бол </th>
-                        <th>Б</th>
-                        <th>З</th>
+                        <th id="cls">Хэвийн бус бол </th>
+                        <th id="cls">Б</th>
+                        <th id="cls">З</th>
                      </tr>
                      <tr>
-                        <th>Стерноклейдомастойд</th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls">Стерноклейдомастойд</th>
+                        <th id="cls">
+
+
+                        </th>
+                        <th id="cls">
+
+
+
+                           
+                        </th>
                      </tr>
                      <tr>
-                        <th>Трапец хэлбэрт булчин</th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls">Трапец хэлбэрт булчин</th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                   </thead>
                </Table>
@@ -872,7 +892,7 @@ const CT_1_Sergeeh = (props) => {
                      <tr>
                         <th colSpan={4}></th>
                         <th rowSpan={5}>
-                           <th> XII: </th>
+                           <th id="cls"> XII: </th>
                            <Checkbox.Group value={formData?.q62}>
                               <Checkbox className="w-full ml-2" value={'q62-1'}>
                                  Хэвийн
@@ -880,13 +900,17 @@ const CT_1_Sergeeh = (props) => {
                               <Checkbox value={'q62-2'}> Хэвийн бус</Checkbox>
                            </Checkbox.Group>
                         </th>
-                        <th>Хэвийн бус бол</th>
-                        <th className="w-6">Б</th>
-                        <th className="w-6">З</th>
+                        <th id="cls">Хэвийн бус бол</th>
+                        <th id="cls" className="w-6">
+                           Б
+                        </th>
+                        <th id="cls" className="w-6">
+                           З
+                        </th>
                      </tr>
                      <tr>
                         <th rowSpan={4} className="w-[100px]">
-                           <th> V:</th>
+                           <th id="cls"> V:</th>
                            <Checkbox.Group value={formData?.q61}>
                               <Checkbox className="w-full ml-2" value={'q61-1'}>
                                  Хэвийн
@@ -894,33 +918,39 @@ const CT_1_Sergeeh = (props) => {
                               <Checkbox value={'q61-2'}>Хэвийн бус</Checkbox>
                            </Checkbox.Group>
                         </th>
-                        <th>Хэвийн бус бол </th>
-                        <th className="w-6">Б</th>
-                        <th className="w-6">З</th>
-                        <th>Хэлний хазайлт</th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls">Хэвийн бус бол </th>
+                        <th id="cls" className="w-6">
+                           Б
+                        </th>
+                        <th id="cls" className="w-6">
+                           З
+                        </th>
+                        <th id="cls">Хэлний хазайлт</th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                      <tr>
-                        <th>Нүүрний мэдрэхүй</th>
-                        <th></th>
-                        <th></th>
-                        <th>Хатангиршил / татвалзал </th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls">Нүүрний мэдрэхүй</th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
+                        <th id="cls">Хатангиршил / татвалзал </th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                      <tr>
-                        <th>Эвэрлэгийн рефлекс</th>
-                        <th></th>
-                        <th></th>
-                        <th rowSpan={5}>Дизартри / анартри</th>
-                        <th rowSpan={5}></th>
-                        <th rowSpan={5}></th>
+                        <th id="cls">Эвэрлэгийн рефлекс</th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
+                        <th id="cls" rowSpan={5}>
+                           Дизартри / анартри
+                        </th>
+                        <th id="cls" rowSpan={5}></th>
+                        <th id="cls" rowSpan={5}></th>
                      </tr>
                      <tr>
-                        <th>Зажлуурын булчингийн хүч</th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls">Зажлуурын булчингийн хүч</th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                   </thead>
                </Table>
@@ -933,36 +963,36 @@ const CT_1_Sergeeh = (props) => {
                      <tr>
                         <th colSpan={3} rowSpan={5}>
                            <th className="flex flex-col gap-0">
-                              <th>Үений хөдөлгөөний далайц</th>
-                              <th>Мөр</th>
-                              <th>Тохой</th>
-                              <th>Бугуй</th>
-                              <th>Сарвуу</th>
-                              <th>Түнх</th>
-                              <th>Өвдөг</th>
-                              <th>Шагай</th>
-                              <th>Булчингийн хүч:</th>
-                              <th>
+                              <th id="cls">Үений хөдөлгөөний далайц</th>
+                              <th id="cls">Мөр</th>
+                              <th id="cls">Тохой</th>
+                              <th id="cls">Бугуй</th>
+                              <th id="cls">Сарвуу</th>
+                              <th id="cls">Түнх</th>
+                              <th id="cls">Өвдөг</th>
+                              <th id="cls">Шагай</th>
+                              <th id="cls">Булчингийн хүч:</th>
+                              <th id="cls">
                                  Гар:
                                  <Input />
                               </th>
                               <th>------------------------------------------------------ </th>
                            </th>
                         </th>
-                        <th>
+                        <th id="cls">
                            <p>Мэдрэхүй</p>{' '}
                         </th>
-                        <th>Хэвийн</th>
-                        <th>Ихэссэн</th>
-                        <th>Буурсан</th>
-                        <th rowSpan={5}>
-                           <th>Үнэрлэх:</th>
+                        <th id="cls">Хэвийн</th>
+                        <th id="cls">Ихэссэн</th>
+                        <th id="cls">Буурсан</th>
+                        <th id="cls" rowSpan={5}>
+                           <th id="cls">Үнэрлэх:</th>
                            <Checkbox.Group className="flex flex-col" value={formData?.q63}>
                               <Checkbox className="ml-2">Хэвийн</Checkbox>
                               <Checkbox value={'q63-1'}>Ихэссэн</Checkbox>
                               <Checkbox value={'q63-2'}>Буурсан</Checkbox>
                            </Checkbox.Group>
-                           <th>Сонсгол:</th>
+                           <th id="cls">Сонсгол:</th>
                            <Checkbox.Group className="flex flex-col" value={formData?.q64}>
                               <Checkbox className="ml-2">Хэвийн</Checkbox>
                               <Checkbox value={'q64-1'}>Ихэссэн</Checkbox>
@@ -972,28 +1002,28 @@ const CT_1_Sergeeh = (props) => {
                      </tr>
                      <tr>
                         <th>
-                           <p>Өнгөц</p>
+                           <p id="cls">Өнгөц</p>
                         </th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                      <tr>
-                        <th>
+                        <th id="cls">
                            <p>Гүн</p>
                         </th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                      <tr>
-                        <th>
+                        <th id="cls">
                            <p>Хэт</p>
                            <p>мэдрэгшил</p>
                         </th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                   </thead>
                </Table>
@@ -1009,72 +1039,82 @@ const CT_1_Sergeeh = (props) => {
                               <th>
                                  <Input />
                               </th>
-                              <th>Булчингийн тонус: </th>
-                              <th>
+                              <th id="cls">Булчингийн тонус: </th>
+                              <th id="cls">
                                  Гар: <Input />
                               </th>
-                              <th>
+                              <th id="cls">
                                  <Input />
                               </th>
-                              <th>
+                              <th id="cls">
                                  Хөл: <Input />
                               </th>
-                              <th>
+                              <th id="cls">
                                  <Input />
                               </th>
                            </th>
                         </th>
-                        <th rowSpan={4} className="w-[98px]"></th>
-                        <th rowSpan={4} className="w-[65px]"></th>
-                        <th rowSpan={4} className="w-[71px]"></th>
-                        <th rowSpan={4} className="w-[72px]"></th>
-                        <th rowSpan={5} className="w-[120px]"></th>
+                        <th id="cls" rowSpan={4} className="w-[98px]"></th>
+                        <th id="cls" rowSpan={4} className="w-[65px]"></th>
+                        <th id="cls" rowSpan={4} className="w-[71px]"></th>
+                        <th id="cls" rowSpan={4} className="w-[72px]"></th>
+                        <th id="cls" rowSpan={5} className="w-[120px]"></th>
                      </tr>
                   </thead>
                   <thead>
                      <tr>
-                        <th>Рефлекс </th>
-                        <th>≠ ≠</th>
-                        <th>≠ ≠ ≠</th>
-                        <th>≠</th>
-                        <th colSpan={3}>Эмгэг рефлекс</th>
-                        <th className="text-center">+</th>
-                        <th className="text-center">-</th>
+                        <th id="cls">Рефлекс </th>
+                        <th id="cls">≠ ≠</th>
+                        <th id="cls">≠ ≠ ≠</th>
+                        <th id="cls">≠</th>
+                        <th id="cls" colSpan={3}>
+                           Эмгэг рефлекс
+                        </th>
+                        <th id="cls" className="text-center">
+                           +
+                        </th>
+                        <th id="cls" className="text-center">
+                           -
+                        </th>
                      </tr>
                      <tr>
-                        <th>Бицепс </th>
-                        <th></th>
-                        <th> </th>
-                        <th></th>
-                        <th colSpan={3}>Бабински:</th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls">Бицепс </th>
+                        <th id="cls"></th>
+                        <th id="cls"> </th>
+                        <th id="cls"></th>
+                        <th id="cls" colSpan={3}>
+                           Бабински:
+                        </th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                      <tr>
-                        <th>Трицепс </th>
-                        <th></th>
-                        <th> </th>
-                        <th></th>
-                        <th colSpan={3}>Хоффман:</th>
-                        <th></th>
-                        <th></th>
+                        <th id="cls">Трицепс </th>
+                        <th id="cls"></th>
+                        <th id="cls"> </th>
+                        <th id="cls"></th>
+                        <th id="cls" colSpan={3}>
+                           Хоффман:
+                        </th>
+                        <th id="cls"></th>
+                        <th id="cls"></th>
                      </tr>
                      <tr>
-                        <th>Өвдөгний </th>
-                        <th></th>
-                        <th> </th>
-                        <th></th>
-                        <th colSpan={3} rowSpan={2}>
+                        <th id="cls">Өвдөгний </th>
+                        <th id="cls"></th>
+                        <th id="cls"> </th>
+                        <th id="cls"></th>
+                        <th id="cls" colSpan={3} rowSpan={2}>
                            Тавхайн чичигнэлт:{' '}
                         </th>
-                        <th rowSpan={2}></th>
-                        <th rowSpan={2}></th>
+                        <th id="cls" rowSpan={2}></th>
+                        <th id="cls" rowSpan={2}></th>
                      </tr>
                      <tr>
-                        <th>Ахиллын </th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
+                        <th id='cls'>Ахиллын </th>
+                        <th id='cls'></th>
+                        <th id='cls'></th>
+                        <th id='cls'></th>
                      </tr>
                      <tr>
                         <th colSpan={4}>Тэнцвэрийн тогтолцоо </th>

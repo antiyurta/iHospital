@@ -18,7 +18,7 @@ function BeforeInPatientTabs({ departmentId }) {
    const { setDocumentView } = useContext(EmrContext);
    const AppIds = useSelector(selectCurrentAppId);
    const [activeKey, setActiveKey] = useState(0);
-   const [documents, setDocuments] = useState([]);
+   const [  documents, setDocuments] = useState([]);
    const [selectedDocument, setSelectedDocument] = useState(Number);
    const getDocuments = async () => {
       await DocumentRoleApi.getByPageFilterShow({

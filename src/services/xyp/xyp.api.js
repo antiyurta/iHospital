@@ -12,5 +12,9 @@ class XypApi {
    async checkOtp(regnum, otp) {
       return await jwtInterceopter.post('xyp/check-otp', { regnum, otp });
    }
+   /** Эцэг эсвэл эхийн регистрээр  хүүхдүүдийн мэдээлэл харуулах */
+   async childrenInfo(regnum, searchType) {
+      return await jwtInterceopter.post('xyp/children-info', { regnum, searchType });
+   }
 }
 export default new XypApi();
