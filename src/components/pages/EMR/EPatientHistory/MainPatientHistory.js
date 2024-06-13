@@ -26,6 +26,7 @@ import { UsageTypeEnum, InspectionEnum, InspectionTypeEnum } from '@Utils/enum';
 // forms
 import { defualtForm, ConAndAdForm } from './DefualtForms';
 import MainInpatientHistory from './MainInpatientHistory';
+import { PregnancyInfo } from './Pregnancy';
 function MainPatientHistory({ handleClick }) {
    const {
       type,
@@ -66,6 +67,10 @@ function MainPatientHistory({ handleClick }) {
    const Tab3Content = useCallback(() => {
       return <HealtInfo />;
    });
+   const Tab4Content = useCallback(() => {
+      return <PregnancyInfo form={xrayForm} />;
+   });
+
    const DynamicTabContent = useCallback((props) => {
       return (
          <DynamicContent
@@ -207,6 +212,11 @@ function MainPatientHistory({ handleClick }) {
                key: 'item-health-info',
                children: <Tab3Content />
             });
+            newItems.push({
+               label: 'Жирэмсэний дэвтэр',
+               key: 'item-pregnancy-info',
+               children: <Tab4Content />
+            });
          }
          return newItems;
       });
@@ -260,6 +270,11 @@ function MainPatientHistory({ handleClick }) {
                label: 'Эрүүл мэндийн мэдээлэл',
                key: 'item-health-info',
                children: <Tab3Content />
+            });
+            newItems.push({
+               label: 'Жирэмсэний дэвтэр',
+               key: 'item-pregnancy-info',
+               children: <Tab4Content />
             });
          }
          return newItems;
