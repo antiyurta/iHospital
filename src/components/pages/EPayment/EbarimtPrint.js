@@ -1,5 +1,5 @@
-import React, { useRef } from 'react';
-import { Button } from 'antd';
+import React, { useRef, useState } from 'react';
+import { Alert, Button, Input, Modal } from 'antd';
 import { useReactToPrint } from 'react-to-print';
 import QRCode from 'react-qr-code';
 import { numberToCurrency, openNofi } from '../../common';
@@ -7,7 +7,6 @@ import PaymentService from '../../../services/payment/payment';
 import EbarimtService from '../../../services/ebarimt/ebarimt';
 import { useSelector } from 'react-redux';
 import { selectCurrentHospitalName } from '../../../features/authReducer';
-
 //
 import buildingSvg from './building.svg';
 import employeeSvg from './employee.svg';
@@ -17,6 +16,9 @@ import dayjs from 'dayjs';
 function EbarimtPrint(props) {
    const printRef = useRef();
    const hospitalName = useSelector(selectCurrentHospitalName);
+   const [isEasyModal, setIsEasyModal] = useState(false);
+   const [consumerNo, setConsumerNo] = useState('');
+   const { Search } = Input;
    const handleBack = async (id) => {
       await PaymentService.patchPayment(id, { isReturn: true }).then((_response) => {
          openNofi('success', 'Амжилттай', 'Буцаалт Амжиллтай');
@@ -25,6 +27,26 @@ function EbarimtPrint(props) {
    const handlePrint = useReactToPrint({
       content: () => printRef.current
    });
+   const consumerByRegno = async (event) => {
+      await EbarimtService.consumerByRegno(event).then((response) => {
+         if (response.status === 200) {
+            openNofi('success', 'Амжиллтай', `Ebarimt бүртгэлийн дугаар: ${response?.data?.response?.loginName}`);
+            setConsumerNo(response?.data?.response?.loginName);
+         } else {
+            openNofi('error', 'Алдаа', 'Ebarimt бүртгэлийн дугаар олдсонгүй');
+            setConsumerNo('');
+         }
+      });
+   };
+   const easyRegister = async (customerNo, qrData) => {
+      await EbarimtService.easyRegister(customerNo, qrData).then((response) => {
+         if (response.status === 201) {
+            openNofi('success', 'Амжиллтай');
+         } else {
+            openNofi('error', 'Алдаа', response.data?.response?.msg);
+         }
+      });
+   };
    return (
       <div className="pt-6">
          <div ref={printRef} className="px-[0.5cm] m-auto" style={{ maxWidth: '80mm' }}>
@@ -34,6 +56,19 @@ function EbarimtPrint(props) {
                   <p className="float-right font-bold">{hospitalName}</p>
                </div>
                <p className="text-center font-bold">ТӨЛБӨРИЙН БАРИМТ</p>
+               <p>Борлуулагч:</p>
+               <p>ТТД: {props?.props?.merchantTin}</p>
+               <p>Нэр: {props?.props?.merchantName}</p>
+               <p>Хаяг: {props?.props?.merchantAddress}</p>
+               {props?.props?.type == 'B2B_RECEIPT' && (
+                  <>
+                     <p>Банкны нэр: {props?.props?.bankName}</p>
+                     <p>Банкны дансны дугаар: {props?.props?.bankAccountNo}</p>
+                     <p>Худалдан авагч:</p>
+                     <p>ТТД: {props?.props?.customerTin}</p>
+                     <p>Нэр: {props?.props?.customerName}</p>
+                  </>
+               )}
                <div className="flex flex-row gap-2">
                   <img src={employeeSvg} alt="employe" />
                   <p>{`Ажилтан: ${props?.props?.createdEmployeeName}`}</p>
@@ -76,13 +111,13 @@ function EbarimtPrint(props) {
                </table>
                <div className="flex flex-col gap-0">
                   <p style={{ fontWeight: 'bold' }} className="text-end">
-                     Нийт үнэ: {numberToCurrency(props?.props?.plusAmount)}
-                  </p>
-                  <p style={{ fontWeight: 'bold' }} className="text-end">
-                     Төлөх үнэ: {numberToCurrency(props?.props?.paidAmount)}
+                     Нийт дүн: {numberToCurrency(props?.props?.plusAmount)}
                   </p>
                   <p style={{ fontWeight: 'bold' }} className="text-end">
                      Даатгалаас: {numberToCurrency(props?.props?.insuranceAmount)}
+                  </p>
+                  <p style={{ fontWeight: 'bold' }} className="text-end">
+                     Төлөх дүн: {numberToCurrency(props?.props?.paidAmount)}
                   </p>
                </div>
                <hr />
@@ -102,8 +137,14 @@ function EbarimtPrint(props) {
                      />
                   </div>
                   <div className="flex flex-col gap-1">
-                     <p>Cугалааны дугаар</p>
-                     <p>{props?.props?.lottery}</p>
+                     {props?.props?.lottery && (
+                        <>
+                           <p>Cугалааны дугаар:</p>
+                           <p>{props?.props?.lottery}</p>
+                        </>
+                     )}
+                     <p>EBarimt-ын дүн:</p>
+                     <p>{props?.props?.totalAmount}</p>
                   </div>
                </div>
                <hr />
@@ -115,10 +156,39 @@ function EbarimtPrint(props) {
                Буцаалт
             </Button>
          ) : (
-            <Button className="w-full bg-green-500 text-white font-bold" onClick={handlePrint}>
-               Хэвлэх
-            </Button>
+            <div className="flex">
+               <Button className="w-full bg-primary text-white font-bold" onClick={handlePrint}>
+                  Хэвлэх
+               </Button>
+               {props?.props?.type == 'B2B_RECEIPT' && (
+                  <Button className="w-full bg-green-500 text-white font-bold" onClick={() => setIsEasyModal(true)}>
+                     Хялбар бүртгэл
+                  </Button>
+               )}
+            </div>
          )}
+         <Modal
+            title={'E-баримтад бүртгүүлэх'}
+            open={isEasyModal}
+            onCancel={() => setIsEasyModal(false)}
+            onOk={() => easyRegister(consumerNo, props?.props?.qrData)}
+            okText="Хадгалах"
+            cancelText="Болих"
+            width={400}
+         >
+            <div className="w-full p-1">
+               <p>Регистр</p>
+               <Search
+                  onSearch={consumerByRegno}
+                  placeholder="Иргэний РД"
+                  style={{
+                     background: 'white',
+                     width: '100%'
+                  }}
+               />
+               {consumerNo !== '' && <Alert message={`Ebarimt бүртгэлийн дугаар: ${consumerNo}`} type="success" />}
+            </div>
+         </Modal>
       </div>
    );
 }
