@@ -1,6 +1,7 @@
 import React from 'react';
 import { Table } from 'react-bootstrap';
 import { Checkbox, Input } from 'antd';
+import { TextWithUnderline } from './utils';
 
 const CT_1_Nud = (props) => {
    const {
@@ -47,11 +48,12 @@ const CT_1_Nud = (props) => {
                               </Checkbox>
                               <Checkbox value={'q3-2'}>
                                  Хэвийн бус
-                                 <Input
+                                 {/* <Input
                                     className="amaraInput w-10"
                                     value={formData?.['q3-2-1']}
                                     style={{ textAlign: 'center' }}
-                                 />
+                                 /> */}
+                                 <TextWithUnderline>{formData?.['q3-2-1'] || ''}</TextWithUnderline>
                               </Checkbox>
                            </Checkbox.Group>
                         </th>
@@ -167,7 +169,7 @@ const CT_1_Nud = (props) => {
                            <th id="child">
                               АД баруун талд
                               <Input
-                                 className="amaraInput w-8"
+                                 className="amaraInput w-10"
                                  value={formData?.q10}
                                  style={{ textAlign: 'center' }}
                                  id="child"
@@ -176,7 +178,7 @@ const CT_1_Nud = (props) => {
                            <th id="child">
                               Зүүн талд
                               <Input
-                                 className="amaraInput w-8"
+                                 className="amaraInput w-10"
                                  value={formData?.q11}
                                  style={{ textAlign: 'center' }}
                                  id="child"
@@ -208,14 +210,14 @@ const CT_1_Nud = (props) => {
                            <Checkbox.Group value={formData?.q13} id="child">
                               <Checkbox value={'q13-1'}>Өнгөц тэмтрэлтээр</Checkbox>
                               <Checkbox value={'q13-2'}>Гүн тэмтрэлтээр</Checkbox>
-                              <Checkbox value={'q13-3'} className="">
+                              <Checkbox value={'q13-3'}>
                                  Эмзэглэлтэй (байрлал
-                                 <Input
-                                    className="amaraInput w-8"
+                                 {/* <Input
+                                    className="ml-2 w-10"
                                     value={formData?.['q13-3-1']}
                                     style={{ textAlign: 'center' }}
-                                 />
-                                 )
+                                 /> */}
+                                 <TextWithUnderline>{formData?.['q13-3-1'] || ''}</TextWithUnderline>)
                               </Checkbox>
                            </Checkbox.Group>
                            <Checkbox.Group value={formData?.q13} id="child">
@@ -314,13 +316,17 @@ const CT_1_Nud = (props) => {
                            <th>VOD</th>
                         </th>
                         <th className="w-[100px]">
-                           <th></th>
+                           <th>
+                              <span id="cls">{formData?.['q18-1']}</span>
+                           </th>
                         </th>
                         <th className="w-[50px]">
                            <th>ph</th>
                         </th>
                         <th>
-                           <th></th>
+                           <th>
+                              <span id="cls">{formData?.['q18-2']}</span>
+                           </th>
                         </th>
                      </tr>
                      <tr className="border-t-0">
@@ -328,13 +334,17 @@ const CT_1_Nud = (props) => {
                            <th>VOS</th>
                         </th>
                         <th>
-                           <th></th>
+                           <th>
+                              <span id="cls">{formData?.['q18-3']}</span>
+                           </th>
                         </th>
                         <th>
                            <th>ph</th>
                         </th>
                         <th>
-                           <th></th>
+                           <th>
+                              <span id="cls">{formData?.['q18-4']}</span>
+                           </th>
                         </th>
                      </tr>
                   </thead>

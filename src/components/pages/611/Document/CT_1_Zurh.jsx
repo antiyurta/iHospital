@@ -47,7 +47,11 @@ const CT_1_Zurh = (props) => {
                               </Checkbox>
                               <Checkbox value={'q3-2'}>
                                  Хэвийн бус
-                                 <Input className=" w-10" value={'q3-2-1'} style={{ textAlign: 'center' }} />
+                                 <Input
+                                    className=" w-10"
+                                    value={formData?.['q3-2-1']}
+                                    style={{ textAlign: 'center' }}
+                                 />
                               </Checkbox>
                            </Checkbox.Group>
                         </th>
@@ -63,7 +67,7 @@ const CT_1_Zurh = (props) => {
                         <th className="w-[220px]">
                            {' '}
                            Амьсгал 1 минутанд
-                           <Input value={formData?.q4} />
+                           <Input className="w-10" style={{ textAlign: 'center' }} value={formData?.q4} />
                            удаа
                         </th>
                         <th colSpan={3}>
