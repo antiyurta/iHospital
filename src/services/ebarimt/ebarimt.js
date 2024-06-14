@@ -7,7 +7,10 @@ class Ebarimt {
       return await jwtInterceopter.get(`ebarimt/organization/${customerId}`);
    }
    async consumerByRegno(regno) {
-      return await jwtInterceopter.get('/ebarimt/easy/' + regno);
+      return await jwtInterceopter.get('/ebarimt/easy-by-regno/' + regno);
+   }
+   async consumerByPhone(phone) {
+      return await jwtInterceopter.get('/ebarimt/easy-by-phone/' + phone);
    }
    async ReturnBill(billId) {
       return await jwtInterceopter.get('ebarimt/return-bill/' + billId);

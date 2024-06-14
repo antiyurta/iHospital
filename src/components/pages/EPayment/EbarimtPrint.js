@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { Alert, Button, Divider, Input, Modal } from 'antd';
+import { Alert, Button, Divider, Input, Modal, Tabs } from 'antd';
 import { useReactToPrint } from 'react-to-print';
 import QRCode from 'react-qr-code';
 import { numberToCurrency, openNofi } from '../../common';
@@ -18,6 +18,9 @@ function EbarimtPrint({ props, isBackPayment }) {
    const hospitalName = useSelector(selectCurrentHospitalName);
    const [isEasyModal, setIsEasyModal] = useState(false);
    const [consumerNo, setConsumerNo] = useState('');
+   const [consumerFName, setConsumerFName] = useState('');
+   const [consumerLName, setConsumerLName] = useState('');
+   const [consumerEmail, setConsumerEmail] = useState('');
    const { Search } = Input;
    const handleBack = async (id) => {
       await PaymentService.patchPayment(id, { isReturn: true }).then((_response) => {
@@ -32,9 +35,24 @@ function EbarimtPrint({ props, isBackPayment }) {
          if (response.status === 200) {
             openNofi('success', 'Амжиллтай', `Ebarimt бүртгэлийн дугаар: ${response?.data?.response?.loginName}`);
             setConsumerNo(response?.data?.response?.loginName);
+            setConsumerFName(response?.data?.response?.givenName);
+            setConsumerLName(response?.data?.response?.familyName);
          } else {
             openNofi('error', 'Алдаа', 'Ebarimt бүртгэлийн дугаар олдсонгүй');
             setConsumerNo('');
+         }
+      });
+   };
+   const consumerByPhone = async (event) => {
+      await EbarimtService.consumerByPhone(event).then((response) => {
+         if (response.status === 200) {
+            openNofi('success', 'Амжиллтай', `Ebarimt бүртгэлийн дугаар: ${response?.data?.response?.loginName}`);
+            setConsumerNo(response?.data?.response?.loginName);
+            setConsumerEmail(response?.data?.response?.email);
+         } else {
+            openNofi('error', 'Алдаа', 'Ebarimt бүртгэлийн дугаар олдсонгүй');
+            setConsumerNo('');
+            setConsumerEmail('');
          }
       });
    };
@@ -50,6 +68,65 @@ function EbarimtPrint({ props, isBackPayment }) {
 
    console.log({ props });
 
+   const tabItems = [
+      {
+         key: '1',
+         label: 'Утас',
+         children: (
+            <div className="w-full p-1">
+               <p>Утас</p>
+               <Search
+                  onSearch={consumerByPhone}
+                  placeholder="Утас"
+                  style={{
+                     background: 'white',
+                     width: '100%'
+                  }}
+               />
+               {consumerNo !== '' && (
+                  <Alert
+                     message={
+                        <>
+                           <p>Бүртгэлийн дугаар: {consumerNo}</p>
+                           {consumerEmail !== '' && <p>Мэйл: {consumerEmail}</p>}
+                        </>
+                     }
+                     type="success"
+                  />
+               )}
+            </div>
+         )
+      },
+      {
+         key: '2',
+         label: 'Регистр',
+         children: (
+            <div className="w-full p-1">
+               <p>Регистр</p>
+               <Search
+                  onSearch={consumerByRegno}
+                  placeholder="Иргэний РД"
+                  style={{
+                     background: 'white',
+                     width: '100%'
+                  }}
+               />
+               {consumerNo !== '' && (
+                  <Alert
+                     message={
+                        <>
+                           <p>Бүртгэлийн дугаар: {consumerNo}</p>
+                           {consumerLName !== '' && <p>Овог: {consumerLName}</p>}
+                           {consumerFName !== '' && <p>Нэр: {consumerFName}</p>}
+                        </>
+                     }
+                     type="success"
+                  />
+               )}
+            </div>
+         )
+      }
+   ];
    return (
       <div className="pt-6">
          <div ref={printRef} className="w-[95%] mx-auto">
@@ -138,12 +215,27 @@ function EbarimtPrint({ props, isBackPayment }) {
                   <p style={{ fontWeight: 'bold' }} className="w-full flex justify-between text-end">
                      Нийт дүн: {numberToCurrency(props?.plusAmount)}
                   </p>
-                  <p style={{ fontWeight: 'bold' }} className="w-full flex justify-between text-end">
-                     Даатгалаас: {numberToCurrency(props?.insuranceAmount)}
-                  </p>
+                  {props?.insuranceAmount > 0 && (
+                     <p style={{ fontWeight: 'bold' }} className="w-full flex justify-between text-end">
+                        Даатгалаас: {numberToCurrency(props?.insuranceAmount)}
+                     </p>
+                  )}
+                  {props?.discountAmount > 0 && (
+                     <p style={{ fontWeight: 'bold' }} className="w-full flex justify-between text-end">
+                        Хөнгөлсөн дүн: {numberToCurrency(props?.discountAmount)}
+                     </p>
+                  )}
                   <p style={{ fontWeight: 'bold' }} className="w-full flex justify-between text-end">
                      Төлөх дүн: {numberToCurrency(props?.paidAmount)}
                   </p>
+                  {props?.paidAmount > 0 && (
+                     <>
+                        <p style={{ fontWeight: 'bold' }} className="w-full flex justify-between text-end">
+                           Төлбөрийн хэлбэр:
+                        </p>
+                        <p className="ml-2">{props?.paymentType?.name}</p>
+                     </>
+                  )}
                </div>
                <hr />
                <p className="w-full flex justify-between">
@@ -172,7 +264,7 @@ function EbarimtPrint({ props, isBackPayment }) {
                         </>
                      )}
                      <p>EBarimt-ын дүн:</p>
-                     <p>{props?.totalAmount}</p>
+                     <p>{numberToCurrency(props?.paidAmount)}</p>
                   </div>
                </div>
                <hr />
@@ -204,18 +296,7 @@ function EbarimtPrint({ props, isBackPayment }) {
             cancelText="Болих"
             width={400}
          >
-            <div className="w-full p-1">
-               <p>Регистр</p>
-               <Search
-                  onSearch={consumerByRegno}
-                  placeholder="Иргэний РД"
-                  style={{
-                     background: 'white',
-                     width: '100%'
-                  }}
-               />
-               {consumerNo !== '' && <Alert message={`Ebarimt бүртгэлийн дугаар: ${consumerNo}`} type="success" />}
-            </div>
+            <Tabs defaultActiveKey="1" items={tabItems} />
          </Modal>
       </div>
    );
