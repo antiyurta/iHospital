@@ -335,19 +335,22 @@ function List(props) {
                                                                <Button
                                                                   onClick={() => {
                                                                      if (selectedPatient.id) {
-                                                                        orderAppointment({
-                                                                           isUrgent: false,
-                                                                           roomNumber: schedule.room.roomNumber,
-                                                                           structureName: schedule.structure.name,
-                                                                           time: {
-                                                                              start: row.startTime,
-                                                                              end: row.endTime
+                                                                        orderAppointment(
+                                                                           {
+                                                                              isUrgent: false,
+                                                                              roomNumber: schedule.room.roomNumber,
+                                                                              structureName: schedule.structure.name,
+                                                                              time: {
+                                                                                 start: row.startTime,
+                                                                                 end: row.endTime
+                                                                              },
+                                                                              slotId: row.id,
+                                                                              cabinetId: schedule.cabinetId,
+                                                                              appointmentWorkDate: key,
+                                                                              schedule: schedule
                                                                            },
-                                                                           slotId: row.id,
-                                                                           cabinetId: schedule.cabinetId,
-                                                                           appointmentWorkDate: key,
-                                                                           schedule: schedule
-                                                                        });
+                                                                           false
+                                                                        );
                                                                      } else {
                                                                         openNofi(
                                                                            'error',

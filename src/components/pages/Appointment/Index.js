@@ -1,7 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { ClockCircleOutlined, CloseCircleOutlined, SearchOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
-import { Alert, Button, Card, Descriptions, Form, Modal, Radio, Select, Spin, Switch, Table, message } from 'antd';
+import {
+   Alert,
+   Button,
+   Card,
+   Descriptions,
+   Form,
+   Input,
+   Modal,
+   Radio,
+   Select,
+   Spin,
+   Switch,
+   Table,
+   message
+} from 'antd';
 import { useSelector } from 'react-redux';
 //comp
 import List from './List';
@@ -9,18 +23,22 @@ import Finger from '../../../features/finger';
 //common
 import { formatNameForDoc, openNofi } from '@Comman/common';
 //redux
-import { selectCurrentEmrData } from '@Features/emrReducer';
+import { selectCurrentAddHics, selectCurrentEmrData, selectCurrentHicsSeal } from '@Features/emrReducer';
 import { selectCurrentInsurance } from '@Features/authReducer';
 //Api
 import ScheduleApi from '@ApiServices/schedule';
 import ServiceApi from '@ApiServices/serviceRequest';
 import EmployeeApi from '@ApiServices/organization/employee';
 import StructureApi from '@ApiServices/organization/structure';
-import InsuranceApi from '@ApiServices/healt-insurance/healtInsurance';
+import InsuranceApi from '@ApiServices/healt-insurance/insurance';
+import HealtInsuranceApi from '@ApiServices/healt-insurance/healtInsurance';
 import AppointmentApi from '@ApiServices/appointment/api-appointment-service';
-
+//defualt
+const { TextArea } = Input;
 function Index({ selectedPatient, type, invoiceData, handleClick, prevAppointmentId, isExtraGrud }) {
    const [isOpenModalInspectionType, setIsOpenModalInspectionType] = useState(false);
+   const hicsSeal = useSelector(selectCurrentHicsSeal);
+   const addHics = useSelector(selectCurrentAddHics);
    const incomeEmrData = useSelector(selectCurrentEmrData);
    const isInsurance = useSelector(selectCurrentInsurance);
    const today = new Date();
@@ -47,13 +65,69 @@ function Index({ selectedPatient, type, invoiceData, handleClick, prevAppointmen
    const [isSent, setIsSent] = useState(false);
    const [notInsuranceInfo, setNotInsuranceInfo] = useState([]);
    // tsahialga hiih uildel
-   const orderAppointment = (info) => {
-      setLoadingList(true);
-      // const { schedule, ...otherInfo } = info;
+
+   //
+   const [approvalForm] = Form.useForm();
+   const [hicsSupports, setHicsSupports] = useState([]);
+   const [loadingApproval, setLoadingApproval] = useState(false);
+   const [isOpenModalApproval, setOpenModalApproval] = useState(false);
+
+   const setApproval = async (values) => {
+      setLoadingApproval(true);
+      await HealtInsuranceApi.postApproval({
+         patientRegno: selectedPatient.registerNumber,
+         patientFirstname: selectedPatient.firstName,
+         patientLastname: selectedPatient.lastName,
+         ...values,
+         fromServiceId: hicsSeal.hicsServiceId || addHics.hicsSeal.hicsServiceId,
+         toHospitalId: 1892295
+      }).then(async ({ data }) => {
+         if (data.code === 200) {
+            openNofi('success', 'Ажилттай', data.description);
+            await InsuranceApi.createHicsSeal({
+               appointmentId: null,
+               patientId: selectedPatient.id,
+               departmentId: selectedInfo.schedule.structureId,
+               startAt: new Date(),
+               hicsAmbulatoryStartId: null,
+               hicsServiceId: values.toServiceId,
+               hicsStartCode: null,
+               hicsApprovalCode: data.result[0]?.approvalCode,
+               groupId: Number(values.toServiceId.toString().substring(0, 3))
+            }).then(({ data: { response } }) => {
+               setLoadingApproval(false);
+               setOpenModalApproval(false);
+               orderAppointment({ ...selectedInfo, hicsSealId: response.id }, true);
+            });
+         }
+      });
+   };
+
+   const getHicsSupports = async (hicsServiceIds) => {
+      await HealtInsuranceApi.getHicsService().then(({ data }) => {
+         if (data.code === 200) {
+            const filteredHicsServices = data.result.filter((hicsService) => hicsServiceIds.includes(hicsService.id));
+            setHicsSupports(filteredHicsServices || []);
+            setOpenModalApproval(true);
+         }
+      });
+   };
+
+   const orderAppointment = async (info, state) => {
       setIsSent(false);
       setIsUrgent(info.isUrgent);
       setSelectedInfo(info);
-      setAppointmentModal(true);
+      const isRequireHicsServiceIds = [20340, 24040];
+      const hicsServiceIds = info.schedule.cabinet.hicsServiceIds;
+      const isRequireApproval = Array.isArray(hicsSupports)
+         ? hicsServiceIds.some((id) => isRequireHicsServiceIds.includes(id))
+         : isRequireHicsServiceIds.includes(hicsServiceIds);
+      if (isRequireApproval && !state && !invoiceData?.isCheckInsurance) {
+         await getHicsSupports(hicsServiceIds);
+      } else {
+         setLoadingList(true);
+         setAppointmentModal(true);
+      }
    };
    // tasagt hamaaraltai emch awchirah
    const getDoctor = async (value) => {
@@ -98,7 +172,7 @@ function Index({ selectedPatient, type, invoiceData, handleClick, prevAppointmen
    // irgen deer daatgal shalgah
    const checkPatientInsurance = async (values) => {
       setIsLoadingCheckPatientInsurance(true);
-      await InsuranceApi.postCitizenInfo({
+      await HealtInsuranceApi.postCitizenInfo({
          regNo: selectedPatient.registerNumber,
          isChild: selectedPatient.age > 18 ? true : false,
          fingerPrint: values.fingerPrint
@@ -157,7 +231,7 @@ function Index({ selectedPatient, type, invoiceData, handleClick, prevAppointmen
          type: 3, // 1 bol yaralta 2 bol shuud 3 urdcilsan zahialga 4 bol urdcilsan segiileh
          status: 1, // 1 bol tsag zahilsn 2 bol odor solison 3 tsutsalsn 4 uzleh higed duussan
          isInsurance: stateInsurance || !invoiceData?.isCheckInsurance,
-         hicsSealId: invoiceData?.hicsSealId || null,
+         hicsSealId: selectedInfo.hicsSealId || invoiceData?.hicsSealId,
          appointmentId: prevAppointmentId
       }).then(async (response) => {
          if (response.status === 201) {
@@ -233,17 +307,20 @@ function Index({ selectedPatient, type, invoiceData, handleClick, prevAppointmen
                                  .validateFields()
                                  .then((_values) => {
                                     if (selectedPatient.id) {
-                                       orderAppointment({
-                                          isUrgent: true,
-                                          roomNumber: '',
-                                          structureName: 'Яаралтай тасаг',
-                                          time: {
-                                             start: dayjs(today).format('HH:mm'),
-                                             end: dayjs(today).format('HH:mm')
+                                       orderAppointment(
+                                          {
+                                             isUrgent: true,
+                                             roomNumber: '',
+                                             structureName: 'Яаралтай тасаг',
+                                             time: {
+                                                start: dayjs(today).format('HH:mm'),
+                                                end: dayjs(today).format('HH:mm')
+                                             },
+                                             slotId: null,
+                                             cabinetId: selectedDep.id
                                           },
-                                          slotId: null,
-                                          cabinetId: selectedDep.id
-                                       });
+                                          true
+                                       );
                                     } else {
                                        openNofi('warning', 'Алдаа', 'Яаралтай үед өвчтөн сонгох');
                                     }
@@ -369,6 +446,42 @@ function Index({ selectedPatient, type, invoiceData, handleClick, prevAppointmen
                   </Button>
                </div>
             </div>
+         </Modal>
+         <Modal
+            title="Эмчийн заалт бичих"
+            open={isOpenModalApproval}
+            onCancel={() => {
+               setOpenModalApproval(false);
+            }}
+            confirmLoading={loadingApproval}
+            onOk={() => {
+               approvalForm.validateFields().then(setApproval);
+            }}
+            cancelText="Болих"
+            okText="Хадгалах"
+         >
+            <Form form={approvalForm} layout="vertical">
+               <Form.Item
+                  label="Т.Ү-ний дугаар"
+                  name="toServiceId"
+                  rules={[{ required: true, message: 'Үйлчилгээний төрөл заавал сонгох' }]}
+                  style={{
+                     width: '100%'
+                  }}
+                  className="mb-0"
+               >
+                  <Select
+                     placeholder="Үйлчилгээний төрөл сонгох"
+                     options={hicsSupports.map((hicsSupport) => ({
+                        label: `${hicsSupport.name}->${hicsSupport.id}`,
+                        value: hicsSupport.id
+                     }))}
+                  />
+               </Form.Item>
+               <Form.Item label="Заалтын тайлбар" name="approvalDesc">
+                  <TextArea />
+               </Form.Item>
+            </Form>
          </Modal>
          <Modal
             title="Цаг захиалах"

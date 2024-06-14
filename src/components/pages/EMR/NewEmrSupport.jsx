@@ -94,4 +94,3 @@ const NewEmrSupport = () => {
    );
 };
 export default NewEmrSupport;
-

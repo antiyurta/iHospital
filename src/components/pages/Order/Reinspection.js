@@ -23,7 +23,8 @@ function Reinspection({ isInsurance, selectedPatient, appointmentId, hicsSeal })
          type: 9,
          invoiceId: res.invoiceId,
          requestId: res.id,
-         orderTime: `${info?.time?.start?.substr(0, 5)}->${info?.time?.end?.substr(0, 5)}`
+         orderTime: `${info?.time?.start?.substr(0, 5)}->${info?.time?.end?.substr(0, 5)}`,
+         sealData: null
       };
       dispatch(
          setOtsData({

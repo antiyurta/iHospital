@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { Button, ConfigProvider, DatePicker, Form, Input, InputNumber, Radio, Select, Spin } from 'antd';
+import { Button, ConfigProvider, DatePicker, Form, InputNumber, Radio, Select, Spin } from 'antd';
 import dayjs from 'dayjs';
 import { RollbackOutlined } from '@ant-design/icons';
 import locale from 'antd/es/locale/mn_MN';
 import 'moment/locale/mn';
 import { useLocation } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 //common
+import { setSealForHics } from '@Utils/config/insurance';
 import { formatNameForDoc, numberToCurrency, openNofi } from '@Comman/common';
+//redux
+import { setHicsSeal } from '@Features/emrReducer';
 //comp
 import DoctorNotes from '@Pages/EMR/DoctorNotes';
 import NewDiagnose from '@Pages/service/NewDiagnose';
@@ -18,21 +22,23 @@ import EmployeeApi from '@ApiServices/organization/employee';
 import StructureApi from '@ApiServices/organization/structure';
 import InsuranceApi from '@ApiServices/healt-insurance/insurance';
 import DocumentRoleApi from '@ApiServices/organization/documentRole';
-import HealtInsuranceApi from '@ApiServices/healt-insurance/healtInsurance';
 //defaults
 const { Option } = Select;
-const { TextArea } = Input;
 const { RangePicker } = DatePicker;
-import { InpatientGroupIds } from '@Utils/config/insurance';
+
 //
 const CreateStory = () => {
    const {
-      state: { patient, inpatientRequestId, roomInfo, isInsurance, hicsSeal }
+      state: { patient, inpatientRequestId, roomInfo, isInsurance, hicsSealId }
    } = useLocation();
-   //emd
-   const [hicsSupports, setHicsSupports] = useState([]);
-   //
+   const dispatch = useDispatch();
    const [form] = Form.useForm();
+   const [isDisable, setDisable] = useState({
+      depId: false,
+      floorId: false,
+      roomId: false,
+      bedId: false
+   });
    const [isLoading, setIsLoading] = useState(false);
    const [departments, setDepartments] = useState([]);
    const [floorIds, setFloorIds] = useState([]);
@@ -148,10 +154,29 @@ const CreateStory = () => {
          .validateFields()
          .then(async (values) => {
             if (isInsurance) {
-               return setApproval(values);
-            } else {
-               return values;
+               return await InsuranceApi.requestHicsSeal(hicsSealId, {
+                  startAt: values.dateDuration[0] || new Date(),
+                  endAt: values.dateDuration[1] || new Date()
+               })
+                  .then(async ({ data: { response } }) => {
+                     if (response) {
+                        const ourHicsRes = await setSealForHics(patient, hicsSealId, {}, isInsurance);
+                        console.log('res', ourHicsRes);
+                        if (!ourHicsRes) {
+                           // Assuming response has a success field
+                           return Promise.reject('Failed to set seal for HICS');
+                        }
+                        return values;
+                     } else {
+                        return Promise.reject('Failed to update our hicsSeal');
+                     }
+                  })
+                  .catch((error) => {
+                     console.log(error);
+                     return Promise.reject('Failed to update our hicsSeal');
+                  });
             }
+            return values;
          })
          .then(async (data) => {
             data['isOut'] = false;
@@ -162,62 +187,27 @@ const CreateStory = () => {
                openNofi('success', 'Амжилттай', 'Амжиллтай');
                window.history.back();
             });
+         })
+         .catch((error) => {
+            console.error(error);
+            openNofi('error', 'Алдаа', error); // You can customize this message
          });
    };
 
    const setIncomeRoomInfo = () => {
+      setDisable({
+         depId: roomInfo.depId ? true : false,
+         floorId: roomInfo.floorId ? true : false,
+         roomId: roomInfo.roomId ? true : false,
+         bedId: roomInfo.bedId ? true : false
+      });
+      roomInfo.depId && onSelectDep(roomInfo.depId);
       const rooms = departments?.find((department) => department.id === roomInfo.depId)?.rooms;
       const floorIds = rooms?.filter((room) => room.isInpatient)?.map((fRoom) => fRoom.floorId);
       setFloorIds(floorIds);
       onSelectRoom(roomInfo.roomId, rooms);
       form.setFieldValue('roomInfo', roomInfo);
       getDoctors(roomInfo?.depId);
-   };
-
-   const getHicsService = async () => {
-      await HealtInsuranceApi.getHicsService().then(({ data }) => {
-         if (data.code === 200) {
-            openNofi('success', 'Амжиллтай', `${data.description}`);
-            setHicsSupports(data.result.filter((hicsService) => InpatientGroupIds.includes(hicsService.groupId)));
-         } else if (data.code === 400) {
-            openNofi('error', 'Амжилттгүй', `${data.description}`);
-         }
-      });
-   };
-   const setApproval = async (values) => {
-      return await HealtInsuranceApi.postApproval({
-         patientRegno: patient.registerNumber,
-         patientFirstname: patient.firstName,
-         patientLastname: patient.lastName,
-         approvalDesc: values?.inpatientInfo.approvalDesc,
-         toServiceId: values?.inpatientInfo.toServiceId,
-         fromServiceId: hicsSeal.hicsServiceId,
-         toHospitalId: 1892298
-      }).then(({ data }) => {
-         if (data.code === 200 && data.result?.length > 0) {
-            return CreateHicsSeal(values, data.result[0]);
-         }
-         return values;
-      });
-   };
-
-   const CreateHicsSeal = async (values, result) => {
-      return await InsuranceApi.createHicsSeal({
-         inpatientRequestId: inpatientRequestId,
-         patientId: patient.id,
-         departmentId: values.roomInfo?.depId,
-         startAt: new Date(),
-         doctorServiceNumber: result.fromServiceId,
-         hicsAmbulatoryStartId: null,
-         hicsServiceId: values?.inpatientInfo.toServiceId,
-         hicsApprovalCode: result.approvalCode,
-         groupId: hicsSupports.find((hicsSupport) => hicsSupport.id === values.inpatientInfo.toServiceId)?.groupId
-      }).then((response) => {
-         if (response.status != 201) {
-            openNofi('error', 'Амжилтгүй', response);
-         }
-         return values;
-      });
    };
 
    useEffect(() => {
@@ -228,13 +218,20 @@ const CreateStory = () => {
          setIncomeRoomInfo();
       }
    }, [roomInfo, departments]);
+
    useEffect(() => {
       getDepartments();
    }, []);
 
+   const getHicsSeal = async () => {
+      await InsuranceApi.getByIdHicsSeals(hicsSealId).then(({ data: { response } }) => {
+         dispatch(setHicsSeal(response));
+      });
+   };
+
    useEffect(() => {
-      isInsurance && getHicsService();
-   }, [isInsurance]);
+      hicsSealId && getHicsSeal();
+   }, [hicsSealId]);
 
    return (
       <div className="w-full">
@@ -294,6 +291,7 @@ const CreateStory = () => {
                                     ]}
                                  >
                                     <Select
+                                       disabled={isDisable['depId']}
                                        onSelect={onSelectDep}
                                        options={departments?.map((department) => ({
                                           label: department.name,
@@ -313,6 +311,7 @@ const CreateStory = () => {
                                     ]}
                                  >
                                     <Select
+                                       disabled={isDisable['floorId']}
                                        onSelect={onSelectFloor}
                                        options={floors?.map((floor) => ({
                                           label: floor.name,
@@ -332,7 +331,7 @@ const CreateStory = () => {
                                           }
                                        ]}
                                     >
-                                       <Select onSelect={(id) => onSelectRoom(id, null)}>
+                                       <Select disabled={isDisable['roomId']} onSelect={(id) => onSelectRoom(id, null)}>
                                           {filteredRooms?.map((room, index) => (
                                              <Option
                                                 key={index}
@@ -358,6 +357,7 @@ const CreateStory = () => {
                                        ]}
                                     >
                                        <Select
+                                          disabled={isDisable['bedId']}
                                           options={beds?.map((bed) => ({
                                              label: bed.bedNumber,
                                              value: bed.id
@@ -456,45 +456,11 @@ const CreateStory = () => {
                                     }))}
                                  />
                               </Form.Item>
-                              {isInsurance ? (
-                                 <>
-                                    <Form.Item
-                                       label="Т.Ү-ний дугаар"
-                                       name={['inpatientInfo', 'toServiceId']}
-                                       rules={[{ required: true, message: 'Үйлчилгээний төрөл заавал сонгох' }]}
-                                       style={{
-                                          width: '100%'
-                                       }}
-                                       className="mb-0"
-                                    >
-                                       <Select
-                                          placeholder="Үйлчилгээний төрөл сонгох"
-                                          options={hicsSupports.map((hicsSupport) => ({
-                                             label: hicsSupport.name,
-                                             value: hicsSupport.id
-                                          }))}
-                                       />
-                                    </Form.Item>
-                                    <Form.Item
-                                       label="Заалтын тайлбар"
-                                       name={['inpatientInfo', 'approvalDesc']}
-                                       rules={[
-                                          {
-                                             required: true,
-                                             message: 'Заалтын тайлбар'
-                                          }
-                                       ]}
-                                    >
-                                       <TextArea maxLength={255} />
-                                    </Form.Item>
-                                 </>
-                              ) : null}
                               <div className="flex flex-row gap-2 items-end">
                                  <NewDiagnose
                                     patientId={patient.id}
                                     appointmentId={null}
                                     inpatientRequestId={inpatientRequestId}
-                                    hicsServiceId={null}
                                     usageType={'IN'}
                                     selectType={1}
                                  />

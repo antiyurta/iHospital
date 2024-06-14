@@ -31,7 +31,6 @@ const Finger = (props) => {
 
    useEffect(() => {
       if (receivedDatas[`${rest.name}`]) {
-         console.log('end data=====>', receivedDatas[`${rest.name}`].result);
          if (typeof rest.name !== 'string') {
             form.setFieldsValue({
                [rest.name[0]]: {
@@ -116,4 +115,3 @@ const Finger = (props) => {
    );
 };
 export default Finger;
-

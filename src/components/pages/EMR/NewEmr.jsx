@@ -71,6 +71,7 @@ class NewEmr extends React.Component {
       const { hicsSealId } = this.props.IncomeEMRData;
       hicsSealId &&
          (await InsuranceApi.getByIdHicsSeals(hicsSealId).then(({ data: { response } }) => {
+            console.log('ene bol hicsSeal=============>', response);
             this.props.setHicsSeal(response);
          }));
    }
@@ -78,6 +79,7 @@ class NewEmr extends React.Component {
       const { addHicsId } = this.props.IncomeEMRData;
       addHicsId &&
          (await InsuranceApi.getByIdAddHics(addHicsId).then(({ data: { response } }) => {
+            console.log('ene bol addHics=============>', response);
             this.props.setAddHics(response);
          }));
    }
@@ -144,7 +146,6 @@ class NewEmr extends React.Component {
    }
    render() {
       const RenderIcon = ({ state }) => {
-         console.log('state', state);
          if (state) return <FullscreenOutlined />;
          return <FullscreenExitOutlined />;
       };

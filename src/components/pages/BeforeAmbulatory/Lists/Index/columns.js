@@ -160,7 +160,7 @@ export const outDoctorColumns = [
                </div>
             );
          } else if (status === 3) {
-            return <div className="text-start">Цаг цуцалсан</div>;
+            return <TypeInfo bgColor="red" textColor="white" text={'Цаг цуцалсан'} />;
          } else if (status === 4) {
             return <div className="text-start">Үзлэг дууссан</div>;
          } else if (status === 5) {

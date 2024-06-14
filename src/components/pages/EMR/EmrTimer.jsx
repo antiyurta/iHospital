@@ -2,19 +2,12 @@ import React, { useState } from 'react';
 import dayjs from 'dayjs';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { ClockCircleOutlined, SwapOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Form, Input, Modal, Radio, Select, message } from 'antd';
+import { ClockCircleOutlined } from '@ant-design/icons';
+import { Button, Checkbox, Form, Input, Modal, Radio, message } from 'antd';
 //redux
-import {
-   selectCurrentAddHics,
-   selectCurrentEmrData,
-   selectCurrentHicsSeal,
-   // setAddHics,
-   // setEmrData,
-   setHicsSeal
-} from '@Features/emrReducer';
 import { selectPatient } from '@Features/patientReducer';
 import { selectCurrentInsurance, selectCurrentUserId } from '@Features/authReducer';
+import { selectCurrentAddHics, selectCurrentEmrData, selectCurrentHicsSeal, setHicsSeal } from '@Features/emrReducer';
 //common
 import { openNofi } from '@Comman/common';
 //api
@@ -25,14 +18,13 @@ import appointmentApi from '@ApiServices/appointment/api-appointment-service';
 //comp
 import Clock from './Clock';
 import Finger from '@Comman/Finger/Finger';
-import { getPersonalInfo } from '@Utils/config/insurance';
+import { setSealForHics } from '@Utils/config/insurance';
 
 const EmrTimer = ({ startDate, endDate, inspection }) => {
    const navigate = useNavigate();
    const dispatch = useDispatch();
    const location = useLocation();
    const [form] = Form.useForm();
-   // const [swapFormHics] = Form.useForm();
    const [isDisable, setDisable] = useState(true);
    ///
    const hicsSeal = useSelector(selectCurrentHicsSeal);
@@ -43,9 +35,6 @@ const EmrTimer = ({ startDate, endDate, inspection }) => {
    const userId = useSelector(selectCurrentUserId);
    const isInsurance = useSelector(selectCurrentInsurance);
    const [isOpenModal, setIsOpenModal] = useState(false);
-   // tuslamj uilcihge solih
-   // const [isOpenModalSwap, setOpenModalSwap] = useState(false);
-   // const [hicsSupports, setHicsSupports] = useState([]);
 
    // uzlegin temdeglel tatah
    const getInspectionNote = async () => {
@@ -59,93 +48,46 @@ const EmrTimer = ({ startDate, endDate, inspection }) => {
    };
    // uzleg duusgah
    const endInspection = async (values) => {
-      const isEndEMD = values.conclusion?.includes('confirmed');
-      if (isInsurance) {
-         if (hicsSeal.process === 0) {
-            if (hicsSeal.hicsServiceId === 20120 && addHics?.checkupId > 1) {
-               await addHicsService(hicsSeal.hicsSealCode);
-            } else {
-               const data = {
-                  patientRegno: currentPatient.registerNumber,
-                  patientFingerprint: values.finger,
-                  patientFirstname: currentPatient.firstName,
-                  patientLastname: currentPatient.lastName,
-                  startDate: hicsSeal.startAt,
-                  endDate: new Date(),
-                  hicsServiceId: hicsSeal.hicsServiceId,
-                  parentServiceNumber: null,
-                  doctorServiceNumber: hicsSeal.doctorServiceNumber,
-                  sent13RequestNo: hicsSeal.sent13RequestNo,
-                  departNo: hicsSeal.department?.id,
-                  departName: hicsSeal.department?.name,
-                  isForeign: 0,
-                  freeTypeId: 0,
-                  historyCode: hicsSeal.patientHistoryCode,
-                  phoneNo: currentPatient.phoneNo,
-                  bloodType: hicsSeal.bloodType,
-                  diagnosis: {
-                     ...(hicsSeal.diagnosis || addHics.diagnosis),
-                     description: hicsSeal.description || (await getInspectionNote())
-                  },
-                  isLiver: currentPatient.isLiver ? 1 : 2,
-                  startCode: hicsSeal.hicsStartCode,
-                  xypResponse: {
-                     requestId: currentPatient.requestId,
-                     resultMsg: currentPatient.resultMsg
-                  },
-                  personalInfo: getPersonalInfo(currentPatient),
-                  employment: {
-                     ...hicsSeal.employment,
-                     employmentId: currentPatient.employmentId || '1',
-                     employmentName: currentPatient.employmentName || '- Цалин хөлстэй ажиллагч',
-                     isEmployment: currentPatient.isEmployment,
-                     emplessDescriptionId: currentPatient.emplessDescriptionId,
-                     emplessDescription: currentPatient.emplessDescription
-                  },
-                  healthInfo: hicsSeal.healthInfo,
-                  paymentType: isInsurance ? 0 : 1
-               };
-               await healtInsurance.saveHics(data).then(async ({ data }) => {
-                  if (data.code === 200) {
-                     openNofi('success', 'Амжилттай', data.description);
-                     await insuranceApi
-                        .requestHicsSeal(hicsSeal.id, {
-                           ...hicsSeal,
-                           hicsSealCode: data.result.serviceNumber,
-                           process: 1
-                        })
-                        .then(async ({ data: { response: ourHicsResponse } }) => {
-                           dispatch(setHicsSeal(ourHicsResponse));
-                           if (ourHicsResponse.hicsServiceId === 20120) {
-                              await addHicsService(ourHicsResponse.hicsSealCode);
-                           }
-                        });
-                  } else if (data.code === 400) {
-                     openNofi('error', 'Амжилтгүй', data.description);
+      try {
+         const isEndEMD = values.conclusion?.includes('confirmed');
+         if (isInsurance) {
+            if (hicsSeal.process === 0) {
+               if (hicsSeal.hicsServiceId === 20120 && addHics?.checkupId > 1) {
+                  await addHicsService(hicsSeal.hicsSealCode);
+               } else {
+                  const ourHicsResponse = await setSealForHics(currentPatient, hicsSeal.id, values, isInsurance);
+                  dispatch(setHicsSeal(ourHicsResponse));
+                  if (ourHicsResponse.hicsServiceId === 20120) {
+                     await addHicsService(ourHicsResponse.hicsSealCode);
                   }
+               }
+            }
+            if (isEndEMD) {
+               const sentHicsSealResponse = await insuranceApi.requestHicsSealSent(hicsSeal.id, {
+                  patientFingerprint: values?.finger,
+                  addHicsId: addHics?.id
                });
+               if (sentHicsSealResponse.data.code === 200) {
+                  openNofi('success', 'Амжиллтай', 'Үзлэг амжиллтай хадгалагдлаа ');
+                  navigate(-1);
+               }
             }
-         }
-         if (isEndEMD) {
-            const data = await insuranceApi.requestHicsSealSent(hicsSeal.id, {
-               patientFingerprint: values?.finger,
-               addHicsId: addHics?.id
+         } else {
+            await patchAppointment({
+               slotId: appointmentType === 0 ? location?.state?.slotId : null,
+               endDate: new Date(),
+               doctorId: appointmentType === 0 ? null : userId,
+               status: values?.conclusion?.includes('confirmed') ? 5 : 4
+            }).then(({ data: { success } }) => {
+               if (success) {
+                  setIsOpenModal(false);
+                  openNofi('success', 'Амжиллтай', 'Үзлэг амжиллтай хадгалагдлаа ');
+                  navigate(-1);
+               }
             });
-            console.log('==============>', data);
          }
-      } else {
-         await patchAppointment({
-            slotId: appointmentType === 0 ? location?.state?.slotId : null,
-            endDate: new Date(),
-            doctorId: appointmentType === 0 ? null : userId,
-            status: values?.conclusion?.includes('confirmed') ? 5 : 4
-         }).then(({ data: { success } }) => {
-            if (success) {
-               setIsOpenModal(false);
-               openNofi('success', 'Амжиллтай', 'Үзлэг амжиллтай хадгалагдлаа ');
-               navigate(-1);
-            }
-         });
+      } catch (error) {
+         console.log('error', error);
       }
    };
 
@@ -184,55 +126,6 @@ const EmrTimer = ({ startDate, endDate, inspection }) => {
          });
    };
 
-   // const getHicsService = async () => {
-   //    await healtInsurance.getHicsService().then(({ data: { code, description, result } }) => {
-   //       if (code === 200) {
-   //          const currentGroupId = (hicsSeal.hicsServiceId || '')?.toString().substring(0, 3);
-   //          if (currentGroupId) {
-   //             setHicsSupports(
-   //                result.filter(
-   //                   (hicsService) =>
-   //                      [Number(currentGroupId)].includes(hicsService.groupId) &&
-   //                      hicsService.id != hicsSeal.hicsServiceId
-   //                )
-   //             );
-   //             setOpenModalSwap(true);
-   //          }
-   //       } else {
-   //          openNofi('error', 'Амжилттгүй', description);
-   //       }
-   //    });
-   // };
-
-   // const createAddHics = async (startCode) => {
-   //    return await insuranceApi
-   //       .createAddHics({
-   //          checkupId: 1,
-   //          departName: hicsSeal.department.name,
-   //          departNo: hicsSeal.departNo,
-   //          hicsSealId: hicsSeal.id,
-   //          startDate: new Date(),
-   //          startCode: startCode
-   //       })
-   //       .then(({ data: { response } }) => response);
-   // };
-
-   // const deleteAddHics = async () => {
-   //    addHics.id &&
-   //       (await insuranceApi.deleteAddHics(addHics.id).then(() => {
-   //          dispatch(setAddHics(null));
-   //       }));
-   // };
-
-   // const updateHicsSeal = async (startCode, hicsServiceId) => {
-   //    await insuranceApi.requestHicsSeal(hicsSeal.id, {
-   //       hicsServiceId: hicsServiceId,
-   //       startAt: new Date(),
-   //       hicsStartCode: startCode,
-   //       diagnosis: null
-   //    });
-   // };
-
    const patchAppointment = async (data) => {
       try {
          const apiMap = {
@@ -246,58 +139,6 @@ const EmrTimer = ({ startDate, endDate, inspection }) => {
          message.error(error);
       }
    };
-
-   // const updateHics = async (result, hicsServiceId) => {
-   //    try {
-   //       let newAddHicsId = null;
-   //       if (hicsServiceId === 20120) {
-   //          const addHicsResponse = await createAddHics(result.code);
-   //          await patchAppointment({
-   //             addHicsId: addHicsResponse.id
-   //          }).then(() => {
-   //             newAddHicsId = addHicsResponse.id;
-   //          });
-   //       } else {
-   //          const oldHicsServiceId = hicsSeal.hicsServiceId;
-   //          if (oldHicsServiceId === 20120) {
-   //             await patchAppointment({
-   //                addHicsId: null
-   //             }).then(async (response) => {
-   //                if (response.success) {
-   //                   await deleteAddHics();
-   //                }
-   //             });
-   //          }
-   //       }
-   //       await updateHicsSeal(result.code, hicsServiceId);
-   //       dispatch(
-   //          setEmrData({
-   //             ...incomeEmrData,
-   //             addHicsId: newAddHicsId,
-   //             startDate: new Date()
-   //          })
-   //       );
-   //       navigate(0);
-   //    } catch (error) {
-   //       message.error(error);
-   //    }
-   // };
-
-   // const swapAmbulatory = async (values) => {
-   //    await healtInsurance
-   //       .postStartHics({
-   //          patientRegno: currentPatient.registerNumber,
-   //          patientFingerprint: values.fingerprint,
-   //          hicsServiceId: values?.hicsServiceId
-   //       })
-   //       .then(async ({ data }) => {
-   //          if (data.code === 400) {
-   //             openNofi('error', 'Амжилтгүй', data.description);
-   //          } else if (data.code === 200) {
-   //             updateHics(data.result, values.hicsServiceId);
-   //          }
-   //       });
-   // };
 
    return (
       <>
@@ -329,60 +170,6 @@ const EmrTimer = ({ startDate, endDate, inspection }) => {
                Үзлэг дуусах
             </Button>
          </div>
-         {/* <Modal
-            title="Тусламж үйлчилгээг солих"
-            open={isOpenModalSwap}
-            onCancel={() => {
-               setOpenModalSwap(false);
-            }}
-            onOk={() =>
-               swapFormHics
-                  .validateFields()
-                  .then(swapAmbulatory)
-                  .catch(({ errorFields }) => {
-                     errorFields?.map((error) => message.error(error.errors[0]));
-                  })
-            }
-            width={300}
-         >
-            <Form form={swapFormHics} layout="vertical">
-               <div className="w-full flex flex-col gap-3">
-                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block p-2">
-                     <Finger
-                        form={swapFormHics}
-                        insurance={true}
-                        noStyle
-                        name="fingerprint"
-                        rules={[
-                           {
-                              required: true,
-                              message: 'Иргэний хурууны хээ заавал'
-                           }
-                        ]}
-                     >
-                        <Input />
-                     </Finger>
-                  </div>
-                  <Form.Item
-                     label="Т.Ү-ний дугаар"
-                     name="hicsServiceId"
-                     rules={[{ required: true, message: 'Үйлчилгээний төрөл заавал сонгох' }]}
-                     style={{
-                        width: '100%'
-                     }}
-                     className="mb-0"
-                  >
-                     <Select
-                        placeholder="Үйлчилгээний төрөл сонгох"
-                        options={hicsSupports.map((hicsSupport) => ({
-                           label: `${hicsSupport.name}->${hicsSupport.id}`,
-                           value: hicsSupport.id
-                        }))}
-                     />
-                  </Form.Item>
-               </div>
-            </Form>
-         </Modal> */}
          <Modal
             title="Үзлэгийн төрөл"
             open={isOpenModal}

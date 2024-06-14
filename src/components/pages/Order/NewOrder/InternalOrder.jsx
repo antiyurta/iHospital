@@ -343,7 +343,13 @@ const InternalOrder = (props) => {
             {showOperation && <Operation usageType={usageType} handleclick={handleclick} />}
             {showPackage && <Package registerNumber={selectedPatient.registerNumber} handleclick={handleclick} />}
             {showInpatient && (
-               <InpatientRequest selectedPatient={selectedPatient} handleClick={inpatientRequestClick} />
+               <InpatientRequest
+                  selectedPatient={selectedPatient}
+                  handleClick={inpatientRequestClick}
+                  hasInsurance={IncomeEMRData.isInsurance}
+                  hicsSeal={hicsSeal}
+                  addHics={addHics}
+               />
             )}
             {showDoctorInspection && <DoctorInspection handleclick={handleclick} />}
             {showReinspection && (
