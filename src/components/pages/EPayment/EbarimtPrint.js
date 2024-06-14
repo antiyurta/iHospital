@@ -160,7 +160,7 @@ function EbarimtPrint(props) {
                <Button className="w-full bg-primary text-white font-bold" onClick={handlePrint}>
                   Хэвлэх
                </Button>
-               {props?.props?.type == 'B2B_RECEIPT' && (
+               {props?.props?.type == 'B2C_RECEIPT' && (
                   <Button className="w-full bg-green-500 text-white font-bold" onClick={() => setIsEasyModal(true)}>
                      Хялбар бүртгэл
                   </Button>
