@@ -506,6 +506,7 @@ function Invoice() {
                   >
                      <Order
                         isDoctor={false}
+                        isPackage={false}
                         selectedPatient={selectedPatient}
                         usageType="OUT"
                         categories={categories}

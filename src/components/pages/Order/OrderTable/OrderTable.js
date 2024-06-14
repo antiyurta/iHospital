@@ -1,18 +1,5 @@
 import React, { useState } from 'react';
-import {
-   Button,
-   Checkbox,
-   DatePicker,
-   Form,
-   Input,
-   InputNumber,
-   Modal,
-   Popconfirm,
-   Select,
-   Space,
-   Table,
-   message
-} from 'antd';
+import { Button, Checkbox, DatePicker, Form, Input, InputNumber, Modal, Popconfirm, Space, Table, message } from 'antd';
 import OrderForm from './OrderForm';
 import TextArea from 'antd/lib/input/TextArea';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
@@ -20,15 +7,11 @@ import { ClockCircleOutlined, MinusCircleOutlined } from '@ant-design/icons';
 import { NewInputNumber } from '../../../Input/Input';
 import { useDispatch, useSelector } from 'react-redux';
 import Appointment from '@Pages/Appointment/Index';
-//common
-import { openNofi } from '@Comman/common';
 //api
 import regularApi from '@ApiServices/regular.api';
 import invoiceApi from '@ApiServices/payment/invoice';
-import insuranceApi from '@ApiServices/healt-insurance/insurance';
-import healtInsuranceApi from '@ApiServices/healt-insurance/healtInsurance';
 //redux
-import { selectCurrentEmrData, selectCurrentHicsSeal, selectCurrentOtsData, setOtsData } from '@Features/emrReducer';
+import { selectCurrentEmrData, selectCurrentOtsData, setOtsData } from '@Features/emrReducer';
 
 const checkNumber = (event) => {
    var charCode = event.charCode;
@@ -64,20 +47,13 @@ const requestTypeMap = (id, typeId) => ({
 function OrderTable(props) {
    const { selectedPatient, setLoading, isLoading, usageType, services, form, remove } = props;
    const dispatch = useDispatch();
-   const hicsSeal = useSelector(selectCurrentHicsSeal);
    const incomeOtsData = useSelector(selectCurrentOtsData);
    const incomeEmrData = useSelector(selectCurrentEmrData);
    const [lastResponse, setLastResponse] = useState({});
    const [isOpenAppointment, setOpenAppointment] = useState(false);
    const [appointmentTypeId, setAppointmentTypeId] = useState();
    const [invoiceData, setInvoiceData] = useState({});
-   //emchin zaalt
-   const [approvalForm] = Form.useForm();
-   const [isLoadingApproval, setLoadingApproval] = useState(false);
-   const [approvalData, setApprovalData] = useState(false);
-   const [hicsSupports, setHicsSupports] = useState([]);
-   const [isOpenModalApproval, setOpenModalApproval] = useState(false);
-   //emchin zaalt
+
    const minRule = (index) => {
       const type = form.getFieldValue(['services', index, 'type']);
       const state = type === 8 || type === 2 ? true : false;
@@ -200,56 +176,7 @@ function OrderTable(props) {
          setOpenAppointment(true);
       }
    };
-   const getHicsSupports = async (currentSealData, index) => {
-      await healtInsuranceApi.getHicsService().then(({ data }) => {
-         if (data.code === 200) {
-            const filteredHicsServices = data.result.filter((hicsService) =>
-               currentSealData.approvalGroupIds.includes(hicsService.groupId)
-            );
-            setHicsSupports(filteredHicsServices || []);
-            setApprovalData(index);
-            setOpenModalApproval(true);
-         }
-      });
-   };
-   const setApproval = async (values) => {
-      setLoadingApproval(true);
-      await healtInsuranceApi
-         .postApproval({
-            patientRegno: selectedPatient.registerNumber,
-            patientFirstname: selectedPatient.firstName,
-            patientLastname: selectedPatient.lastName,
-            ...values,
-            toServiceId: hicsSeal.hicsServiceId,
-            toHospitalId: 1892295
-         })
-         .then(async ({ data }) => {
-            if (data.code === 200) {
-               openNofi('success', 'Ажилттай', data.description);
-               await insuranceApi.requestHicsSeal(hicsSeal.id, {
-                  hicsApprovalCode: data.result[0]?.approvalCode
-               });
-               form.setFieldsValue({
-                  services: {
-                     [approvalData]: {
-                        sealData: {
-                           isApproval: true,
-                           desc: values.approvalDesc
-                        }
-                     }
-                  }
-               });
-               dispatch(
-                  setOtsData({
-                     services: form.getFieldValue('services'),
-                     total: incomeOtsData.total
-                  })
-               );
-               setLoadingApproval(false);
-               setOpenModalApproval(false);
-            }
-         });
-   };
+
    const replaceOtsData = () => {
       dispatch(
          setOtsData({

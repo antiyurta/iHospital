@@ -5,107 +5,104 @@ import { ReturnById } from '../611/Document/Index';
 import { FilePdfOutlined, PrinterOutlined } from '@ant-design/icons';
 import { useReactToPrint } from 'react-to-print';
 import { Each } from '../../../features/Each';
-
+//api
 import DApi from '@ApiServices/organization/document';
 
 const DocumentViewer = () => {
    const { setDocumentView, documentType, selectedDocument } = useContext(EmrContext);
    const [printLoading, setPrintLoading] = useState(false);
-   const [mergedPdfBytes, setMergedPdfBytes] = useState(null);
    const currentRef = useRef();
 
    const htmlToPDF = async () => {
       try {
+         setPrintLoading(true);
          const currentContent = currentRef.current.innerHTML;
          // ${currentContent}
-         const response = await DApi.generatePDF(
-            `<!DOCTYPE html>
-         <html>
-         <head>
-         <style>
-         .subpage {
-            padding: 1cm
-         }
-         .border-1 {
-            border: 1px solid black;
-         }
-         .text-center {
-            text-align: center
-         }
-         .grid-cols-2 {
-            display:grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-         }
-         .break {
-            clear: both;
-            page-break-after: always;
-         }
-         </style>
-         </head>
-         <body>
-            ${currentContent}
-         </body>
-         </html>
-         `,
-            'a4',
-            false
-         );
-         const response1 = await DApi.generatePDF(
-            `<!DOCTYPE html>
-         <html>
-         <head>
-         <style>
-         .subpage {
-            padding: 1cm
-         }
-         .border-1 {
-            border: 1px solid black;
-         }
-         .text-center {
-            text-align: center
-         }
-         .grid-cols-2 {
-            display:grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-         }
-         .break {
-            clear: both;
-            page-break-after: always;
-         }
-         </style>
-         </head>
-         <body>
-            <div>1</div>
-            <div>2</div>
-         </body>
-         </html>
-         `,
-            'a4',
-            true
-         );
+         const response = await DApi.generatePDF({
+            pages: [
+               {
+                  body: `<!DOCTYPE html>
+            <html>
+            <head>
+            <style>
+            .subpage {
+               padding: 1cm
+            }
+            .border-1 {
+               border: 1px solid black;
+            }
+            .text-center {
+               text-align: center
+            }
+            .grid-cols-2 {
+               display:grid;
+               grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            }
+            .break {
+               clear: both;
+               page-break-after: always;
+            }
+            </style>
+            </head>
+            <body>
+               ${currentContent}
+            </body>
+            </html>
+            `,
+                  format: 'a4',
+                  landscape: false
+               },
+               {
+                  body: `<!DOCTYPE html>
+            <html>
+            <head>
+            <style>
+            .subpage {
+               padding: 1cm
+            }
+            .border-1 {
+               border: 1px solid black;
+            }
+            .text-center {
+               text-align: center
+            }
+            .grid-cols-2 {
+               display:grid;
+               grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            }
+            .break {
+               clear: both;
+               page-break-after: always;
+            }
+            </style>
+            </head>
+            <body>
+               ${currentContent}
+            </body>
+            </html>
+            `,
+                  format: 'a5',
+                  landscape: false
+               }
+            ]
+         });
 
          if (!response.data.success) {
             throw new Error(`HTTP error! Status: ${response.status}`);
          }
          const uint8Array = new Uint8Array(response.data.response.data);
-         const uint8Array1 = new Uint8Array(response1.data.response.data);
-         // await mergePDFs(uint8Array, uint8Array1);
+         const blob = new Blob([uint8Array], { type: 'application/pdf' });
+         const url = window.URL.createObjectURL(blob);
 
-         // const blob = new Blob([uint8Array], { type: 'application/pdf' });
-         // const blob1 = new Blob([uint8Array1], { type: 'application/pdf' });
-         // console.log(blob);
-         // setTestUrl([blob, blob1]);
-         // const url = window.URL.createObjectURL(blob);
+         const newWindow = window.open(url, '_blank');
+         setPrintLoading(false);
+         if (newWindow) {
+            newWindow.focus();
+         } else {
+            console.error('Failed to open PDF in a new window');
+         }
 
-         // const newWindow = window.open(url, '_blank');
-
-         // if (newWindow) {
-         //    newWindow.focus();
-         // } else {
-         //    console.error('Failed to open PDF in a new window');
-         // }
-
-         // window.URL.revokeObjectURL(url);
+         window.URL.revokeObjectURL(url);
       } catch (error) {
          console.error('Error fetching PDF:', error);
          // Handle error as needed
@@ -158,17 +155,6 @@ const DocumentViewer = () => {
          }}
          title="Маягт дэлгэрэнгүй"
       >
-         {mergedPdfBytes && (
-            <div>
-               <p>Merged PDF created successfully!</p>
-               <a
-                  href={`data:application/pdf;base64,${Buffer.from(mergedPdfBytes).toString('base64')}`}
-                  download="merged.pdf"
-               >
-                  Download Merged PDF
-               </a>
-            </div>
-         )}
          <div className="grid grid-cols-5 gap-2">
             <div
                className="col-span-4 overflow-auto"
@@ -193,6 +179,7 @@ const DocumentViewer = () => {
                   onClick={() => {
                      htmlToPDF();
                   }}
+                  loading={printLoading}
                   icon={
                      <FilePdfOutlined
                         style={{

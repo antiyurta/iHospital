@@ -63,6 +63,7 @@ export default function Ocs({ selectedPatient, UsageType, handleClick }) {
    return (
       <div className="items-center">
          <Order
+            isDoctor={true}
             isPackage={false}
             selectedPatient={selectedPatient}
             usageType={UsageType}

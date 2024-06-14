@@ -1,11 +1,7 @@
 import jwtInterceopter from '../../components/jwtInterceopter';
 class DocumentsFormPatient {
-   async generatePDF(body, format, landscape) {
-      return await jwtInterceopter.post('document-middleware/generate-pdf', {
-         body,
-         format,
-         landscape
-      });
+   async generatePDF(data) {
+      return await jwtInterceopter.post('document-middleware/generate-pdf', data);
    }
    async get(config) {
       return await jwtInterceopter.get('document-middleware', config);

@@ -309,7 +309,14 @@ function Packages() {
             </Form>
          </Modal>
          <Modal title="Сонгох" onCancel={() => setIsOpenSecondModal(false)} footer={null} open={isOpenSecondModal}>
-            <Order isPackage={true} isDoctor={false} categories={categories} save={AddServices} />
+            <Order
+               isDoctor={false}
+               isPackage={true}
+               selectedPatient={null}
+               usageType={null}
+               categories={categories}
+               save={AddServices}
+            />
          </Modal>
       </div>
    );
