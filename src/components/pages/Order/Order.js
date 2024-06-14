@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import InternalOrder from './NewOrder/InternalOrder';
 import PartnerOrder from './NewOrder/PartnerOrder';
 //
-function Order({ isPackage, selectedPatient, usageType, categories, save }) {
+function Order({ isDoctor, isPackage, selectedPatient, usageType, categories, save }) {
    const [activeKey, setActiveKey] = useState(0);
    const components = [
       <InternalOrder
+         isDoctor={isDoctor}
          isPackage={isPackage}
          usageType={usageType}
          selectedPatient={selectedPatient}

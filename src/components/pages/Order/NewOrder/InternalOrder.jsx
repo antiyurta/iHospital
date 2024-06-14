@@ -36,7 +36,7 @@ import InsuranceApi from '@ApiServices/healt-insurance/insurance';
 import HealtInsuranceApi from '@ApiServices/healt-insurance/healtInsurance';
 
 const InternalOrder = (props) => {
-   const { isPackage, usageType, selectedPatient, categories, save } = props;
+   const { isDoctor, isPackage, usageType, selectedPatient, categories, save } = props;
    const dispatch = useDispatch();
    const hicsSeal = useSelector(selectCurrentHicsSeal);
    const addHics = useSelector(selectCurrentAddHics);
@@ -110,6 +110,7 @@ const InternalOrder = (props) => {
          } else {
             await Promise.all(
                value.map(async (item) => {
+                  console.log('item', item);
                   let service = {
                      isCito: false,
                      id: item.id,
@@ -127,7 +128,7 @@ const InternalOrder = (props) => {
                      sealData: null,
                      approvalData: null
                   };
-                  if (item.examCode) {
+                  if (item.examCode && IncomeEMRData.isInsurance && item.isInsurance && isDoctor) {
                      const currentSeal = addHics || hicsSeal;
                      const freeTypeId = 0;
                      const currentIcdCode = currentSeal?.diagnosis?.icdCode;

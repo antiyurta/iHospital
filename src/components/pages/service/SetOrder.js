@@ -262,7 +262,14 @@ function SetOrder() {
             </Form>
          </Modal>
          <Modal onCancel={() => setIsOpenSecondModal(false)} footer={null} open={isOpenSecondModal} width={'70%'}>
-            <Order isPackage={true} isDoctor={false} categories={categories} save={AddServices} />
+            <Order
+               isDoctor={false}
+               isPackage={true}
+               selectedPatient={null}
+               usageType={null}
+               categories={categories}
+               save={AddServices}
+            />
          </Modal>
       </div>
    );
