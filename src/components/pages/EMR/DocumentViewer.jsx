@@ -7,6 +7,7 @@ import { useReactToPrint } from 'react-to-print';
 import { Each } from '../../../features/Each';
 //api
 import DApi from '@ApiServices/organization/document';
+import documentViewerInjection from './DocumentViewer/injection';
 
 const DocumentViewer = () => {
    const { setDocumentView, documentType, selectedDocument } = useContext(EmrContext);
@@ -15,94 +16,78 @@ const DocumentViewer = () => {
 
    const htmlToPDF = async () => {
       try {
-         setPrintLoading(true);
+         // setPrintLoading(true);
          const currentContent = currentRef.current.innerHTML;
-         // ${currentContent}
-         const response = await DApi.generatePDF({
-            pages: [
-               {
+         const result = documentViewerInjection(currentContent);
+         if (result?.length > 0) {
+            const response = await DApi.generatePDF({
+               pages: result?.map((rslt) => ({
                   body: `<!DOCTYPE html>
-            <html>
-            <head>
-            <style>
-            .subpage {
-               padding: 1cm
+                  <html>
+                  <head>
+                  <style>
+                  .w-full {
+                     width: 100%;
+                  }
+                  p {
+                     font-size: 14px;
+                     font-weight: 400;
+                  }
+                  .page {
+                     width: 210mm;
+                     height: 297mm;
+                  }
+                  .subpage {
+                     padding: 1cm
+                  }
+                  .border-1 {
+                     border: 1px solid black;
+                  }
+                  .text-center {
+                     text-align: center
+                  }
+                  .grid-cols-2 {
+                     display:grid;
+                     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+                  }
+                  .break {
+                     clear: both;
+                     page-break-after: always;
+                  }
+                  .flex-row {
+                     display: flex;
+                     flex-direction: row;
+                  }
+                  .flex-col {
+                     display: flex;
+                     flex-direction: column;
+                  }
+                  </style>
+                  </head>
+                  <body>
+                     ${rslt.body}
+                  </body>
+                  </html>
+                  `,
+                  format: rslt.format,
+                  landscape: rslt.landscape
+               }))
+            });
+            if (!response.data.success) {
+               throw new Error(`HTTP error! Status: ${response.status}`);
             }
-            .border-1 {
-               border: 1px solid black;
+            const uint8Array = new Uint8Array(response.data.response.data);
+            const blob = new Blob([uint8Array], { type: 'application/pdf' });
+            const url = window.URL.createObjectURL(blob);
+            const newWindow = window.open(url, '_blank');
+            setPrintLoading(false);
+            if (newWindow) {
+               newWindow.focus();
+            } else {
+               console.error('Failed to open PDF in a new window');
             }
-            .text-center {
-               text-align: center
-            }
-            .grid-cols-2 {
-               display:grid;
-               grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-            }
-            .break {
-               clear: both;
-               page-break-after: always;
-            }
-            </style>
-            </head>
-            <body>
-               ${currentContent}
-            </body>
-            </html>
-            `,
-                  format: 'a4',
-                  landscape: false
-               },
-               {
-                  body: `<!DOCTYPE html>
-            <html>
-            <head>
-            <style>
-            .subpage {
-               padding: 1cm
-            }
-            .border-1 {
-               border: 1px solid black;
-            }
-            .text-center {
-               text-align: center
-            }
-            .grid-cols-2 {
-               display:grid;
-               grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-            }
-            .break {
-               clear: both;
-               page-break-after: always;
-            }
-            </style>
-            </head>
-            <body>
-               ${currentContent}
-            </body>
-            </html>
-            `,
-                  format: 'a5',
-                  landscape: false
-               }
-            ]
-         });
-
-         if (!response.data.success) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+            window.URL.revokeObjectURL(url);
          }
-         const uint8Array = new Uint8Array(response.data.response.data);
-         const blob = new Blob([uint8Array], { type: 'application/pdf' });
-         const url = window.URL.createObjectURL(blob);
-
-         const newWindow = window.open(url, '_blank');
-         setPrintLoading(false);
-         if (newWindow) {
-            newWindow.focus();
-         } else {
-            console.error('Failed to open PDF in a new window');
-         }
-
-         window.URL.revokeObjectURL(url);
       } catch (error) {
          console.error('Error fetching PDF:', error);
          // Handle error as needed

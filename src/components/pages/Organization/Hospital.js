@@ -1,23 +1,12 @@
 import '../../../style/Hospital.css';
-import React, { useEffect, useMemo, useState } from 'react';
-import { Modal, Form, Input, message, Table, Card, Button, Tabs, InputNumber } from 'antd';
-
-import UTable from '../../UTable';
-import { Patch, openNofi } from '../../common';
-import { useSelector } from 'react-redux';
-import { selectCurrentToken } from '../../../features/authReducer';
-
+import React, { useEffect, useState } from 'react';
+import { Modal, Form, message, Table, Card, Button, Tabs } from 'antd';
+import { openNofi } from '@Comman/common';
+//api
 import hospitalApi from '@ApiServices/organization/hospital.api';
-
-import insuranceApi from '../../../services/healt-insurance/insurance';
-import healtInsuranceApi from '@ApiServices/healt-insurance/healtInsurance';
-import zoneApi from '@ApiServices/reference/zone';
-import provinceApi from '@ApiServices/reference/province';
-import districtApi from '@ApiServices/reference/district';
+import insuranceApi from '@ApiServices/healt-insurance/insurance';
 import { CheckOutlined, CloseOutlined, EditOutlined, SwapOutlined } from '@ant-design/icons';
-
-//
-
+//comp
 import General from './Hospital/General';
 import Hics from './Hospital/Hics';
 import Vatpos from './Hospital/Vatpos';
@@ -148,10 +137,10 @@ function Hospital() {
    ];
 
    const syncHospital = async () => {
-      await hospitalApi
-         .syncHospital()
-         .then(() => {
-            openNofi('success', 'Амжилттай', 'Амжилттай');
+      await insuranceApi
+         .postHospitalInfo()
+         .then(({ data }) => {
+            openNofi('success', 'Амжилттай', data.description);
          })
          .catch((error) => {
             console.log(error);

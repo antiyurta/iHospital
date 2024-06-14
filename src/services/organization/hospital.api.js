@@ -3,9 +3,6 @@ class HospitalApi {
    async get(params) {
       return await jwtInterceopter.get('organization/hospital', { params });
    }
-   async syncHospital() {
-      return await jwtInterceopter.get('organization/hospital/beds/data');
-   }
    async getById(id) {
       return await jwtInterceopter.get(`organization/hospital/${id}`);
    }
