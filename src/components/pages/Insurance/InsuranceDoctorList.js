@@ -8,21 +8,21 @@ import {
    Input,
    InputNumber,
    Modal,
-   Progress,
    Select,
    Table,
    message
 } from 'antd';
-import { localMn, numberToCurrency, openNofi } from '../../common';
-import { EditOutlined, RollbackOutlined } from '@ant-design/icons';
+import { localMn, openNofi } from '../../common';
+import { CloseOutlined, EditOutlined, RollbackOutlined } from '@ant-design/icons';
 import MonitorCriteria from './MonitorCriteria';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
 import moment from 'moment';
-//request service uud
-import InsuranceSealService from '../../../services/healt-insurance/insuranceSeal';
-import healtInsuranceService from '../../../services/healt-insurance/healtInsurance';
-import apiInsurance from '../../../services/healt-insurance/insurance';
+//comp
 import { ListPatientInfo } from '../../ListInjection';
+//api
+import insuranceApi from '@ApiServices/healt-insurance/insurance';
+import healtInsuranceApi from '@ApiServices/healt-insurance/healtInsurance';
+
 //request service uud
 
 const { RangePicker } = DatePicker;
@@ -66,7 +66,7 @@ function InsuranceDocterList() {
          params.patient = filterValues.patient;
          params.process = filterValues.process;
       }
-      await apiInsurance
+      await insuranceApi
          .getAllHicsSeals(params)
          .then(({ data }) => {
             if (data.success) {
@@ -93,12 +93,14 @@ function InsuranceDocterList() {
       setIsOpenReturnModal(true);
    };
    const getReturnInsurance = async (values) => {
-      await healtInsuranceService
+      await healtInsuranceApi
          .cancelService(values)
-         .then((response) => {
-            console.log(response);
-            if (response.data.code === 201 || response.data.code === 200) {
-               openNofi(response.data.code === 200 ? 'success' : 'info', 'Даатгал буцаалт', response.data.description);
+         .then(async ({ data }) => {
+            if (data.code === 201 || data.code === 200) {
+               openNofi(data.code === 200 ? 'success' : 'info', 'Даатгал буцаалт', data.description);
+               await insuranceApi.requestHicsSeal(values.hicsSealId, {
+                  process: 4
+               });
             }
             returnForm.resetFields();
             setIsOpenReturnModal(false);
@@ -111,7 +113,7 @@ function InsuranceDocterList() {
          });
    };
    const getRepairInsurance = async (values) => {
-      await healtInsuranceService.postRepair(values).then((response) => {
+      await healtInsuranceApi.postRepair(values).then((response) => {
          if (response.data.code === 400) {
             openNofi('warning', 'Анхааруулга', response.data.description);
          } else if (response.data.code === 200) {
@@ -121,7 +123,7 @@ function InsuranceDocterList() {
       });
    };
    const getHicsGroups = async () => {
-      await healtInsuranceService
+      await healtInsuranceApi
          .getHicsServiceGroup()
          .then(({ data }) => {
             if (data.code == 200) {
@@ -136,8 +138,13 @@ function InsuranceDocterList() {
          });
    };
    const getHicsService = async () => {
-      await healtInsuranceService.getHicsService().then(({ data }) => {
+      await healtInsuranceApi.getHicsService().then(({ data }) => {
          setHicsService(data.result);
+      });
+   };
+   const confirmPackage = async (row) => {
+      await insuranceApi.requestHicsSealConfirm(row.id).then(({ data }) => {
+         console.log('=========>', data);
       });
    };
    const getInfoProcess = (process) => {
@@ -149,7 +156,7 @@ function InsuranceDocterList() {
          return 'Төлбөрийн мэдээлэл илгээгүй байна.';
       } else if (process === 3) {
          return 'Төлбөрийн мэдээлэл илгээсэн байна.';
-      } else {
+      } else if (process === 4) {
          return 'Буцаалт хийгдсэн.';
       }
    };
@@ -237,23 +244,40 @@ function InsuranceDocterList() {
          }
       },
       {
-         title: '',
+         title: 'Засах',
          dataIndex: 'process',
-         render: (text, row) => {
-            if (text === 3) {
+         render: (process, row) => {
+            if (process === 3) {
                return <Button onClick={() => getById(row)} icon={<EditOutlined style={{ color: 'blue' }} />} />;
             }
          }
       },
       {
-         title: '',
+         title: 'Цуцлах',
          dataIndex: 'process',
-         render: (text, row) => {
-            if (text === 1 || text === 2 || text === 3) {
+         render: (process, row) => {
+            if (process === 1 || process === 2 || process === 3) {
                return (
                   <Button
                      onClick={() => returnInsurance(row.id, row.hicsSealCode)}
                      icon={<RollbackOutlined style={{ color: 'red' }} />}
+                  />
+               );
+            }
+         }
+      },
+      {
+         title: 'Дуусгах',
+         dataIndex: 'hicsServiceId',
+         render: (hicsServiceId, row) => {
+            if (hicsServiceId === 20120) {
+               return (
+                  <Button
+                     danger
+                     icon={<CloseOutlined />}
+                     onClick={() => {
+                        confirmPackage(row);
+                     }}
                   />
                );
             }

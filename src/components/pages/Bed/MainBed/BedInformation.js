@@ -177,7 +177,7 @@ const BedInformation = () => {
                   bedId: selectedBed.id
                },
                isInsurance: inpatient_request.isInsurance,
-               hicsSeal: inpatient_request.appointment?.hicsSeal
+               hicsSealId: inpatient_request?.hicsSealId
             }
          });
       }

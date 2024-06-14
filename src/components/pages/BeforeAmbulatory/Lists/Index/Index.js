@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { PlusCircleOutlined } from '@ant-design/icons';
-import { Button, Card, Empty, Form, Input, InputNumber, Modal, Select, Table, message } from 'antd';
+import { Button, Card, Empty, Form, Input, Modal, Select, Table, message } from 'antd';
 import dayjs from 'dayjs';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -19,7 +19,6 @@ import { setEmrData } from '@Features/emrReducer';
 import { setPatient } from '@Features/patientReducer';
 import { selectCurrentDepId, selectCurrentUserId } from '@Features/authReducer';
 //api
-import StructureApi from '@ApiServices/organization/structure';
 import ScheduleApi from '@ApiServices/schedule';
 import ServiceApi from '@ApiServices/service/service';
 import SurgeryApi from '@ApiServices/service/surgery.api';
@@ -28,8 +27,6 @@ import healthInsuranceApi from '@ApiServices/healt-insurance/healtInsurance';
 import AppointmentApi from '@ApiServices/appointment/api-appointment-service';
 //columns
 import { outDoctorColumns, outNurseColumns, inColumns, surguryColumns } from './columns';
-//defaults
-import { AmbulatoryGroupId } from '@Utils/config/insurance';
 
 function Index({ type, isDoctor, isSurgeyBoss }) {
    //type 0 bol ambultor
@@ -47,8 +44,6 @@ function Index({ type, isDoctor, isSurgeyBoss }) {
       page: 1,
       limit: 10
    });
-   const [hicsServiceIds, setHicsServiceIds] = useState([]);
-   const [isOpenModalConfirm, setOpenModalConfirm] = useState(false);
    const [spinner, setSpinner] = useState(false);
    // suul newew 8.1
    const [selectedRow, setSelectedRow] = useState();
@@ -56,13 +51,34 @@ function Index({ type, isDoctor, isSurgeyBoss }) {
    const [hicsSupports, setHicsSupports] = useState([]);
    //
    const getAppointment = async (page, limit, start, end) => {
-      setSpinner(true);
-      if (type === 0) {
-         await AppointmentApi.getByPageFilter({
+      try {
+         setSpinner(true);
+         const paramsMap = {
+            0: {
+               doctorId: isDoctor ? employeeId : null
+            },
+            2: {
+               depIds: depIds?.toString(),
+               ...otherParams
+            },
+            4: {
+               columnId: isSurgeyBoss ? 3 : null,
+               ...otherParams
+            }
+         };
+         const apiMap = {
+            0: AppointmentApi.getByPageFilter,
+            1: AppointmentApi.getPreOrder,
+            2: ServiceApi.getInpatientRequest,
+            4: SurgeryApi.getRequest
+         };
+         const selectedApi = apiMap[type];
+         if (!selectedApi) throw new Error('Unknown service type');
+         await selectedApi({
             params: {
                page: page,
                limit: limit,
-               doctorId: isDoctor ? employeeId : null,
+               ...paramsMap[type],
                startDate: dayjs(start).format('YYYY-MM-DD HH:mm'),
                endDate: dayjs(end).format('YYYY-MM-DD HH:mm')
             }
@@ -77,69 +93,11 @@ function Index({ type, isDoctor, isSurgeyBoss }) {
             .finally(() => {
                setSpinner(false);
             });
-      } else if (type === 1) {
-         await AppointmentApi.getPreOrder({
-            params: {
-               page: page,
-               limit: limit,
-               startDate: dayjs(start).format('YYYY-MM-DD HH:mm'),
-               endDate: dayjs(end).format('YYYY-MM-DD HH:mm')
-            }
-         })
-            .then(({ data: { response } }) => {
-               setAppointments(response.data);
-               setMeta(response.meta);
-            })
-            .catch((error) => {
-               if (error.response.status === 400) {
-                  openNofi('error', 'Алдаа', 'Админаар орсон байна');
-               }
-            })
-            .finally(() => {
-               setSpinner(false);
-            });
-      } else if (type === 2) {
-         await ServiceApi.getInpatientRequest({
-            params: {
-               page: page,
-               limit: limit,
-               depIds: depIds?.toString(),
-               startDate: dayjs(start).format('YYYY-MM-DD HH:mm'),
-               endDate: dayjs(end).format('YYYY-MM-DD HH:mm'),
-               ...otherParams
-            }
-         })
-            .then(({ data: { response } }) => {
-               setAppointments(response.data);
-               setMeta(response.meta);
-            })
-            .finally(() => {
-               setSpinner(false);
-            });
-      } else if (type === 3) {
-         await SurgeryApi.getRequest({
-            page: page,
-            limit: limit,
-            startDate: dayjs(start).format('YYYY-MM-DD HH:mm'),
-            endDate: dayjs(end).format('YYYY-MM-DD HH:mm'),
-            columnId: isSurgeyBoss ? 3 : null,
-            ...otherParams
-         })
-            .then(({ data: { response } }) => {
-               setAppointments(response.data);
-               setMeta(response.meta);
-            })
-            .finally(() => {
-               setSpinner(false);
-            });
+      } catch (error) {
+         console.log('error', error);
+         message.error(error);
       }
    };
-   const getStructureById = async (id) => {
-      return await StructureApi.getById(id).then(({ data: { response } }) => {
-         return response.hicsServiceIds || [];
-      });
-   };
-   //
    const getEMRorENR = async (row) => {
       dispatch(setPatient(row.patient));
       // status heregteii anhan dawtan
@@ -180,23 +138,23 @@ function Index({ type, isDoctor, isSurgeyBoss }) {
             if (row.startDate === null && isDoctor) {
                if (row.isInsurance) {
                   if (row.type != 1) {
-                     await getStructureById(row.cabinet.parentId).then(async (response) => {
-                        await healthInsuranceApi
-                           .getHicsService()
-                           .then(({ data }) => {
-                              setHicsSupports(
-                                 data.result.filter((hicsService) => response.includes(hicsService.groupId))
-                              );
-                           })
-                           .catch(() => {
-                              openNofi(
-                                 'error',
-                                 'Алдаа',
-                                 'Даатгалтай холбогдож чадсангүй та түр хүлээгээд дахин оролдоно уу'
-                              );
-                           });
-                     });
+                     const hicsServiceIds = row?.cabinet?.hicsServiceIds || [];
+                     await healthInsuranceApi
+                        .getHicsService()
+                        .then(({ data }) => {
+                           setHicsSupports(
+                              data.result.filter((hicsService) => hicsServiceIds.includes(hicsService.id))
+                           );
+                        })
+                        .catch(() => {
+                           openNofi(
+                              'error',
+                              'Алдаа',
+                              'Даатгалтай холбогдож чадсангүй та түр хүлээгээд дахин оролдоно уу'
+                           );
+                        });
                      startFormHics.resetFields();
+                     startFormHics.setFieldValue('hicsServiceId', row.hicsSeal?.hicsServiceId);
                      setIsOpenModalStartService(true);
                   } else {
                      CreateHicsSeal(
@@ -222,6 +180,7 @@ function Index({ type, isDoctor, isSurgeyBoss }) {
          patientId: row.patientId,
          inspection: type === 2 ? 1 : row.inspectionType,
          type: row.type,
+         hicsServiceIds: row.cabinet?.hicsServiceIds,
          hicsSealId: sealResponse?.id || row.hicsSealId,
          addHicsId: addResponse?.id || row.addHicsId,
          startDate: row.startDate || new Date(),
@@ -270,8 +229,8 @@ function Index({ type, isDoctor, isSurgeyBoss }) {
             await selectedApi(row.id, {
                slotId: row.id,
                startDate: new Date(),
-               hicsSealId: sealResponse?.id || null,
-               addHicsId: addResponse?.id || null
+               hicsSealId: sealResponse?.id || row.hicsSealId,
+               addHicsId: addResponse?.id || row.addHicsId
             }).then(async ({ data: { success } }) => {
                if (success && type != 1 && row.slotId && isDoctor && row.slot?.incomeDate === null) {
                   ScheduleApi.patchSlot(row.slotId, {
@@ -515,17 +474,20 @@ function Index({ type, isDoctor, isSurgeyBoss }) {
                startFormHics
                   .validateFields()
                   .then((values) => {
-                     if (values.hicsServiceId === 20110 || values.hicsServiceId === 20120) {
-                        startAmbulatory(values);
+                     if (!selectedRow.hicsSealId || !selectedRow.addHicsId) {
+                        if (values.hicsServiceId === 20110 || values.hicsServiceId === 20120) {
+                           startAmbulatory(values);
+                        } else if (values.hicsServiceId === 20150) {
+                           CreateHicsSeal(
+                              selectedRow,
+                              {
+                                 hicsServiceId: values.hicsServiceId
+                              },
+                              201
+                           );
+                        }
                      } else {
-                        CreateHicsSeal(
-                           selectedRow,
-                           {
-                              code: null,
-                              hicsServiceId: values.hicsServiceId
-                           },
-                           Number(values.hicsServiceId.toString().substring(0, 3))
-                        );
+                        hrefEMR(selectedRow, null, null);
                      }
                   })
                   .catch(({ errorFields }) => {
@@ -552,25 +514,29 @@ function Index({ type, isDoctor, isSurgeyBoss }) {
                         <Input />
                      </Finger>
                   </div>
-                  {selectedRow?.hicsSeal?.hicsServiceId === 20120 ? null : (
-                     <Form.Item
-                        label="Т.Ү-ний дугаар"
-                        name="hicsServiceId"
-                        rules={[{ required: true, message: 'Үйлчилгээний төрөл заавал сонгох' }]}
-                        style={{
-                           width: '100%'
-                        }}
-                        className="mb-0"
-                     >
-                        <Select
-                           placeholder="Үйлчилгээний төрөл сонгох"
-                           options={hicsSupports.map((hicsSupport) => ({
-                              label: `${hicsSupport.name}->${hicsSupport.id}`,
-                              value: hicsSupport.id
-                           }))}
-                        />
-                     </Form.Item>
-                  )}
+                  <Form.Item
+                     label="Т.Ү-ний дугаар"
+                     name="hicsServiceId"
+                     rules={[
+                        {
+                           required: true,
+                           message: 'Үйлчилгээний төрөл заавал сонгох'
+                        }
+                     ]}
+                     style={{
+                        width: '100%'
+                     }}
+                     className="mb-0"
+                  >
+                     <Select
+                        disabled={selectedRow?.hicsSealId ? true : false}
+                        placeholder="Үйлчилгээний төрөл сонгох"
+                        options={hicsSupports.map((hicsSupport) => ({
+                           label: `${hicsSupport.name}->${hicsSupport.id}`,
+                           value: hicsSupport.id
+                        }))}
+                     />
+                  </Form.Item>
                </div>
             </Form>
          </Modal>

@@ -179,8 +179,11 @@ function InpatientRequests() {
                         isRead: true,
                         patient: patient,
                         inpatientRequestId: row.id,
+                        roomInfo: {
+                           depId: row.orderDepartmentId
+                        },
                         isInsurance: row.isInsurance,
-                        hicsSeal: row.appointment?.hicsSeal
+                        hicsSealId: row.hicsSealId
                      }}
                   >
                      Хэвтүүлэх

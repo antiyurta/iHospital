@@ -156,9 +156,7 @@ function DynamicContent({ props, incomeData, handleClick, isViewDiagnose }) {
             scrollToFirstError
             onFinish={(e) => saveDynamicTab(e, props.formKey)}
             onFinishFailed={onFinishFailed}
-            onFieldsChange={(e) => {
-               console.log(e);
-            }}
+            onFieldsChange={(_e) => {}}
          >
             <div className="emr-ins flex flex-col gap-2 justify-between">
                <div className="inputs flex flex-col pr-3 gap-2">
@@ -284,6 +282,7 @@ function DynamicContent({ props, incomeData, handleClick, isViewDiagnose }) {
                            <NewDiagnose
                               patientId={incomeData.patientId}
                               appointmentId={incomeData.appointmentId}
+                              inpatientRequestId={null}
                               usageType={incomeData.usageType}
                               selectType={1}
                            />

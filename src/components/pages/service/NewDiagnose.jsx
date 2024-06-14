@@ -155,6 +155,7 @@ const NewDiagnose = ({ patientId, appointmentId, inpatientRequestId, usageType, 
       const { diagnose } = foundDiagnosis || {};
       hicsDiagnosisForm.setFieldValue(['diagnosis', 'icdCodeName'], diagnose?.nameMn);
       setIsLoading(true);
+      console.log(hicsSeal);
       HealthInsuranceApi.getHicsCostByField(hicsSeal.hicsServiceId, value)
          .then(({ data }) => {
             if (data.code == 200) {

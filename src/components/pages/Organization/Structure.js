@@ -73,20 +73,8 @@ function Structure() {
          index: 'hicsServiceIds',
          isView: true,
          input: 'multipleSelect',
-         inputData: [
-            {
-               id: 201,
-               label: '201-ambo'
-            },
-            {
-               id: 203,
-               label: '203-odrin'
-            },
-            {
-               id: 205,
-               label: 205
-            }
-         ],
+         inputData: hicsServices,
+         relValueIndex: 'id',
          relIndex: 'id',
          col: 24
       }
@@ -127,6 +115,16 @@ function Structure() {
          label: 'Захиалга авах эсэх',
          isView: true,
          input: 'switch',
+         col: 24
+      },
+      {
+         label: 'Даатгал',
+         index: 'hicsServiceIds',
+         isView: true,
+         input: 'multipleSelect',
+         inputData: hicsServices,
+         relValueIndex: 'id',
+         relIndex: 'id',
          col: 24
       }
    ];
@@ -187,7 +185,7 @@ function Structure() {
                isRead={true}
                isUpdate={true}
                isDelete={true}
-               width="80%"
+               width="50%"
                isRefresh={testParam}
             />
             <UTable

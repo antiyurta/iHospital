@@ -137,6 +137,9 @@ function DoctorAppointment() {
                invoiceData={{
                   isCheckInsurance: true
                }}
+               handleClick={(e) => {
+                  console.log('e', e);
+               }}
                prevAppointmentId={null}
                isExtraGrud={{
                   isCreate: true,

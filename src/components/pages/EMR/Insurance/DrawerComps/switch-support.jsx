@@ -1,30 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Input, Select } from 'antd';
 import Finger from '@Comman/Finger/Finger';
-
-import healtInsurance from '@ApiServices/healt-insurance/healtInsurance';
 import { useSelector } from 'react-redux';
 import { selectCurrentHicsSeal } from '@Features/emrReducer';
+import healtInsurance from '@ApiServices/healt-insurance/healtInsurance';
 
-export const SwitchSupport = (props) => {
-   const { form } = props;
+export const SwitchSupport = ({ form, hicsServiceIds }) => {
    const hicsSeal = useSelector(selectCurrentHicsSeal);
-
    const [hicsSupports, setHicsSupports] = useState([]);
 
    const getHicsService = async () => {
       await healtInsurance.getHicsService().then(({ data: { code, description, result } }) => {
          if (code === 200) {
-            const currentGroupId = (hicsSeal.hicsServiceId || '')?.toString().substring(0, 3);
-            if (currentGroupId) {
-               setHicsSupports(
-                  result.filter(
-                     (hicsService) =>
-                        [Number(currentGroupId)].includes(hicsService.groupId) &&
-                        hicsService.id != hicsSeal.hicsServiceId
-                  )
-               );
-            }
+            setHicsSupports(
+               result.filter(
+                  (hicsService) => hicsServiceIds?.includes(hicsService.id) && hicsService.id != hicsSeal.hicsServiceId
+               )
+            );
          } else {
             openNofi('error', 'Амжилттгүй', description);
          }

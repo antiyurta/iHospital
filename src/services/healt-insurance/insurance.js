@@ -32,6 +32,10 @@ class ApiInsurance {
    async requestHicsSealSent(id, data) {
       return await jwtInterceopter.patch(`hics-seal/sent/${id}`, data);
    }
+   /** 20120 дуусгавар болгох */
+   async requestHicsSealConfirm(id, data) {
+      return await jwtInterceopter.patch(`hics-seal/confirm/${id}`);
+   }
    /** Цогц дээр эмчин үзлэг нээх */
    async createAddHics(data) {
       return await jwtInterceopter.post('hics-seal-addHics', data);
