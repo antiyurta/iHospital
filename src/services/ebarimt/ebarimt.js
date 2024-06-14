@@ -21,5 +21,8 @@ class Ebarimt {
    async easyRegister(customerNo, qrData) {
       return await jwtInterceopter.post('/ebarimt/easy/register', { customerNo, qrData });
    }
+   async getAccountsByTin(tin) {
+      return await jwtInterceopter.get(`ebarimt/bank-accounts/${tin}`);
+   }
 }
 export default new Ebarimt();

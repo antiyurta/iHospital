@@ -1,557 +1,254 @@
 import '../../../style/Hospital.css';
 import React, { useEffect, useMemo, useState } from 'react';
-import { Modal, Form, Input, message } from 'antd';
+import { Modal, Form, Input, message, Table, Card, Button, Tabs, InputNumber } from 'antd';
 
 import UTable from '../../UTable';
-import { Patch } from '../../common';
+import { Patch, openNofi } from '../../common';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
+
+import hospitalApi from '@ApiServices/organization/hospital.api';
+
 import insuranceApi from '../../../services/healt-insurance/insurance';
 import healtInsuranceApi from '@ApiServices/healt-insurance/healtInsurance';
 import zoneApi from '@ApiServices/reference/zone';
 import provinceApi from '@ApiServices/reference/province';
 import districtApi from '@ApiServices/reference/district';
+import { CheckOutlined, CloseOutlined, EditOutlined, SwapOutlined } from '@ant-design/icons';
+
+//
+
+import General from './Hospital/General';
+import Hics from './Hospital/Hics';
+import Vatpos from './Hospital/Vatpos';
 
 function Hospital() {
-   const token = useSelector(selectCurrentToken);
-   const [insuranceForm] = Form.useForm();
-   const [isOpenInsurance, setIsOpenInsurance] = useState(false);
-   const [selectedRow, setSelectedRow] = useState({});
-   const [isRefresh, setIsRefresh] = useState(true);
-   const [operationList, setOperationList] = useState([]);
-   const [zoneList, setZoneList] = useState([]);
-   const [provinceList, setProvinceList] = useState([]);
-   const [districtList, setDistrictList] = useState([]);
-   //
-   const [changedValues, setChangedValues] = useState({});
+   const [hospitalForm] = Form.useForm();
+   const hospitalHasInsurance = Form.useWatch('isInsurance', hospitalForm);
+   const [editMode, setMode] = useState(false);
+   const [isLoading, setLoading] = useState(false);
+   const [hospitals, setHospitals] = useState([]);
+   const [isOpenModal, setOpenModal] = useState(false);
+   const [tabItems, setTabItems] = useState([
+      {
+         key: 1,
+         label: 'Eрөнхий',
+         children: <General form={hospitalForm} />
+      },
+      {
+         key: 2,
+         label: 'VAT',
+         children: <Vatpos />
+      }
+   ]);
 
-   const filteredProvinceList = useMemo(() => {
-      if (changedValues.zoneId) {
-         return provinceList.filter((pro) => pro.zoneId === changedValues.zoneId);
-      }
-      return provinceList;
-   }, [changedValues]);
-   const filteredDistrictList = useMemo(() => {
-      if (changedValues.provinceId) {
-         return districtList.filter((dist) => dist.provinceId === changedValues.provinceId);
-      }
-      return districtList;
-   }, [changedValues]);
+   const getHospitals = async () => {
+      setLoading(true);
+      await hospitalApi
+         .get()
+         .then(({ data: { response } }) => {
+            setHospitals(response.data || []);
+         })
+         .finally(() => {
+            setLoading(false);
+         });
+   };
 
-   const fetchOperationList = async () => {
-      try {
-         const res = await healtInsuranceApi.getHospitalOperation();
-         const operations = res.data.result || [];
-         setOperationList(
-            operations.map((op) => ({
-               id: op.id,
-               label: op.name,
-               value: op.id
-            }))
-         );
-      } catch (error) {
-         console.error('Error fetching operation list:', error);
-      }
-   };
-   const fetchZoneList = async () => {
-      try {
-         const res = await zoneApi.get();
-         const zone = res.data.response || [];
-         setZoneList(zone);
-      } catch (error) {
-         console.error('Error fetching zone list:', error);
-      }
-   };
-   const fetchProvinceList = async () => {
-      try {
-         const res = await provinceApi.get();
-         const province = res.data.response || [];
-         setProvinceList(province);
-      } catch (error) {
-         console.error('Error fetching province list:', error);
-      }
-   };
-   const fetchDistrictList = async () => {
-      try {
-         const res = await districtApi.get();
-         const district = res.data.response || [];
-         setDistrictList(district);
-      } catch (error) {
-         console.error('Error fetching district list:', error);
-      }
-   };
-   useEffect(() => {
-      fetchOperationList();
-      fetchZoneList();
-      fetchProvinceList();
-      fetchDistrictList();
-   }, []);
-
-   const column = [
+   const columns = [
       {
-         index: 'name',
-         label: 'Нэр',
-         isView: true,
-         input: 'input',
-         col: 12
+         title: '№',
+         width: 50,
+         render: (_, _row, index) => index + 1
       },
       {
-         index: 'zoneId',
-         label: 'Бүсчлэл',
-         isView: true,
-         input: 'select',
-         inputData: zoneList,
-         relValueIndex: 'id',
-         relIndex: 'name',
-         col: 12
+         title: 'Эмнэлэгийн нэр',
+         width: 120,
+         dataIndex: 'name'
       },
       {
-         index: 'provinceId',
-         label: 'Аймаг/Хот',
-         isView: true,
-         input: 'select',
-         inputData: filteredProvinceList,
-         relValueIndex: 'id',
-         relIndex: 'name',
-         col: 12
+         title: 'Дата басс нэр',
+         width: 120,
+         dataIndex: 'databaseName'
       },
       {
-         index: 'districtCode',
-         label: 'Сум/Дүүрэг',
-         isView: true,
-         input: 'select',
-         inputData: filteredDistrictList,
-         relValueIndex: 'code',
-         relIndex: 'name',
-         col: 12
+         title: 'Регистр дугаар',
+         width: 120,
+         dataIndex: 'registerNumber'
       },
       {
-         index: 'databaseName',
-         label: 'Дата басс нэр',
-         isView: true,
-         input: 'input',
-         col: 12
+         title: 'Идэвхтэй эсэх',
+         width: 50,
+         dataIndex: 'isActive',
+         render: (isActive) =>
+            isActive ? <CheckOutlined className="text-green-600" /> : <CloseOutlined className="text-red-600" />
       },
       {
-         index: 'hospitalType',
-         label: 'Лавлагаа ЭМБ гм',
-         isView: true,
-         input: 'input',
-         col: 12
-      },
-
-      {
-         index: 'registerNumber',
-         label: 'Регистр дугаар',
-         isView: true,
-         input: 'input',
-         col: 12
+         title: 'Даатгалтай эсэх',
+         width: 50,
+         dataIndex: 'isInsurance',
+         render: (isInsurance) =>
+            isInsurance ? <CheckOutlined className="text-green-600" /> : <CloseOutlined className="text-red-600" />
       },
       {
-         index: 'email',
-         label: 'И-мэйл',
-         rules: [
-            {
-               required: true,
-               message: 'Хоосон байж болохгүй'
-            },
-            {
-               type: 'email',
-               message: 'Хэлбэрийн алдаа'
-            },
-            {
-               validator: async (_, email) => {
-                  if (email?.length < 10) {
-                     return Promise.reject(new Error(''));
-                  }
-               }
-            }
-         ],
-         isView: true,
-         input: 'input',
-         col: 12
+         title: 'XYP-тай эсэх',
+         width: 50,
+         dataIndex: 'isXyp',
+         render: (isXyp) =>
+            isXyp ? <CheckOutlined className="text-green-600" /> : <CloseOutlined className="text-red-600" />
       },
       {
-         index: 'phone',
-         label: 'Утас(1)',
-         isView: true,
-         input: 'input',
-         col: 12
+         title: 'Дараа төлбөрт эсэх',
+         width: 50,
+         dataIndex: 'isAfterPay',
+         render: (isAfterPay) =>
+            isAfterPay ? <CheckOutlined className="text-green-600" /> : <CloseOutlined className="text-red-600" />
       },
       {
-         index: 'hsPersonPhone',
-         label: 'Утас(2)',
-         isView: false,
-         input: 'input',
-         col: 12
+         title: 'Салбартай эсэх',
+         width: 50,
+         dataIndex: 'hasBranch',
+         render: (hasBranch) =>
+            hasBranch ? <CheckOutlined className="text-green-600" /> : <CloseOutlined className="text-red-600" />
       },
       {
-         index: 'hsLng',
-         label: 'Уртраг',
-         isView: false,
-         input: 'numberInput',
-         col: 12
+         title: 'Бүсчлэл',
+         width: 50,
+         dataIndex: 'districtId'
       },
       {
-         index: 'hsLat',
-         label: 'Өргөрөг',
-         isView: false,
-         input: 'numberInput',
-         col: 12
+         title: 'Цагийн хуваарь',
+         width: 100,
+         dataIndex: 'hsTimetable'
       },
       {
-         index: 'hsCapacity',
-         label: 'Нийт орны тоо',
-         isView: true,
-         input: 'numberInput',
-         col: 12
+         title: 'Засах',
+         render: (_, row) => (
+            <Button
+               icon={<EditOutlined className="text-green-600" />}
+               onClick={() => {
+                  setMode(true);
+                  hospitalForm.resetFields();
+                  hospitalForm.setFieldsValue(row);
+                  setOpenModal(true);
+               }}
+            />
+         )
       },
       {
-         index: 'hsSocial',
-         label: 'Сошиал хаяг',
-         isView: false,
-         input: 'input',
-         col: 12
-      },
-      {
-         index: 'hsIntroduction',
-         label: 'Танилцуулга',
-         isView: false,
-         input: 'textarea',
-         col: 12
-      },
-      {
-         index: 'hsTimetable',
-         label: 'Цагийн хуваарь',
-         isView: false,
-         input: 'input',
-         col: 12
-      },
-      {
-         index: 'address',
-         label: 'Хаяг байршил',
-         isView: false,
-         input: 'textarea',
-         col: 12
-      },
-      {
-         index: 'hasInsurance',
-         label: 'ЭМД гэрээтэй эсэх',
-         isView: false,
-         input: 'switch',
-         col: 8
-      },
-      {
-         index: 'isActive',
-         label: 'Идэвхтэй эсэх',
-         isView: true,
-         input: 'switch',
-         col: 8
-      },
-      {
-         index: 'isXyp',
-         label: 'Xyp-тай эсэх',
-         isView: true,
-         input: 'switch',
-         col: 8
-      },
-      {
-         index: 'isInsurance',
-         label: 'Даатгалтай эсэх',
-         isView: false,
-         input: 'switch',
-         col: 8
-      },
-      {
-         index: 'isAfterPay',
-         label: 'Дараа төлбөрт эсэх',
-         isView: true,
-         input: 'switch',
-         col: 8
-      },
-      {
-         index: 'hasBranch',
-         label: 'Салбартай эсэх',
-         isView: true,
-         input: 'switch',
-         col: 8,
-         child: true
-      },
-      {
-         index: 'branchList',
-         label: 'Салбар нэмэх',
-         isView: false,
-         input: 'formList',
-         childrenColumns: [
-            {
-               index: 'branchId',
-               label: 'Салбарын дугаар',
-               input: 'input',
-               isView: false,
-               col: 12
-            },
-            {
-               index: 'hospitalName',
-               label: 'Салбарын нэр',
-               input: 'input',
-               isView: false,
-               col: 12
-            },
-            {
-               index: 'hsPhone',
-               label: 'Холбогдох утасны дугаар',
-               input: 'input',
-               isView: false,
-               col: 12
-            },
-            {
-               index: 'hsPersonPhone',
-               label: 'Холбоо барих хүний дугаар',
-               input: 'input',
-               isView: false,
-               col: 12
-            },
-            {
-               index: 'hsEmail',
-               label: 'Салбарын имэйл хаяг',
-               input: 'input',
-               isView: false,
-               col: 12
-            },
-            {
-               index: 'hsSocial',
-               label: 'Салбарын сошиал хаяг',
-               input: 'input',
-               isView: false,
-               col: 12
-            },
-            {
-               index: 'address',
-               label: 'Салбарын хаяг, байршил',
-               input: 'input',
-               isView: false,
-               col: 24
-            },
-            {
-               index: 'hsLat',
-               label: 'Салбарын өргөрөг',
-               input: 'input',
-               isView: false,
-               col: 12
-            },
-            {
-               index: 'hsLng',
-               label: 'Салбарын уртраг',
-               input: 'input',
-               isView: false,
-               col: 12
-            },
-            {
-               index: 'hsTimetable',
-               label: 'Салбарын цагийн хуваарь',
-               input: 'input',
-               isView: false,
-               col: 12
-            },
-            {
-               index: 'hsCapacity',
-               label: 'Салбарын нийт орны тоо',
-               input: 'numberInput',
-               isView: false,
-               col: 12
-            },
-            {
-               index: 'status',
-               label: 'Төлөв /0-идэвхгүй, 1-идэвхтэй/',
-               input: 'select',
-               inputData: [
-                  {
-                     label: 'идэвхгүй',
-                     value: 0
-                  },
-                  {
-                     label: 'идэвхтэй',
-                     value: 1
-                  }
-               ],
-               relValueIndex: 'value',
-               relIndex: 'label',
-               isView: false,
-               col: 12
-            },
-            {
-               index: 'numberOfBeds',
-               label: 'Салбарын сул орны тоо',
-               input: 'numberInput',
-               isView: false,
-               col: 12
-            },
-            {
-               index: 'hsIntroduction',
-               label: 'Салбарын товч танилцуулга',
-               input: 'textarea',
-               isView: false,
-               col: 24
-            }
-         ],
-         col: 24
-      },
-      {
-         index: 'operationList',
-         label: 'Үйл ажиллагааны чиглэлийн мэдээлэл',
-         isView: false,
-         input: 'formList',
-         childrenColumns: [
-            {
-               index: 'id',
-               label: 'Үйл ажиллагааны чиглэлийн дугаар',
-               input: 'select',
-               inputData: operationList,
-               isView: false,
-               relValueIndex: 'id',
-               relIndex: 'label',
-               col: 24
-            },
-            {
-               index: 'status',
-               label: 'Төлөв /0-идэвхгүй, 1-идэвхтэй/',
-               input: 'select',
-               inputData: [
-                  {
-                     label: 'идэвхгүй',
-                     value: 0
-                  },
-                  {
-                     label: 'идэвхтэй',
-                     value: 1
-                  }
-               ],
-               relValueIndex: 'value',
-               relIndex: 'label',
-               isView: false,
-               col: 12
-            }
-         ],
-         col: 24
+         title: 'ЭМД Sync 4.56',
+         render: (_, row) => (
+            <Button
+               icon={<SwapOutlined />}
+               onClick={() => {
+                  syncHospital();
+               }}
+            />
+         )
       }
    ];
 
-   const updateHospital = async (values) => {
-      const conf = {
-         headers: {},
-         params: {}
-      };
-      const response = await Patch('organization/hospital/' + selectedRow.id, token, conf, values);
-      if (response === 200) {
-         setIsOpenInsurance(false);
-      }
-      setIsRefresh(!isRefresh);
-   };
-   const insuranceFunction = async (row) => {
-      if (row) {
-         setIsOpenInsurance(true);
-         insuranceForm.setFieldValue('insuranceUsername', row.insuranceUsername);
-         insuranceForm.setFieldValue('insurancePassword', row.insurancePassword);
-         setSelectedRow(row);
-      }
-   };
-   const insuranceSyncFunction = async () => {
-      await insuranceApi.createHicsExams().then(({ data }) => {
-         if (data.code == 200) {
-            message.success(data.description);
-         } else {
-            message.warn(data.description);
-         }
-      });
+   const syncHospital = async () => {
+      await hospitalApi
+         .syncHospital()
+         .then(() => {
+            openNofi('success', 'Амжилттай', 'Амжилттай');
+         })
+         .catch((error) => {
+            console.log(error);
+            openNofi('error', 'Амжилтгүй', 'Амжилтгүй');
+         });
    };
 
+   const onFinish = async (values) => {
+      try {
+         setLoading(true);
+         if (editMode) {
+            await hospitalApi.patch(values.id, {
+               ...values,
+               hasInsurance: values.isInsurance ? 1 : 0,
+               hasBranch: values?.branch?.length > 0 ? 1 : 0
+            });
+         } else {
+            await hospitalApi.post({
+               ...values,
+               hasInsurance: values.isInsurance ? 1 : 0,
+               hasBranch: values?.branch?.length > 0 ? 1 : 0
+            });
+         }
+         setLoading(false);
+         setOpenModal(false);
+         getHospitals();
+      } catch (error) {
+         console.log(error);
+         message.error(error);
+      }
+   };
+
+   useEffect(() => {
+      if (hospitalHasInsurance) {
+         setTabItems((prevValues) => [
+            ...prevValues.filter((item) => item.key !== 3),
+            {
+               key: 3,
+               label: 'Даатгал',
+               children: <Hics />
+            }
+         ]);
+      } else {
+         setTabItems((prevValues) => prevValues.filter((item) => item.key !== 3));
+      }
+   }, [hospitalHasInsurance]);
+
+   useEffect(() => {
+      getHospitals();
+   }, []);
+
    return (
-      <div className="w-full bg-[#f5f6f7] p-3">
-         <UTable
-            title={'Байгууллага'}
-            url={'organization/hospital'}
-            onValuesChange={setChangedValues}
-            column={column}
-            isCreate={true}
-            isRead={true}
-            isUpdate={true}
-            isDelete={true}
-            width="30%"
-            isInsurance={true}
-            insuranceSync={true}
-            insuranceFunction={insuranceFunction}
-            insuranceSyncFunction={insuranceSyncFunction}
-            isRefresh={isRefresh}
-            // initialValues={{
-            //    hospitalType: 'test',
-            //    address: 'dasd',
-            //    branchList_address: 'asd',
-            //    branchList_branchId: 123,
-            //    branchList_hospitalName: 'asd',
-            //    branchList_hsCapacity: 123,
-            //    branchList_hsEmail: 'asd12@gmail.com',
-            //    branchList_hsLat: 1223,
-            //    branchList_hsLng: 213,
-            //    branchList_hsPersonPhone: 'asd',
-            //    branchList_hsPhone: 'asd',
-            //    branchList_hsSocial: 'as',
-            //    branchList_hsTimetable: 'asdsa',
-            //    branchList_numberOfBeds: 100,
-            //    branchList_status: undefined,
-            //    databaseName: 'as',
-            //    email: 'dasd@gmail.com',
-            //    hasBranch: undefined,
-            //    hasInsurance: 1,
-            //    hsCapacity: 123,
-            //    hsIntroduction: 'asdas',
-            //    hsLat: 123,
-            //    hsLng: 123,
-            //    hsPersonPhone: 'das',
-            //    hsSocial: 'as',
-            //    isActive: undefined,
-            //    isAfterPay: undefined,
-            //    isInsurance: undefined,
-            //    isXyp: undefined,
-            //    name: 'asdas',
-            //    phone: 'asdasd',
-            //    registerNumber: 'asasd'
-            // }}
-         />
-         <Modal
-            open={isOpenInsurance}
-            onCancel={() => {
-               setIsOpenInsurance(false);
-               insuranceForm.resetFields();
+      <div className="p-3 w-full h-full bg-[#f5f6f7]">
+         <Card
+            title="Байгууллага"
+            extra={
+               <Button
+                  type="primary"
+                  onClick={() => {
+                     hospitalForm.resetFields();
+                     setMode(false);
+                     setOpenModal(true);
+                  }}
+               >
+                  Нэмэх
+               </Button>
+            }
+            bordered={false}
+            className="header-solid rounded-md"
+            bodyStyle={{
+               padding: 8
             }}
-            onOk={() => insuranceForm.validateFields().then((values) => updateHospital(values))}
-            okText="Хадагалах"
-            cancelText="Болих"
          >
-            <Form form={insuranceForm} layout="vertical">
-               <Form.Item
-                  label="Даатгалын нэвтрэх нэр"
-                  name="insuranceUsername"
-                  rules={[
-                     {
-                        required: true,
-                        message: 'Заавал'
-                     }
-                  ]}
-               >
-                  <Input />
-               </Form.Item>
-               <Form.Item
-                  label="Даатгалын нууц үг"
-                  name="insurancePassword"
-                  rules={[
-                     {
-                        required: true,
-                        message: 'Заавал'
-                     }
-                  ]}
-               >
-                  <Input />
-               </Form.Item>
+            <Table
+               rowKey="id"
+               bordered
+               loading={isLoading}
+               className="hospital-table"
+               columns={columns}
+               dataSource={hospitals}
+            />
+         </Card>
+         <Modal
+            title="Байгууллага"
+            open={isOpenModal}
+            confirmLoading={isLoading}
+            onCancel={() => {
+               setOpenModal(false);
+            }}
+            onOk={() => {
+               hospitalForm.validateFields().then(onFinish);
+            }}
+            cancelText="Болих"
+            okText="Хадгалах"
+         >
+            <Form form={hospitalForm} layout="vertical">
+               <Tabs tabPosition="left" items={tabItems} />
             </Form>
          </Modal>
       </div>
