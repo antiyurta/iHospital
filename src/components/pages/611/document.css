@@ -1,0 +1,49 @@
+/* paragraph style */
+.document-paragraph {
+   font-size: 12pt;
+}
+.bold {
+   font-weight: bold;
+}
+.upper {
+   text-transform: uppercase;
+}
+.center {
+   text-align: center;
+}
+.end {
+   text-align: end;
+}
+.start {
+   text-align: flex-start;
+}
+/* box border */
+.document-box {
+   padding: 0px 6px;
+   border: 1px solid black;
+}
+
+/* The standalone checkbox square*/
+.checkbox {
+   width: 15px;
+   height: 15px;
+   border: 1px solid #000;
+   display: inline-block;
+}
+
+/* This is what simulates a checkmark icon */
+.checkbox.checked:after {
+   content: '';
+   display: block;
+   width: 4px;
+   height: 7px;
+
+   /* "Center" the checkmark */
+   position: relative;
+   top: 2px;
+   left: 4px;
+
+   border: solid #000;
+   border-width: 0 2px 2px 0;
+   transform: rotate(45deg);
+}

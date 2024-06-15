@@ -1,4 +1,5 @@
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import ReactDOMServer from 'react-dom/server';
 import { Button, PageHeader } from 'antd';
 import EmrContext from '../../../features/EmrContext';
 import { ReturnById } from '../611/Document/Index';
@@ -10,6 +11,7 @@ import DApi from '@ApiServices/organization/document';
 import documentViewerInjection from './DocumentViewer/injection';
 
 const DocumentViewer = () => {
+   const [pdfUrl, setPdfUrl] = useState('');
    const { setDocumentView, documentType, selectedDocument } = useContext(EmrContext);
    const [printLoading, setPrintLoading] = useState(false);
    const currentRef = useRef();
@@ -26,41 +28,53 @@ const DocumentViewer = () => {
                   <html>
                   <head>
                   <style>
-                  .w-full {
-                     width: 100%;
+                  /* paragraph style */
+                  .document-paragraph {
+                     font-size: 10pt;
                   }
-                  p {
-                     font-size: 14px;
-                     font-weight: 400;
+                  .bold {
+                     font-weight: bold;
                   }
-                  .page {
-                     width: 210mm;
-                     height: 297mm;
+                  .upper {
+                     text-transform: uppercase;
                   }
-                  .subpage {
-                     padding: 1cm
+                  .center {
+                     text-align: center;
                   }
-                  .border-1 {
+                  .end {
+                     text-align: end;
+                  }
+                  .start {
+                     text-align: flex-start;
+                  }
+                  .document-box {
+                     padding: 0px 6px;
                      border: 1px solid black;
                   }
-                  .text-center {
-                     text-align: center
+                  .checkbox {
+                     width: 10px;
+                     min-width: 10px;
+                     height: 10px;
+                     border: 1px solid #000;
+                     display: inline-block;
                   }
-                  .grid-cols-2 {
-                     display:grid;
-                     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+                  .checkbox.checked:after {
+                     content: '';
+                     display: block;
+                     width: 4px;
+                     height: 7px;
+                     position: relative;
+                     top: 0px;
+                     left: 2px;
+                     border: solid #000;
+                     border-width: 0 2px 2px 0;
+                     transform: rotate(45deg);
                   }
-                  .break {
-                     clear: both;
-                     page-break-after: always;
+                  .page {
+                     width: 100%;
                   }
-                  .flex-row {
-                     display: flex;
-                     flex-direction: row;
-                  }
-                  .flex-col {
-                     display: flex;
-                     flex-direction: column;
+                  .subpage {
+                     padding: 1cm;
                   }
                   </style>
                   </head>
@@ -79,14 +93,15 @@ const DocumentViewer = () => {
             const uint8Array = new Uint8Array(response.data.response.data);
             const blob = new Blob([uint8Array], { type: 'application/pdf' });
             const url = window.URL.createObjectURL(blob);
-            const newWindow = window.open(url, '_blank');
+            setPdfUrl(url);
+            // const newWindow = window.open(url, '_blank');
             setPrintLoading(false);
-            if (newWindow) {
-               newWindow.focus();
-            } else {
-               console.error('Failed to open PDF in a new window');
-            }
-            window.URL.revokeObjectURL(url);
+            // if (newWindow) {
+            //    newWindow.focus();
+            // } else {
+            //    console.error('Failed to open PDF in a new window');
+            // }
+            // window.URL.revokeObjectURL(url);
          }
       } catch (error) {
          console.error('Error fetching PDF:', error);
@@ -132,6 +147,7 @@ const DocumentViewer = () => {
    if (!selectedDocument) {
       return <div>...loading</div>;
    }
+
    return (
       <PageHeader
          ghost={true}
@@ -149,6 +165,7 @@ const DocumentViewer = () => {
                   padding: 10
                }}
             >
+               <iframe src={pdfUrl} width="100%" height="600px" title="PDF Viewer"></iframe>
                <div ref={currentRef} className="print-remove-p">
                   {documentType === 'one' ? <Body document={selectedDocument} /> : null}
                   {documentType === 'many' ? (

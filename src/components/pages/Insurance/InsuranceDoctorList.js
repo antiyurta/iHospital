@@ -102,7 +102,7 @@ function InsuranceDocterList() {
             console.log(error);
          })
          .finally(() => {
-            // getList(1, 10, filterForm.getFieldsValue());
+            getList(1, 10, filterForm.getFieldsValue());
          });
    };
    const getRepairInsurance = async (values) => {

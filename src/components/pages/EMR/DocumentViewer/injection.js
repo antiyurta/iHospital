@@ -19,7 +19,7 @@ const documentViewerInjection = (html) => {
       let startIndexPage = html.indexOf(startTagPage);
       let startIndexPageLandscape = html.indexOf(startTagPageLandscape);
       if (startIndexPage === -1 && startIndexPageLandscape === -1) {
-         return; // No more divs with classes found
+         return results; // No more divs with classes found
       } else if (
          startIndexPage === -1 ||
          (startIndexPageLandscape !== -1 && startIndexPageLandscape < startIndexPage)
