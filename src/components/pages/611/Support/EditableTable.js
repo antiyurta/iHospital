@@ -21,10 +21,31 @@ function EditableTable(props) {
    const [isOpenConfModal, setIsOpenConfModal] = useState(false);
    const [oldDocuments, setOldDocuments] = useState([]);
    const [documentForm, setDocumentForm] = useState({});
-   const [selectedStructureId, setSelectedStructureId] = useState(Number);
+   const [selectedStructureIds, setSelectedStructureId] = useState(Number);
    const [selectedDocumentValue, setSelectDocumentValue] = useState(Number);
    const [selectedEmployeeIds, setSelectedEmployeeIds] = useState([]);
    const [currentDocumentOptions, setCurrentDocumentOptions] = useState([]);
+   //checkbox all
+   const [indeterminate, setIndeterminate] = useState(false);
+   const [checkAll, setCheckAll] = useState(false);
+   const onCheckAllChange = (e, index, values) => {
+      const allValues = values.map((value) => value.keyWord);
+      console.log(allValues);
+      if (e.target.checked) {
+         confForm.setFieldValue(index, allValues);
+      } else {
+         confForm.setFieldValue(index, []);
+      }
+      setIndeterminate(false);
+      setCheckAll(e.target.checked);
+   };
+   const onChange = (list, index, plainOptions) => {
+      confForm.setFieldValue(index, list);
+      const newPlanOptions = plainOptions.filter((pO) => pO.isHead && pO.type != 'title');
+      setIndeterminate(!!list.length && list.length < newPlanOptions.length);
+      setCheckAll(list.length === newPlanOptions.length);
+   };
+   //
    const getPositionInfo = (positionId) => {
       var title = '';
       console.log(positions);
@@ -61,6 +82,7 @@ function EditableTable(props) {
                response: { data }
             }
          }) => {
+            console.log('==========>', data);
             if (data.length > 0) {
                setCurrentDocumentOptions(data);
                setEditModePosition(true);
@@ -91,7 +113,7 @@ function EditableTable(props) {
    };
    const confOnFinish = async (values) => {
       const data = {
-         structureId: selectedStructureId,
+         structureIds: selectedStructureIds,
          documentValue: selectedDocumentValue,
          items: values
       };
@@ -105,7 +127,7 @@ function EditableTable(props) {
                   });
                } else {
                   await DocumentOptionServices.post({
-                     structureId: selectedStructureId,
+                     structureIds: selectedStructureIds,
                      documentValue: selectedDocumentValue,
                      items: { [`${key}`]: value }
                   });
@@ -233,7 +255,7 @@ function EditableTable(props) {
             <ReturnDetails type={1} oldDocuments={oldDocuments} handleClick={handleClick} />
          </Modal>
          <Modal
-            title="sdads"
+            title="PER ZOOH"
             open={isOpenConfModal}
             onCancel={() => setIsOpenConfModal(false)}
             onOk={() =>
@@ -245,12 +267,28 @@ function EditableTable(props) {
             <Form form={confForm} layout="vertical">
                <Collapse>
                   {selectedEmployeeIds?.map((id, index) => {
+                     console.log('documentForm', documentForm);
                      return (
                         <Panel key={index} header={getPositionInfo(id)}>
+                           <Checkbox
+                              indeterminate={indeterminate}
+                              onChange={(e) => {
+                                 onCheckAllChange(e, id, documentForm.documentForm);
+                              }}
+                              checked={checkAll}
+                           >
+                              Бүгд сонгох
+                           </Checkbox>
+                           <div className="w-full h-[1px] bg-red-300" />
                            <Form.Item name={id}>
-                              <Checkbox.Group className="w-full">
+                              <Checkbox.Group
+                                 onChange={(e) => {
+                                    onChange(e, id, documentForm?.documentForm);
+                                 }}
+                                 className="w-full"
+                              >
                                  {documentForm?.documentForm
-                                    ?.filter((df) => df.isHead)
+                                    ?.filter((df) => df.isHead && df.type != 'title')
                                     .map((form, index) => (
                                        <Checkbox key={index} value={form.keyWord}>
                                           {form.question}

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Checkbox, DatePicker, Form, Input, InputNumber, Radio, TimePicker, Tooltip } from 'antd';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
 import moment from 'moment';
-import { CloseOutlined } from '@ant-design/icons';
+import { CloseOutlined, QuestionCircleOutlined, QuestionOutlined } from '@ant-design/icons';
 //comp
 import HumanParts from './human-parts';
 import NewFormTable from './NewFormTable';
@@ -155,7 +155,14 @@ const NewFormRender = ({
                <div key={item.index} className="document-forms">
                   <AForm>
                      <div className="flex flex-row gap-1 justify-between items-center">
-                        <p className="font-bold">{item.question}</p>
+                        <div className="flex flex-row gap-1">
+                           <p className="font-bold">{item.question}</p>
+                           {state ? (
+                              <Tooltip title={message}>
+                                 <QuestionCircleOutlined className="text-red-500" />
+                              </Tooltip>
+                           ) : null}
+                        </div>
                         <Tooltip title="Хариу арилгах">
                            <Button
                               danger
@@ -168,8 +175,6 @@ const NewFormRender = ({
                         </Tooltip>
                      </div>
                      <Form.Item
-                        tooltip={state ? message : null}
-                        label={state ? ' ' : null}
                         className="mb-0"
                         labelCol={{
                            style: {
@@ -214,7 +219,7 @@ const NewFormRender = ({
             return (
                <div key={item.index} className="document-forms">
                   <AForm>
-                     <Form.Item {...restItem}>
+                     <Form.Item {...restItem} tooltip={state ? message : null}>
                         <Checkbox.Group
                            onChange={(e) => {
                               handleChangeCheckbox(e, item?.options, configNames(item.keyWord));
@@ -254,7 +259,7 @@ const NewFormRender = ({
             };
             return (
                <AForm key={item.index}>
-                  <Form.Item {...restItem}>
+                  <Form.Item {...restItem} tooltip={state ? message : null}>
                      <InputN />
                   </Form.Item>
                </AForm>
@@ -281,7 +286,7 @@ const NewFormRender = ({
             return (
                <AForm key={item.index}>
                   <div className="flex flex-row gap-2 justify-between">
-                     <Form.Item {...restItem}>
+                     <Form.Item {...restItem} tooltip={state ? message : null}>
                         <Input disabled placeholder={item.question} />
                      </Form.Item>
                      <div className="flex flex-row gap-1">
@@ -346,6 +351,7 @@ const NewFormRender = ({
                <AForm key={item.index}>
                   <Form.Item
                      {...restItem}
+                     tooltip={state ? message : null}
                      getValueProps={(i) => {
                         if (i) {
                            return { value: moment(i) };

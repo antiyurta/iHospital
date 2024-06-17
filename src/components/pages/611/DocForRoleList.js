@@ -105,6 +105,7 @@ function DocForRoleList() {
       return name;
    };
    const selectDepartment = async (depIds) => {
+      setPositions([]);
       form.setFieldsValue({
          employeePositionIds: [],
          supervisePositionIds: []
@@ -272,7 +273,7 @@ function DocForRoleList() {
    const columnsOption = [
       {
          title: 'Тасаг',
-         dataIndex: ['structure', 'name']
+         dataIndex: 'structureIds'
       },
       {
          title: 'Хэн',
@@ -291,15 +292,7 @@ function DocForRoleList() {
       {
          title: 'Бөглөх асуумж',
          dataIndex: 'formOptionIds',
-         render: (text) => {
-            return (
-               <div className="grid grid-cols-6 gap-1 justify-items-start">
-                  {text?.map((item, index) => {
-                     return <div key={index}>{item}</div>;
-                  })}
-               </div>
-            );
-         }
+         render: (text) => <div className="flex flex-row gap-1 flex-wrap">{text?.join(',')}</div>
       },
       {
          title: 'Үйлдэл',

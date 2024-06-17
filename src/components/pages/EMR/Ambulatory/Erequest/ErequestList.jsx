@@ -69,6 +69,7 @@ const ErequestList = () => {
                </div>
                <Table
                   rowKey="index"
+                  bordered
                   loading={isLoading}
                   columns={[
                      {

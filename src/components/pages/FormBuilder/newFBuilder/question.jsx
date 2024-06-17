@@ -116,7 +116,7 @@ const Question = (props) => {
          >
             <strong>Түлхүүр</strong>
             <Input
-               disabled={type === 'title' ? true : false}
+               // disabled={type === 'title' ? true : false}
                value={keyWord}
                onChange={(e) => {
                   setKeyWord(e.target.value);

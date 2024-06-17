@@ -61,7 +61,7 @@ function Index({ type, isDoctor, isSurgeyBoss }) {
                depIds: depIds?.toString(),
                ...otherParams
             },
-            4: {
+            3: {
                columnId: isSurgeyBoss ? 3 : null,
                ...otherParams
             }
@@ -70,7 +70,7 @@ function Index({ type, isDoctor, isSurgeyBoss }) {
             0: AppointmentApi.getByPageFilter,
             1: AppointmentApi.getPreOrder,
             2: ServiceApi.getInpatientRequest,
-            4: SurgeryApi.getRequest
+            3: SurgeryApi.getRequest
          };
          const selectedApi = apiMap[type];
          if (!selectedApi) throw new Error('Unknown service type');

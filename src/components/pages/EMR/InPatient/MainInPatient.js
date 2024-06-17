@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import ComingSoon from './ComingSoon';
+import ErequestList from '../Ambulatory/Erequest/ErequestList';
 
 function MainInPatient() {
    const [activeKey, setActiveKey] = useState(1);
@@ -7,7 +8,7 @@ function MainInPatient() {
       {
          label: 'Шинжилгээний хариу',
          key: 1,
-         children: <ComingSoon />
+         children: <ErequestList />
       },
       {
          label: 'Дүрс оношилгоо',
@@ -60,7 +61,7 @@ function MainInPatient() {
                </button>
             ))}
          </div>
-         <div>{buttonItems[activeKey - 1].children}</div>
+         {buttonItems[activeKey - 1].children}
       </div>
    );
 }
