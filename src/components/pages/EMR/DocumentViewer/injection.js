@@ -1,5 +1,3 @@
-import React from 'react';
-
 const documentViewerInjection = (html) => {
    const formatMap = {
       '<div class="page">': 'a4',

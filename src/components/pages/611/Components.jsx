@@ -69,6 +69,12 @@ const DocumentCheckbox = ({ value, title, groupValue }) => {
 };
 
 const DocumentCheckboxGroup = ({ value, children }) => {
+   const entireChild = (child) => {
+      if (child.props?.children?.length > 0) {
+         return child.props?.children?.map((prop) => entireChild(prop));
+      }
+      return React.cloneElement(child, { groupValue: value });
+   };
    return (
       <div
          style={{
@@ -77,9 +83,7 @@ const DocumentCheckboxGroup = ({ value, children }) => {
             gap: 0
          }}
       >
-         {React.Children.map(children, (child) => {
-            return React.cloneElement(child, { groupValue: value });
-         })}
+         {React.Children.map(children, (child) => entireChild(child))}
       </div>
    );
 };
