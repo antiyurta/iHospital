@@ -1,6 +1,7 @@
 import React from 'react';
 import { Table } from 'react-bootstrap';
 import { Checkbox, Input } from 'antd';
+import { TextWithUnderline } from './utils';
 
 const CT_1_Emegtei = (props) => {
    const {
@@ -48,11 +49,7 @@ const CT_1_Emegtei = (props) => {
                               </Checkbox>
                               <Checkbox value={'q3-2'}>
                                  Хэвийн бус
-                                 <Input
-                                    className="  w-10 mb-2"
-                                    value={formData?.['q3-2-1']}
-                                    style={{ textAlign: 'center' }}
-                                 />
+                                 <TextWithUnderline>{formData?.['q3-2-1'] || ''}</TextWithUnderline>
                               </Checkbox>
                            </Checkbox.Group>
                         </th>
@@ -170,11 +167,13 @@ const CT_1_Emegtei = (props) => {
                            </Checkbox.Group>
                            <th id="child">
                               АД баруун талд
-                              <Input className="  w-8" value={formData?.['q10']} style={{ textAlign: 'center' }} />/
+                              <TextWithUnderline>{formData?.q10 || ''}</TextWithUnderline>
+
                            </th>
                            <th id="child">
                               Зүүн талд
-                              <Input className="  w-8" value={formData?.['q11']} style={{ textAlign: 'center' }} />/
+                              <TextWithUnderline>{formData?.q11 || ''}</TextWithUnderline>
+
                            </th>
                         </th>
                      </tr>
@@ -206,11 +205,13 @@ const CT_1_Emegtei = (props) => {
                               <Checkbox value={'q13-2'}>Гүн тэмтрэлтээр</Checkbox>
                               <Checkbox value={'q13-3'} className="">
                                  Эмзэглэлтэй (байрлал
-                                 <Input
+                                 {/* <Input
                                     className="  w-8"
                                     value={formData?.['q13-1-1']}
                                     style={{ textAlign: 'center' }}
-                                 />
+                                 /> */}
+                                 <TextWithUnderline>{formData?.['q13-3-1'] || ''}</TextWithUnderline>
+
                                  )
                               </Checkbox>
                               <Checkbox value={'q13-4'}>Ердийн</Checkbox>

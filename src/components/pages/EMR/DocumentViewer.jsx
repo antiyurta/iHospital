@@ -16,76 +16,95 @@ const DocumentViewer = () => {
    const htmlToPDF = async () => {
       try {
          setPrintLoading(true);
-         const currentContent = currentRef.current.innerHTML;
-         // ${currentContent}
+         const currentContent = await currentRef.current.innerHTML;
+
+
+         const regex = /<div class="page">(.*?)<\/div>/gs;
+
+         const items = [];
+         const matches = templateString.matchAll(regex);
+
+
+         for (const match of matches) {
+            items.push(match[0].trim());
+         }
+
+
+
+         console.log({ items });
+
+
          const response = await DApi.generatePDF({
             pages: [
-               {
+               ...(items || []).map((itemContent) => ({
                   body: `<!DOCTYPE html>
-            <html>
-            <head>
-            <style>
-            .subpage {
-               padding: 1cm
-            }
-            .border-1 {
-               border: 1px solid black;
-            }
-            .text-center {
-               text-align: center
-            }
-            .grid-cols-2 {
-               display:grid;
-               grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-            }
-            .break {
-               clear: both;
-               page-break-after: always;
-            }
-            </style>
-            </head>
-            <body>
-               ${currentContent}
-            </body>
-            </html>
-            `,
+                  <html>
+                  <head>
+                  <style>
+                  .subpage {
+                    padding: 1cm;
+                  }
+                  .border-1 {
+                    border: 1px solid black;
+                  }
+                  .text-center {
+                    text-align: center;
+                  }
+                  .grid-cols-2 {
+                    display: grid;
+                    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+                  }
+                  .break {
+                    clear: both;
+                    page-break-after: always;
+                  }
+                  </style>
+                  </head>
+                  <body>
+
+                  
+                    ${itemContent}
+                  </body>
+                  </html>
+                `,
                   format: 'a4',
                   landscape: false
-               },
-               {
+               })),
+               ...(items || []).map((itemContent) => ({
                   body: `<!DOCTYPE html>
-            <html>
-            <head>
-            <style>
-            .subpage {
-               padding: 1cm
-            }
-            .border-1 {
-               border: 1px solid black;
-            }
-            .text-center {
-               text-align: center
-            }
-            .grid-cols-2 {
-               display:grid;
-               grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-            }
-            .break {
-               clear: both;
-               page-break-after: always;
-            }
-            </style>
-            </head>
-            <body>
-               ${currentContent}
-            </body>
-            </html>
-            `,
+                  <html>
+                  <head>
+                  <style>
+                  .subpage {
+                    padding: 1cm;
+                  }
+                  .border-1 {
+                    border: 1px solid black;
+                  }
+                  .text-center {
+                    text-align: center;
+                  }
+                  .grid-cols-2 {
+                    display: grid;
+                    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+                  }
+                  .break {
+                    clear: both;
+                    page-break-after: always;
+                  }
+                  </style>
+                  </head>
+                  <body>
+                    ${itemContent}
+                  </body>
+                  </html>
+                `,
                   format: 'a5',
                   landscape: false
-               }
+               }))
             ]
          });
+
 
          if (!response.data.success) {
             throw new Error(`HTTP error! Status: ${response.status}`);
@@ -108,6 +127,7 @@ const DocumentViewer = () => {
          // Handle error as needed
       }
    };
+
    const handlePrint = useReactToPrint({
       onBeforeGetContent: () => setPrintLoading(true),
       onBeforePrint: () => setPrintLoading(false),
@@ -119,6 +139,7 @@ const DocumentViewer = () => {
       <>
          {document?.isExpand ? (
             <div className="new-form print-remove-p">
+
                <ReturnById
                   type={document.children[0]?.usageType}
                   id={document.documentId}
@@ -170,6 +191,7 @@ const DocumentViewer = () => {
                      <Each of={selectedDocument} render={(document) => <Body document={document} />} />
                   ) : null}
                </div>
+               ddddd
             </div>
             <div className="col-span-1 bg-white rounded-xl flex flex-col gap-2 p-2">
                <Button loading={printLoading} icon={<PrinterOutlined />} onClick={() => handlePrint()}>
