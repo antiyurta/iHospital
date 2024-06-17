@@ -83,8 +83,13 @@ const CT1Nuur = (props) => {
             <FlexRow>
                <Box width={'100%'} top left>
                   <FlexCol gap={8}>
-                     <Paragraph>{`Төрсөн    он    сар   өдөр`}</Paragraph>
-                     <Paragraph>
+                     <FlexRow gap={1} justify="space-between">
+                        <Paragraph>Төрсөн</Paragraph>
+                        <Paragraph>он</Paragraph>
+                        <Paragraph>сар</Paragraph>
+                        <Paragraph>өдөр</Paragraph>
+                     </FlexRow>
+                     <Paragraph align="center">
                         {dayjs(regToDate(history?.patientData?.registerNumber)).format('YYYY/MM/DD')}
                      </Paragraph>
                      <Paragraph>{`Нас: ${getAge(history?.patientData?.registerNumber)?.substring(0, 2)}`}</Paragraph>
@@ -129,6 +134,13 @@ const CT1Nuur = (props) => {
             <FlexRow>
                <Box width={'100%'} top left>
                   <Paragraph>Тогтмол хаяг:</Paragraph>
+                  <Paragraph>Аймаг/хот: {history?.patientData?.aimagName}</Paragraph>
+                  <GridColTwo>
+                     <Paragraph>Сум/дүүрэг:</Paragraph>
+                     <Paragraph>Баг/хороо:{history?.patientData?.bagKhorooName}</Paragraph>
+                     <Paragraph>Гудамж/Байшин:{history?.patientData?.addressStreetName}</Paragraph>
+                     <Paragraph>тоот:{history?.patientData?.addressDetail}</Paragraph>
+                  </GridColTwo>
                </Box>
                <Box minWidth={200} top left>
                   <Paragraph>{`Ажлын газар, албан тушаал: ${history?.patientData?.workplace} , ${history?.patientData?.positionName}`}</Paragraph>
@@ -159,47 +171,13 @@ const CT1Nuur = (props) => {
                   </Paragraph>
                </Box>
             </FlexRow>
-            <div className="flex flex-row">
-               <div className="border-1 w-full">
-                  <p>Тогтмол хаяг:</p>
-                  <p>
-                     <span>
-                        Аймаг/хот:<span className="underline">{history?.patientData?.aimagName}</span>
-                     </span>
-                  </p>
-                  <p className="flex flex-row justify-between">
-                     <span>
-                        Сум/дүүрэг:<span className="underline">{history?.patientData?.soumName}</span>
-                     </span>
-                     <span>
-                        Баг/хороо:<span className="underline">{history?.patientData?.bagKhorooName}</span>
-                     </span>
-                  </p>
-                  <p className="flex flex-row justify-between">
-                     <span>
-                        Гудамж/Байшин: <span className="underline">{history?.patientData?.addressStreetName}</span>
-                     </span>
-                     <span>
-                        тоот: <span className="underline">{history?.patientData?.addressDetail}</span>
-                     </span>
-                  </p>
-               </div>
-               <div className="border-1 px-2 max-w-[210px]">
-                  <p>{`Ажлын газар, албан тушаал: ${history?.patientData?.workplace} , ${history?.patientData?.positionName}`}</p>
-                  <p>Мэргэжил:{history?.patientData?.occupationName}</p>
-               </div>
-               <div className="border-1 w-[120px] px-2">
-                  <p>Цусны бүлэг:</p>
-                  <p className="underline">{history?.patientData?.bloodType}</p>
-                  <p
-                     style={{
-                        fontSize: 12
-                     }}
-                  >
-                     Баталгаажуулсан хүний нэр гарын үсэг:
-                  </p>
-               </div>
-            </div>
+            <FlexRow>
+               <Box top left>
+                  <Paragraph>Яаралтай үед холбоо барих</Paragraph>
+                  <Paragraph>Өөрийн утас:{history?.patientData?.phoneNo}</Paragraph>
+                  <Paragraph>Ар гэрийн утас:{history?.patientData?.contacts?.[0].contactPhoneNo}</Paragraph>
+               </Box>
+            </FlexRow>
             <div className="flex flex-row">
                <div className="border-1 w-full">
                   <p>Яаралтай үед холбоо барих</p>
