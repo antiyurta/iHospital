@@ -285,7 +285,7 @@ function Schedule({ isOpen, isOCS, incomeData, selectedPatient, isClose, isSucce
                            ></Radio.Group>
                            {currentType == 'B2B_RECEIPT' && (
                               <div className="w-full p-1">
-                                 <p>Байгууллагын дугаар оруулах</p>
+                                 <p>Бизнес эрхлэгчийн регистр</p>
                                  <Search
                                     onSearch={onSearchCustomer}
                                     placeholder="Байгууллагын РД"

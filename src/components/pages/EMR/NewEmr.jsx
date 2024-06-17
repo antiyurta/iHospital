@@ -141,7 +141,7 @@ class NewEmr extends React.Component {
       await this.getAddHics();
    }
    async componentWillUnmount() {
-      this.props.delEmrData();
+      // this.props.delEmrData();
       console.log('Үзлэг дуусав');
    }
    render() {
