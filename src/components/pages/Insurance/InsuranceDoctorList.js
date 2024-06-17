@@ -37,7 +37,7 @@ const basicRule = [
 ];
 
 function InsuranceDocterList() {
-   const [cancelForm] = Form.useForm();
+   const [returnForm] = Form.useForm();
    const [editForm] = Form.useForm();
    const [data, setData] = useState([]);
    const [meta, setMeta] = useState({});
@@ -45,7 +45,7 @@ function InsuranceDocterList() {
    const [isLoading, setIsLoading] = useState(false);
    const [hicsGroups, setHicsGroups] = useState([]);
    const [hicsService, setHicsService] = useState([]);
-   const [isOpenCancelModal, setOpenCancelModal] = useState(false);
+   const [isOpenReturnModal, setIsOpenReturnModal] = useState(false);
    const [isOpenEditModal, setIsOpenEditModal] = useState(false);
    //
    const getList = async (page, pageSize, filterValues) => {
@@ -80,23 +80,30 @@ function InsuranceDocterList() {
       editForm.setFieldsValue({
          patientRegno: data.patient.registerNumber,
          serviceNumber: data.hicsSealCode,
-         drgCode: data.diagnosis.drgCode,
-         icdCode: data.diagnosis.icdCode,
-         icd9Code: data.diagnosis.icd9Code
+         icdCode: data.icdCode,
+         icd9Code: data.icd9Code
       });
       setIsOpenEditModal(true);
    };
-   const getCancelInsurance = async (values) => {
-      await insuranceApi
-         .requestHicsSealCancel(values.hicsSealId, {
-            reason: values.reason
-         })
-         .then(({ data }) => {
+   const returnInsurance = (id, serviceNumber) => {
+      returnForm.setFieldsValue({
+         hicsSealId: id,
+         serviceNumber: serviceNumber
+      });
+      setIsOpenReturnModal(true);
+   };
+   const getReturnInsurance = async (values) => {
+      await healtInsuranceApi
+         .cancelService(values)
+         .then(async ({ data }) => {
             if (data.code === 201 || data.code === 200) {
                openNofi(data.code === 200 ? 'success' : 'info', 'Даатгал буцаалт', data.description);
+               await insuranceApi.requestHicsSeal(values.hicsSealId, {
+                  process: 4
+               });
             }
-            cancelForm.resetFields();
-            setOpenCancelModal(false);
+            returnForm.resetFields();
+            setIsOpenReturnModal(false);
          })
          .catch((error) => {
             console.log(error);
@@ -252,13 +259,7 @@ function InsuranceDocterList() {
             if (process === 1 || process === 2 || process === 3) {
                return (
                   <Button
-                     onClick={() => {
-                        cancelForm.setFieldsValue({
-                           hicsSealId: row.id,
-                           reason: null
-                        });
-                        setOpenCancelModal(true);
-                     }}
+                     onClick={() => returnInsurance(row.id, row.hicsSealCode)}
                      icon={<RollbackOutlined style={{ color: 'red' }} />}
                   />
                );
@@ -315,7 +316,7 @@ function InsuranceDocterList() {
                                  { value: 1, label: 'Битүүмж амжилттай үүссэн байна.' },
                                  { value: 2, label: 'Төлбөрийн мэдээлэл илгээгүй байна.' },
                                  { value: 3, label: 'Төлбөрийн мэдээлэл илгээсэн байна.' },
-                                 { value: 4, label: 'Цуцалсан хийгдсэн.' }
+                                 { value: 4, label: 'Буцаалт хийгдсэн.' }
                               ]}
                            />
                         </Form.Item>
@@ -359,28 +360,29 @@ function InsuranceDocterList() {
             </Card>
          </div>
          <Modal
-            title="Цуцлах"
-            open={isOpenCancelModal}
-            onCancel={() => setOpenCancelModal(false)}
+            title="Буцаах"
+            open={isOpenReturnModal}
+            onCancel={() => setIsOpenReturnModal(false)}
             onOk={() => {
-               cancelForm.validateFields().then(getCancelInsurance);
+               returnForm.validateFields().then((values) => {
+                  getReturnInsurance(values);
+               });
             }}
          >
-            <Form form={cancelForm} layout="vertical">
+            <Form form={returnForm} layout="vertical">
                <Form.Item hidden name={'hicsSealId'}>
                   <InputNumber disabled={true} />
                </Form.Item>
+               <Form.Item hidden name={'serviceNumber'}>
+                  <Input disabled={true} />
+               </Form.Item>
                <Form.Item
                   name={'reason'}
-                  label="Цуцлах болсон шалтгаан"
+                  label="Буцаах болсон шалтгаан"
                   rules={[
                      {
                         required: true,
-                        message: 'Цуцлах болсон шалтгаан заавал'
-                     },
-                     {
-                        min: 30,
-                        message: 'Үйлчилгээг цуцлаж байгаа шалтгаан 30-с багагүй'
+                        message: 'Буцаах шалтгаан заавал'
                      }
                   ]}
                >

@@ -1,11 +1,6 @@
 .body {
    margin: 24px 16px;
 }
-
-.hospital-table thead.ant-table-thead > tr > th {
-   white-space: wrap;
-}
-
 .text-rtl {
    writing-mode: tb !important;
 }

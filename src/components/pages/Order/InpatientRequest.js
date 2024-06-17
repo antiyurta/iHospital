@@ -25,6 +25,7 @@ function InpatientRequest({ selectedPatient, handleClick, hasInsurance, hicsSeal
    };
 
    const onSelectDep = (id) => {
+      console.log('---------->', id);
       if (hasInsurance) {
          getHicsService(departments.find((department) => department.id === id)?.hicsServiceIds || []);
       }
@@ -47,7 +48,27 @@ function InpatientRequest({ selectedPatient, handleClick, hasInsurance, hicsSeal
          patientId: selectedPatient.id,
          fromServiceId: hicsSeal.hicsServiceId || addHics.hicsSeal.hicsServiceId
       });
-      setIsOpenModal(false);
+      // handleClick({
+      //    patientId: selectedPatient.id
+      // });
+   };
+
+   const getConfirm = () => {
+      Modal.confirm({
+         title: 'Хэвтүүлэх хүсэлт',
+         content: (
+            <div>
+               <p>Та хэвтүүлэх хүсэлт илгээх гэж байна</p>
+            </div>
+         ),
+         cancelText: 'Болих',
+         okText: 'Захиалах',
+         async onOk() {
+            handleClick({
+               patientId: selectedPatient.id
+            });
+         }
+      });
    };
 
    return (

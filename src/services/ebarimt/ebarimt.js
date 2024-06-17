@@ -7,10 +7,7 @@ class Ebarimt {
       return await jwtInterceopter.get(`ebarimt/organization/${customerId}`);
    }
    async consumerByRegno(regno) {
-      return await jwtInterceopter.get('/ebarimt/easy-by-regno/' + regno);
-   }
-   async consumerByPhone(phone) {
-      return await jwtInterceopter.get('/ebarimt/easy-by-phone/' + phone);
+      return await jwtInterceopter.get('/ebarimt/easy/' + regno);
    }
    async ReturnBill(billId) {
       return await jwtInterceopter.get('ebarimt/return-bill/' + billId);
@@ -20,9 +17,6 @@ class Ebarimt {
    }
    async easyRegister(customerNo, qrData) {
       return await jwtInterceopter.post('/ebarimt/easy/register', { customerNo, qrData });
-   }
-   async getAccountsByTin(tin) {
-      return await jwtInterceopter.get(`ebarimt/bank-accounts/${tin}`);
    }
 }
 export default new Ebarimt();

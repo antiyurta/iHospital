@@ -3,6 +3,10 @@
    justify-content: space-between !important;
 }
 
+label {
+   font-weight: 600 !important;
+}
+
 ::placeholder {
    font-weight: 400 !important;
 }

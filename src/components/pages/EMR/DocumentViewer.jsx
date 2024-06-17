@@ -1,5 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import ReactDOMServer from 'react-dom/server';
+import React, { useContext, useRef, useState } from 'react';
 import { Button, PageHeader } from 'antd';
 import EmrContext from '../../../features/EmrContext';
 import { ReturnById } from '../611/Document/Index';
@@ -8,10 +7,8 @@ import { useReactToPrint } from 'react-to-print';
 import { Each } from '../../../features/Each';
 //api
 import DApi from '@ApiServices/organization/document';
-import documentViewerInjection from './DocumentViewer/injection';
 
 const DocumentViewer = () => {
-   const [pdfUrl, setPdfUrl] = useState('');
    const { setDocumentView, documentType, selectedDocument } = useContext(EmrContext);
    const [printLoading, setPrintLoading] = useState(false);
    const currentRef = useRef();
@@ -19,76 +16,95 @@ const DocumentViewer = () => {
    const htmlToPDF = async () => {
       try {
          setPrintLoading(true);
-         const currentContent = currentRef.current.innerHTML;
-         // ${currentContent}
+         const currentContent = await currentRef.current.innerHTML;
+
+
+         const regex = /<div class="page">(.*?)<\/div>/gs;
+
+         const items = [];
+         const matches = templateString.matchAll(regex);
+
+
+         for (const match of matches) {
+            items.push(match[0].trim());
+         }
+
+
+
+         console.log({ items });
+
+
          const response = await DApi.generatePDF({
             pages: [
-               {
+               ...(items || []).map((itemContent) => ({
                   body: `<!DOCTYPE html>
-            <html>
-            <head>
-            <style>
-            .subpage {
-               padding: 1cm
-            }
-            .border-1 {
-               border: 1px solid black;
-            }
-            .text-center {
-               text-align: center
-            }
-            .grid-cols-2 {
-               display:grid;
-               grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-            }
-            .break {
-               clear: both;
-               page-break-after: always;
-            }
-            </style>
-            </head>
-            <body>
-               ${currentContent}
-            </body>
-            </html>
-            `,
+                  <html>
+                  <head>
+                  <style>
+                  .subpage {
+                    padding: 1cm;
+                  }
+                  .border-1 {
+                    border: 1px solid black;
+                  }
+                  .text-center {
+                    text-align: center;
+                  }
+                  .grid-cols-2 {
+                    display: grid;
+                    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+                  }
+                  .break {
+                    clear: both;
+                    page-break-after: always;
+                  }
+                  </style>
+                  </head>
+                  <body>
+
+                  
+                    ${itemContent}
+                  </body>
+                  </html>
+                `,
                   format: 'a4',
                   landscape: false
-               },
-               {
+               })),
+               ...(items || []).map((itemContent) => ({
                   body: `<!DOCTYPE html>
-            <html>
-            <head>
-            <style>
-            .subpage {
-               padding: 1cm
-            }
-            .border-1 {
-               border: 1px solid black;
-            }
-            .text-center {
-               text-align: center
-            }
-            .grid-cols-2 {
-               display:grid;
-               grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-            }
-            .break {
-               clear: both;
-               page-break-after: always;
-            }
-            </style>
-            </head>
-            <body>
-               ${currentContent}
-            </body>
-            </html>
-            `,
+                  <html>
+                  <head>
+                  <style>
+                  .subpage {
+                    padding: 1cm;
+                  }
+                  .border-1 {
+                    border: 1px solid black;
+                  }
+                  .text-center {
+                    text-align: center;
+                  }
+                  .grid-cols-2 {
+                    display: grid;
+                    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+                  }
+                  .break {
+                    clear: both;
+                    page-break-after: always;
+                  }
+                  </style>
+                  </head>
+                  <body>
+                    ${itemContent}
+                  </body>
+                  </html>
+                `,
                   format: 'a5',
                   landscape: false
-               }
+               }))
             ]
          });
+
 
          if (!response.data.success) {
             throw new Error(`HTTP error! Status: ${response.status}`);
@@ -152,7 +168,6 @@ const DocumentViewer = () => {
    if (!selectedDocument) {
       return <div>...loading</div>;
    }
-
    return (
       <PageHeader
          ghost={true}
@@ -170,7 +185,6 @@ const DocumentViewer = () => {
                   padding: 10
                }}
             >
-               <iframe src={pdfUrl} width="100%" height="600px" title="PDF Viewer"></iframe>
                <div ref={currentRef} className="print-remove-p">
                   {documentType === 'one' ? <Body document={selectedDocument} /> : null}
                   {documentType === 'many' ? (

@@ -1,5 +1,13 @@
 import jwtInterceopter from '../../components/jwtInterceopter';
 class ApiInsurance {
+   async getInsuranceServiceIdName(id) {
+      return await jwtInterceopter.get('insurance/hics-service' + id);
+   }
+   async getInsuranceService(params) {
+      return await jwtInterceopter.get('insurance/hics-service-group', {
+         params
+      });
+   }
    /** 4.24 Оношилгоо, шинжилгээний кодын сан дуудах */
    async getAllHicsExams() {
       return await jwtInterceopter.get('hics-exam');
@@ -23,10 +31,6 @@ class ApiInsurance {
    /** Битүүмж илгээх -> Үзлэг дуусгах */
    async requestHicsSealSent(id, data) {
       return await jwtInterceopter.patch(`hics-seal/sent/${id}`, data);
-   }
-   //** Битүүмж цуцлах 4.17 */
-   async requestHicsSealCancel(id, data) {
-      return await jwtInterceopter.patch(`hics-seal/cancel/${id}`, data);
    }
    /** 20120 дуусгавар болгох */
    async requestHicsSealConfirm(id, data) {
@@ -56,10 +60,6 @@ class ApiInsurance {
    /** Төлбөрийн мэдээлэл даатгалруу илгээх */
    async createHicsPayment(data) {
       return await jwtInterceopter.post('hics-payment', data);
-   }
-   //** 4.56 Эмнэлэгийн мэдээлэл илгээх */
-   async postHospitalInfo() {
-      return await jwtInterceopter.post('health-insurance/hospital-info');
    }
 }
 export default new ApiInsurance();
