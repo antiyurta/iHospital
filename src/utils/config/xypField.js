@@ -58,6 +58,7 @@ export const motherMortality = xypFieldJson.filter((field) => field.fieldId === 
 export const motherMortalityResult = xypFieldJson.filter((field) => field.fieldId === 29);
 /** Гэр бүлийн байдал relationship 30 */
 export const relationship = xypFieldJson.filter((field) => field.fieldId === 30);
+export const getRelationship = (value) => relationship.find((relation) => relation.valueId === value)?.valueName;
 /** Төрлөгийн хэлбэр birthType 31  */
 export const birthType = xypFieldJson.filter((field) => field.fieldId === 31);
 /** Жирэмсний хүндрэлтэй эсэх hasPregnantSeverity 32 */

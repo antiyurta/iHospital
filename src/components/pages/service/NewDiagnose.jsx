@@ -340,6 +340,7 @@ const NewDiagnose = ({ patientId, appointmentId, inpatientRequestId, usageType, 
 
    const openModal = () => {
       const data = addHics?.checkupId >= 1 ? addHics : hicsSeal;
+      console.log('data', data);
       if (data?.diagnosis) {
          getIcdFormField(data.diagnosis.icdCode);
          hicsDiagnosisForm.setFieldsValue({

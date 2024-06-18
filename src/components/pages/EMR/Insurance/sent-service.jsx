@@ -28,7 +28,8 @@ import {
    SentAddHicsService,
    SendDirectService,
    SendFormData,
-   SwitchSupport
+   SwitchSupport,
+   SavePregnantSummary
 } from './DrawerComps';
 
 //defaults
@@ -45,6 +46,7 @@ import { setAddHics, setEmrData, setHicsSeal } from '@Features/emrReducer';
 import './style.css';
 
 const SentService = ({ patient, hicsSeal, parentHicsSeal, inspectionNoteId, incomeEmrData, addHics }) => {
+   console.log('patient', patient);
    const navigate = useNavigate();
    const dispatch = useDispatch();
    const [insuranceForm] = Form.useForm();
@@ -222,7 +224,8 @@ const SentService = ({ patient, hicsSeal, parentHicsSeal, inspectionNoteId, inco
             [HST.sendEditMedicalLink]: healthInsuranceApi.postEditMedicalLink,
             [HST.sendAddHicsService]: healthInsuranceApi.postAddHicsService,
             [HST.sendDirectService]: healthInsuranceApi.postDirectSendService,
-            [HST.sendFormData]: healthInsuranceApi.postSendFormData
+            [HST.sendFormData]: healthInsuranceApi.postSendFormData,
+            [HST.savePregnantSummary]: healthInsuranceApi.postSavePregnantSummary
          };
          const selectedApi = apiMap[chooseService];
          if (!selectedApi) throw new Error('Unknown service type');
@@ -364,7 +367,8 @@ const SentService = ({ patient, hicsSeal, parentHicsSeal, inspectionNoteId, inco
          [HST.sendEditMedicalLink]: <SendEditMedicalLink form={insuranceForm} />,
          [HST.sendAddHicsService]: <SentAddHicsService form={insuranceForm} />,
          [HST.sendDirectService]: <SendDirectService form={insuranceForm} />,
-         [HST.sendFormData]: <SendFormData form={insuranceForm} />
+         [HST.sendFormData]: <SendFormData form={insuranceForm} />,
+         [HST.savePregnantSummary]: <SavePregnantSummary form={insuranceForm} patient={patient} />
       };
 
       return formMap[chooseService] || null;

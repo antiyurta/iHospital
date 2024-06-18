@@ -56,8 +56,10 @@ const EmrTimer = ({ startDate, endDate, inspection }) => {
                   await addHicsService(hicsSeal.hicsSealCode);
                } else {
                   const ourHicsResponse = await setSealForHics(currentPatient, hicsSeal.id, values, isInsurance);
-                  dispatch(setHicsSeal(ourHicsResponse));
-                  if (ourHicsResponse.hicsServiceId === 20120) {
+                  if (ourHicsResponse) {
+                     dispatch(setHicsSeal(ourHicsResponse));
+                  }
+                  if (ourHicsResponse?.hicsServiceId === 20120) {
                      await addHicsService(ourHicsResponse.hicsSealCode);
                   }
                }
@@ -313,7 +315,7 @@ const EmrTimer = ({ startDate, endDate, inspection }) => {
                               <Input />
                            </Finger>
                         </div>
-                        {hicsSeal.hicsServiceId === 20150 && watchedConclusion?.includes('confirmed') ? (
+                        {hicsSeal?.hicsServiceId === 20150 && watchedConclusion?.includes('confirmed') ? (
                            <>
                               <div className="bg-[#F2F3F5] p-2 rounded-lg w-full flex flex-col gap-1">
                                  <p

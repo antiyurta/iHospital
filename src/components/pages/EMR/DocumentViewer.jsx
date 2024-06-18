@@ -49,6 +49,7 @@ const DocumentViewer = () => {
                   }
                   .document-box {
                      padding: 0px 6px;
+                     display: block;
                      border: 1px solid black;
                   }
                   .checkbox {

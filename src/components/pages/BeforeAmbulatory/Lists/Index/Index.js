@@ -477,7 +477,7 @@ function Index({ type, isDoctor, isSurgeyBoss }) {
                      if (!selectedRow.hicsSealId || !selectedRow.addHicsId) {
                         if (values.hicsServiceId === 20110 || values.hicsServiceId === 20120) {
                            startAmbulatory(values);
-                        } else if (values.hicsServiceId === 20150) {
+                        } else if (values.hicsServiceId === 20150 || values.hicsServiceId === 20160) {
                            CreateHicsSeal(
                               selectedRow,
                               {
