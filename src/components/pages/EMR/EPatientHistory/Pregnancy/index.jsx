@@ -34,9 +34,9 @@ export const PregnancyInfo = () => {
    const getFormList = async () => {
       setLoading(true);
       await HealtInsuranceApi.getFormData(1)
-         .then((res) => {
-            console.log('sadasd', res.data);
-            form.setFieldValue('formdata', res.data.result);
+         .then(({ data }) => {
+            const sortedData = data.result?.sort((a, b) => a.categoryId - b.categoryId);
+            form.setFieldValue('formdata', sortedData);
             setOpen(true);
          })
          .finally(() => {
@@ -48,10 +48,9 @@ export const PregnancyInfo = () => {
       await HealtInsuranceApi.getPregnantFormData(data.pregnancyNo, patient.registerNumber, data.pregnancyWeek)
          .then(({ data }) => {
             if (data.code === 200) {
-               const dd = data.result
-                  ?.sort((a, b) => a.categoryId - b.categoryId)
-                  ?.groupBy(item, ({ categoryId }) => categoryId);
-               console.log(dd);
+               const sortedData = data.result?.sort((a, b) => a.categoryId - b.categoryId);
+               form.setFieldValue('formdata', sortedData);
+               setOpen(true);
             } else {
                openNofi('error', 'Амжилтгүй', data.description);
             }
@@ -156,6 +155,7 @@ export const PregnancyInfo = () => {
             <Button
                type="default"
                onClick={() => {
+                  // setOpen(true);
                   getFormList();
                }}
                className="border-green-400 flex gap-2 justify-center items-center uppercase font-semibold text-xs text-black/70"
@@ -163,15 +163,6 @@ export const PregnancyInfo = () => {
                <img src={pregnantWomenImg} alt="pregnant-women" className="w-6 h-fit" />
                Мэдээлэл оруулах
             </Button>
-            <Modal
-               title="Товлолийн дэлгэрэнгүй"
-               open={isOpenExtra}
-               onCancel={() => {
-                  setOpenExtra(false);
-               }}
-            >
-               <Collapse></Collapse>
-            </Modal>
             <Modal
                title="Мэдээлэл оруулах"
                open={open}
