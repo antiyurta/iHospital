@@ -8,6 +8,7 @@ import { selectCurrentAddHics, selectCurrentHicsSeal, setAddHics, setHicsSeal } 
 //common
 import { openNofi } from '@Comman/common';
 //service
+import PatientApi from '@ApiServices/pms/patient.api';
 import DiagnoseApi from '@ApiServices/reference/diagnose';
 import InsuranceApi from '@ApiServices/healt-insurance/insurance';
 import PatientDiagnoseApi from '@ApiServices/emr/patientDiagnose';
@@ -138,14 +139,26 @@ const NewDiagnose = ({ patientId, appointmentId, inpatientRequestId, usageType, 
 
    const getHicsCostList = async (value) => {
       const current = drgCodes.find((drgCode) => drgCode.drgCode === value);
+      let amountCit = current.amountCit;
+      let amountHi = current.amountHi;
+      let amountTotal = current.amountTotal;
+      if (usageType === 'IN') {
+         await PatientApi.getById(patientId).then(({ data: { response } }) => {
+            if (response.freeTypeId > 0) {
+               amountCit = 0;
+               amountHi = current.amountTotal;
+               amountTotal = current.amountTotal;
+            }
+         });
+      }
       hicsDiagnosisForm.setFieldsValue({
          diagnosis: {
             drgTypeCode: current.drgTypeCode
          },
          amount: {
-            amountCit: current.amountCit,
-            amountHi: current.amountHi,
-            amountTotal: current.amountTotal
+            amountCit: amountCit,
+            amountHi: amountHi,
+            amountTotal: amountTotal
          }
       });
    };
@@ -155,7 +168,6 @@ const NewDiagnose = ({ patientId, appointmentId, inpatientRequestId, usageType, 
       const { diagnose } = foundDiagnosis || {};
       hicsDiagnosisForm.setFieldValue(['diagnosis', 'icdCodeName'], diagnose?.nameMn);
       setIsLoading(true);
-      console.log(hicsSeal);
       HealthInsuranceApi.getHicsCostByField(hicsSeal.hicsServiceId, value)
          .then(({ data }) => {
             if (data.code == 200) {
@@ -165,6 +177,7 @@ const NewDiagnose = ({ patientId, appointmentId, inpatientRequestId, usageType, 
                   setDrgCodes([]);
                }
             } else {
+               setDrgCodes([]);
                openNofi('error', 'Амжилтгүй', data.description);
             }
          })
@@ -231,11 +244,6 @@ const NewDiagnose = ({ patientId, appointmentId, inpatientRequestId, usageType, 
       }
       return false;
    };
-
-   useEffect(() => {
-      getDiagnosis(1, 10, null);
-      appointmentId && getPatientDiagnosis();
-   }, [appointmentId]);
 
    const PatientDiagnoseTable = () => (
       <Table rowKey="id" bordered loading={isLoading} dataSource={patientDiagnosis} pagination={false}>
@@ -340,7 +348,6 @@ const NewDiagnose = ({ patientId, appointmentId, inpatientRequestId, usageType, 
 
    const openModal = () => {
       const data = addHics?.checkupId >= 1 ? addHics : hicsSeal;
-      console.log('data', data);
       if (data?.diagnosis) {
          getIcdFormField(data.diagnosis.icdCode);
          hicsDiagnosisForm.setFieldsValue({
@@ -354,6 +361,11 @@ const NewDiagnose = ({ patientId, appointmentId, inpatientRequestId, usageType, 
       }
       setIsOpenModal(true);
    };
+
+   useEffect(() => {
+      getDiagnosis(1, 10, null);
+      appointmentId && getPatientDiagnosis();
+   }, [appointmentId]);
 
    return (
       <div className="w-full">

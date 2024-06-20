@@ -155,8 +155,8 @@ const CreateStory = () => {
          .then(async (values) => {
             if (isInsurance) {
                return await InsuranceApi.requestHicsSeal(hicsSealId, {
-                  startAt: values.dateDuration[0] || new Date(),
-                  endAt: values.dateDuration[1] || new Date()
+                  startAt: values.dateDuration?.[0] || new Date(),
+                  endAt: values.dateDuration?.[1] || new Date()
                })
                   .then(async ({ data: { response } }) => {
                      if (response) {
@@ -461,6 +461,7 @@ const CreateStory = () => {
                                  />
                               </Form.Item>
                               <div className="flex flex-row gap-2 items-end">
+                                 {/* TODO */}
                                  <NewDiagnose
                                     patientId={patient.id}
                                     appointmentId={null}
