@@ -5,6 +5,20 @@ import { selectPatient } from '../../../../../features/patientReducer';
 import healthInsurance from '../../../../../services/healt-insurance/healtInsurance';
 import patientDiagnose from '../../../../../services/emr/patientDiagnose';
 import Finger from '@Comman/Finger/Finger';
+import { ListPatientInfo } from '@Comman/ListInjection';
+import { openNofi } from '@Comman/common';
+
+const labelstyle = {
+   fontSize: 14,
+   color: 'black',
+   fontWeight: 700
+};
+
+export const types = [
+   { value: 1, label: 'Хөнгөлөлттэй эмийн жор', name: 'aTables' },
+   { value: 2, label: 'Энгийн эмийн жор', name: 'bTables' },
+   { value: 3, label: 'Сэтгэцэд нөлөөлөх эмийн жор', name: 'cTables' }
+];
 
 const { TextArea } = Input;
 
@@ -25,8 +39,13 @@ const TitleRenderer = ({ title }) => {
 export const SendPrescription = (props) => {
    const { form } = props;
    const patient = useSelector(selectPatient);
+   const [selectedDiagnose, setSelectedDiagnose] = useState({});
    const [diagnosis, setDiagnosis] = useState([]);
-   const [tablets, setTablets] = useState([]);
+   const [tablets, setTablets] = useState({
+      1: [],
+      2: [],
+      3: []
+   });
 
    const [selectedValue, setSelectedValue] = useState(null);
 
@@ -60,11 +79,12 @@ export const SendPrescription = (props) => {
          }
       });
    };
-   const setTablet = (index, value) => {
-      const tablet = tablets.find((tablet) => tablet.tbltId == value);
+   const setTablet = (index, value, type, formNAme) => {
+      const tablet = tablets[type]?.find((tablet) => tablet.tbltId == value);
       form.setFieldsValue({
-         ['tablets']: {
+         [`${formNAme}`]: {
             [`${index}`]: {
+               icdCode: tablet.icdCode,
                name: tablet.tbltNameInter,
                desc: tablet.desc,
                packGroup: tablet.packGroup,
@@ -74,12 +94,12 @@ export const SendPrescription = (props) => {
          }
       });
    };
-   const setTbltSize = (index) => {
-      const dailyCount = form.getFieldValue(['tablets', index, 'dailyCount']);
-      const totalDays = form.getFieldValue(['tablets', index, 'totalDays']);
+   const setTbltSize = (index, formName) => {
+      const dailyCount = form.getFieldValue([`${formName}`, index, 'dailyCount']);
+      const totalDays = form.getFieldValue([`${formName}`, index, 'totalDays']);
       const tbltSize = dailyCount * totalDays || 0;
       form.setFieldsValue({
-         ['tablets']: {
+         [`${formName}`]: {
             [`${index}`]: {
                tbltSize: tbltSize
             }
@@ -87,93 +107,61 @@ export const SendPrescription = (props) => {
       });
    };
 
+   const getTablesByIcd = async (value, name) => {
+      if (tablets[value]?.length === 0) {
+         await healthInsurance
+            .getTabletByDiagnosis({
+               diagCode: selectedDiagnose,
+               regNo: patient.registerNumber,
+               receiptType: value
+            })
+            .then(({ data }) => {
+               setTablets((prevTablets) => ({
+                  ...prevTablets,
+                  [value]: data.listTabletModel
+               }));
+               openNofi('success', 'Амжилттай', 'Татав');
+            })
+            .catch((error) => {
+               setTablets((prevTablets) => ({
+                  ...prevTablets,
+                  [value]: []
+               }));
+               if (error.response.status === 400) {
+                  openNofi('error', 'Амжилтгүй', 'Тухайн утгуудаар мэдээлэл олдохгүй байна');
+               }
+            });
+      }
+
+      // form.resetFields([
+      //    ['tablets', name, 'tbltId'],
+      //    ['tablets', name, 'name'],
+      //    ['tablets', name, 'packGroup'],
+      //    ['tablets', name, 'isDiscount'],
+      //    ['tablets', name, 'tbltTypeName'],
+      //    ['tablets', name, 'icdCode'],
+      //    ['tablets', name, 'dailyCount'],
+      //    ['tablets', name, 'totalDays'],
+      //    ['tablets', name, 'tbltSize'],
+      //    ['tablets', name, 'desc']
+      // ]);
+   };
+
    useEffect(() => {
       setPatient();
       getPatientDiagnosis();
-      getTabletByGroups();
+      // getTabletByGroups();
    }, []);
 
    return (
       <div className="space-y-3">
-         <BgRenderer>
-            <TitleRenderer title="Үндсэн мэдээлэл" />
-            <Row gutter={[12, 0]}>
-               <Col span={12}>
-                  <Form.Item
-                     label="Жорын төрөл"
-                     name={'receiptType'}
-                     rules={[
-                        {
-                           required: true,
-                           message: 'Жорын төрөл оруулна уу.'
-                        }
-                     ]}
-                  >
-                     <Select
-                        options={[
-                           { value: 1, label: 'Хөнгөлөлттэй эмийн жор' },
-                           { value: 2, label: 'Энгийн эмийн жор' },
-                           { value: 3, label: 'Сэтгэцэд нөлөөлөх эмийн жор' }
-                        ]}
-                     />
-                  </Form.Item>
-               </Col>
-               <Col span={12}>
-                  <Form.Item
-                     label="Онош"
-                     name={'receiptDiag'}
-                     rules={[
-                        {
-                           required: true,
-                           message: 'Онош оруулна уу.'
-                        }
-                     ]}
-                  >
-                     <Select
-                        allowClear
-                        showSearch
-                        filterOption={(input, option) => option.label.toLowerCase().includes(input.toLowerCase())}
-                        options={diagnosis.map((diagnose) => ({
-                           value: diagnose.code,
-                           label: `${diagnose.code}-${diagnose.nameMn}`
-                        }))}
-                     />
-                  </Form.Item>
-               </Col>
-               <Col span={24}>
-                  <Form.Item
-                     label="Үзлэгийн тэмдэглэл"
-                     name="desc"
-                     rules={[
-                        {
-                           required: true,
-                           message: 'Үзлэгийн тэмдэглэл оруулна уу.'
-                        }
-                     ]}
-                  >
-                     <TextArea />
-                  </Form.Item>
-               </Col>
-            </Row>
-         </BgRenderer>
-         <BgRenderer>
-            <TitleRenderer title={'Өвчтөний мэдээлэл'} />
-            <Row gutter={[12, 0]}>
-               <Col span={12}>
-                  <Form.Item
-                     label="Регистр"
-                     name={['patient', 'regNo']}
-                     rules={[
-                        {
-                           required: true,
-                           message: 'Регистр оруулна уу.'
-                        }
-                     ]}
-                  >
-                     <Input />
-                  </Form.Item>
-               </Col>
-               <Col span={12}>
+         <div className="flex flex-col gap-2">
+            <div className="grid grid-cols-2 gap-2">
+               <BgRenderer>
+                  <div>
+                     <p style={labelstyle}>Өвчтөний мэдээлэл:</p>
+                     <ListPatientInfo patientData={patient} />
+                  </div>
                   <Finger
                      form={form}
                      insurance={true}
@@ -188,219 +176,247 @@ export const SendPrescription = (props) => {
                   >
                      <Input />
                   </Finger>
-               </Col>
-            </Row>
-         </BgRenderer>
-         <BgRenderer>
-            <TitleRenderer title={'Эмчийн мэдээлэл'} />
-            <Row gutter={[12, 0]}>
-               <Col span={12}>
-                  <Form.Item
-                     label="Регистр"
-                     name={['doctor', 'regNo']}
-                     rules={[
-                        {
-                           required: true,
-                           message: 'Регистр оруулна уу.'
-                        }
-                     ]}
-                  >
-                     <Input />
-                  </Form.Item>
-               </Col>
-               <Col span={12}>
-                  <Finger
-                     form={form}
-                     insurance={true}
-                     noStyle
-                     name={['doctor', 'fingerImage']}
-                     rules={[
-                        {
-                           required: true,
-                           message: 'Иргэний хурууны хээ заавал'
-                        }
-                     ]}
-                  >
-                     <Input />
-                  </Finger>
-               </Col>
-            </Row>
-         </BgRenderer>
-         <BgRenderer>
-            <TitleRenderer title={'Үзлэгийн мэдээлэл'} />
-            <Row gutter={[12, 0]}>
-               <Col span={6}>
+               </BgRenderer>
+               <div className="flex flex-col gap-2">
+                  <BgRenderer>
+                     <Form.Item
+                        label="Онош"
+                        name={'receiptDiag'}
+                        rules={[
+                           {
+                              required: true,
+                              message: 'Онош оруулна уу.'
+                           }
+                        ]}
+                     >
+                        <Select
+                           allowClear
+                           showSearch
+                           filterOption={(input, option) => option.label.toLowerCase().includes(input.toLowerCase())}
+                           options={diagnosis.map((diagnose) => ({
+                              value: diagnose.code,
+                              label: `${diagnose.code}-${diagnose.nameMn}`
+                           }))}
+                           onChange={(value) => {
+                              setSelectedDiagnose(value);
+                           }}
+                        />
+                     </Form.Item>
+                  </BgRenderer>
+                  <BgRenderer>
+                     <p style={labelstyle}>Эмчийн хуруу хээ:</p>
+                     <Finger
+                        form={form}
+                        insurance={true}
+                        noStyle
+                        name={['doctor', 'fingerImage']}
+                        rules={[
+                           {
+                              required: true,
+                              message: 'Иргэний хурууны хээ заавал'
+                           }
+                        ]}
+                     >
+                        <Input />
+                     </Finger>
+                  </BgRenderer>
+               </div>
+            </div>
+            <BgRenderer>
+               <p style={labelstyle}>Үзлэгийн мэдээлэл:</p>
+               <Form.Item
+                  label="Эмийн тэмдэглэл"
+                  name="desc"
+                  rules={[
+                     {
+                        required: true,
+                        message: 'Эмийн тэмдэглэл заавал'
+                     },
+                     {
+                        min: 30,
+                        message: 'Эмийн тэмдэглэл заавал 30-с багагүй'
+                     }
+                  ]}
+               >
+                  <TextArea />
+               </Form.Item>
+               <div className="grid grid-cols-4 gap-2">
                   <Form.Item label="Өндөр" name={['survey', 'heigth']}>
                      <Input />
                   </Form.Item>
-               </Col>
-               <Col span={6}>
                   <Form.Item label="Жин" name={['survey', 'weigth']}>
                      <Input />
                   </Form.Item>
-               </Col>
-               <Col span={6}>
                   <Form.Item label="Бүсэлхий" name={['survey', 'waist']}>
                      <InputNumber />
                   </Form.Item>
-               </Col>
-               <Col span={6}>
                   <Form.Item label="Зүрхний цохилт" name={['survey', 'pulse']}>
                      <InputNumber />
                   </Form.Item>
-               </Col>
-               <Col span={6}>
                   <Form.Item label="Амьсгалын тоо" name={['survey', 'breath']}>
                      <InputNumber />
                   </Form.Item>
-               </Col>
-               <Col span={6}>
                   <Form.Item label="Темп" name={['survey', 'temp']}>
                      <InputNumber />
                   </Form.Item>
-               </Col>
-               <Col span={6}>
-                  <Form.Item label="Сатураци">
+                  <Form.Item label="Сатураци" name={['survey', 'saturatsi']}>
                      <InputNumber />
                   </Form.Item>
-               </Col>
-               <Col span={6}>
                   <Form.Item label="Сахар" name={['survey', 'sugar']}>
                      <InputNumber />
                   </Form.Item>
-               </Col>
-               <Col span={6}>
                   <Form.Item label="Холестерин" name={['survey', 'cholesterol']}>
                      <InputNumber />
                   </Form.Item>
-               </Col>
-               <Col span={6}>
-                  <Form.Item label="Даралт дээд" name={['survey', 'maxPressure']}>
+                  <Form.Item
+                     label="Даралт дээд"
+                     rules={[
+                        {
+                           required: true,
+                           message: 'Даралт дээд заавал'
+                        }
+                     ]}
+                     name={['survey', 'maxPressure']}
+                  >
                      <InputNumber />
                   </Form.Item>
-               </Col>
-               <Col span={6}>
-                  <Form.Item label="Даралт доод" name={['survey', 'minPressure']}>
+                  <Form.Item
+                     label="Даралт доод"
+                     rules={[
+                        {
+                           required: true,
+                           message: 'Даралт доод заавал'
+                        }
+                     ]}
+                     name={['survey', 'minPressure']}
+                  >
                      <InputNumber />
                   </Form.Item>
-               </Col>
-               <Col span={6}>
-                  <Form.Item label="Тамхи татдаг эсэх" name={['survey', 'isSmoke']}>
-                     <Radio.Group options={smokeOptions} onChange={handleRadioChange} value={selectedValue} />
+                  <Form.Item label="Тамхи татдаг эсэх" className="white-radio" name={['survey', 'isSmoke']}>
+                     <Radio.Group options={smokeOptions} />
                   </Form.Item>
-               </Col>
-            </Row>
-         </BgRenderer>
-         <BgRenderer>
-            <TitleRenderer title={'Жорын мэдээлэл'} />
-            <Form.List name="tablets">
-               {(fields, { add, remove }) => (
-                  <>
-                     {fields.map(({ key, name }) => (
-                        <Row key={key} style={customeBorderStyle} gutter={[12, 0]}>
-                           <Button
-                              type="dashed"
-                              danger
-                              onClick={() => {
-                                 remove(name);
-                              }}
-                              className="w-full mb-3"
-                           >
-                              Жорын мэдээлэл устгах
-                           </Button>
-                           <Col span={12}>
-                              <Form.Item label="Бичлэг таних дугаар" name={[name, 'tbltId']}>
-                                 <Select
-                                    allowClear
-                                    showSearch
-                                    filterOption={(input, option) =>
-                                       option.label.toLowerCase().includes(input.toLowerCase())
-                                    }
-                                    options={tablets.map((tablet) => ({
-                                       value: tablet.tbltId,
-                                       label: tablet.tbltNameInter
-                                    }))}
-                                    onSelect={(value) => {
-                                       setTablet(name, value);
+               </div>
+            </BgRenderer>
+         </div>
+         <div className="flex flex-col gap-2">
+            {types?.map((type, index) => (
+               <BgRenderer key={index}>
+                  <Form.List name={type.name}>
+                     {(fields, { add, remove }) => (
+                        <>
+                           {fields.map(({ key, name }) => (
+                              <Row key={key} style={customeBorderStyle} gutter={[12, 0]}>
+                                 <Button
+                                    type="dashed"
+                                    danger
+                                    onClick={() => {
+                                       remove(name);
                                     }}
-                                 />
-                              </Form.Item>
-                              <Form.Item label="Эмийн олон улсын нэршил" name={[name, 'name']} hidden>
-                                 <Input />
-                              </Form.Item>
-                              <Form.Item label="Эмийн бүлгийн дугаар" name={[name, 'packGroup']} hidden>
-                                 <InputNumber />
-                              </Form.Item>
-                           </Col>
-                           <Col span={12}>
-                              <Form.Item label="Хөнгөлөлттэй эсэх" name={[name, 'isDiscount']}>
-                                 <Radio.Group disabled className="px-2 py-1">
-                                    <Radio value={1}>Тийм</Radio>
-                                    <Radio value={0}>Үгүй</Radio>
-                                 </Radio.Group>
-                              </Form.Item>
-                           </Col>
-                           <Col span={12}>
-                              <Form.Item label="Эмийн савлагааны төрөл" name={[name, 'tbltTypeName']}>
-                                 <Input disabled />
-                              </Form.Item>
-                           </Col>
-                           <Col span={12}>
-                              <Form.Item label="Өвчний ОУ-ын ангиллын код" name={[name, 'icdCode']}>
-                                 <Select
-                                    allowClear
-                                    showSearch
-                                    filterOption={(input, option) =>
-                                       option.label.toLowerCase().includes(input.toLowerCase())
-                                    }
-                                    options={diagnosis.map((diagnose) => ({
-                                       value: diagnose.code,
-                                       label: `${diagnose.code}-${diagnose.nameMn}`
-                                    }))}
-                                 />
-                              </Form.Item>
-                           </Col>
-                           <Col span={12}>
-                              <Form.Item label="Өдөрт уух хэмжээ" name={[name, 'dailyCount']}>
-                                 <InputNumber />
-                              </Form.Item>
-                           </Col>
-                           <Col span={12}>
-                              <Form.Item label="Нийт уух өдөр" name={[name, 'totalDays']}>
-                                 <InputNumber onChange={() => setTbltSize(name)} />
-                              </Form.Item>
-                           </Col>
-                           <Col span={12}>
-                              <Form.Item
-                                 tooltip={'Өдөрт уух хэмжээ * Нийт уух өдөр'}
-                                 label="Нийт уух ширхгийн тоо"
-                                 name={[name, 'tbltSize']}
+                                    className="w-full mb-3"
+                                 >
+                                    {`${type.label} устгах`}
+                                 </Button>
+                                 <Col span={12}>
+                                    <Form.Item label="Бичлэг таних дугаар" name={[name, 'tbltId']}>
+                                       <Select
+                                          allowClear
+                                          showSearch
+                                          filterOption={(input, option) =>
+                                             option.label.toLowerCase().includes(input.toLowerCase())
+                                          }
+                                          options={tablets[type.value]?.map((tablet) => ({
+                                             value: tablet.tbltId,
+                                             label: tablet.tbltNameInter
+                                          }))}
+                                          onSelect={(value) => {
+                                             setTablet(name, value, type.value, type.name);
+                                          }}
+                                       />
+                                    </Form.Item>
+                                    <Form.Item label="Эмийн олон улсын нэршил" name={[name, 'name']} hidden>
+                                       <Input />
+                                    </Form.Item>
+                                    <Form.Item label="Эмийн бүлгийн дугаар" name={[name, 'packGroup']} hidden>
+                                       <InputNumber />
+                                    </Form.Item>
+                                 </Col>
+                                 <Col span={12}>
+                                    <Form.Item
+                                       label="Хөнгөлөлттэй эсэх"
+                                       className="white-radio"
+                                       name={[name, 'isDiscount']}
+                                    >
+                                       <Radio.Group disabled className="px-2 py-1">
+                                          <Radio value={1}>Тийм</Radio>
+                                          <Radio value={0}>Үгүй</Radio>
+                                       </Radio.Group>
+                                    </Form.Item>
+                                 </Col>
+                                 <Col span={12}>
+                                    <Form.Item label="Эмийн савлагааны төрөл" name={[name, 'tbltTypeName']}>
+                                       <Input disabled />
+                                    </Form.Item>
+                                 </Col>
+                                 <Col span={12}>
+                                    <Form.Item label="Өвчний ОУ-ын ангиллын код" name={[name, 'icdCode']}>
+                                       <Select
+                                          disabled
+                                          allowClear
+                                          showSearch
+                                          filterOption={(input, option) =>
+                                             option.label.toLowerCase().includes(input.toLowerCase())
+                                          }
+                                          options={diagnosis.map((diagnose) => ({
+                                             value: diagnose.code,
+                                             label: `${diagnose.code}-${diagnose.nameMn}`
+                                          }))}
+                                       />
+                                    </Form.Item>
+                                 </Col>
+                                 <Col span={12}>
+                                    <Form.Item label="Өдөрт уух хэмжээ" name={[name, 'dailyCount']}>
+                                       <InputNumber />
+                                    </Form.Item>
+                                 </Col>
+                                 <Col span={12}>
+                                    <Form.Item label="Нийт уух өдөр" name={[name, 'totalDays']}>
+                                       <InputNumber onChange={() => setTbltSize(name, type.name)} />
+                                    </Form.Item>
+                                 </Col>
+                                 <Col span={12}>
+                                    <Form.Item
+                                       tooltip={'Өдөрт уух хэмжээ * Нийт уух өдөр'}
+                                       label="Нийт уух ширхгийн тоо"
+                                       name={[name, 'tbltSize']}
+                                    >
+                                       <InputNumber disabled />
+                                    </Form.Item>
+                                 </Col>
+                                 <Col span={24}>
+                                    <Form.Item label="Эмийн тэмдэглэл" name={[name, 'desc']}>
+                                       <TextArea />
+                                    </Form.Item>
+                                 </Col>
+                              </Row>
+                           ))}
+                           <Form.Item>
+                              <Button
+                                 type="dashed"
+                                 onClick={() => {
+                                    add();
+                                    getTablesByIcd(type.value, type.name);
+                                 }}
+                                 style={{ width: '100%' }}
                               >
-                                 <InputNumber disabled />
-                              </Form.Item>
-                           </Col>
-                           <Col span={12}>
-                              <Form.Item label="Эмийн тэмдэглэл" name={[name, 'desc']}>
-                                 <TextArea />
-                              </Form.Item>
-                           </Col>
-                        </Row>
-                     ))}
-                     <Form.Item>
-                        <Button
-                           type="dashed"
-                           onClick={() => {
-                              add();
-                           }}
-                           style={{ width: '100%' }}
-                        >
-                           Жорын мэдээлэл нэмэх
-                        </Button>
-                     </Form.Item>
-                  </>
-               )}
-            </Form.List>
-         </BgRenderer>
+                                 {`${type.label} бичих`}
+                              </Button>
+                           </Form.Item>
+                        </>
+                     )}
+                  </Form.List>
+               </BgRenderer>
+            ))}
+         </div>
       </div>
    );
 };
@@ -415,4 +431,3 @@ const smokeOptions = [
       value: false
    }
 ];
-

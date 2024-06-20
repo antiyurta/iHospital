@@ -28,7 +28,8 @@ import {
    SentAddHicsService,
    SendDirectService,
    SendFormData,
-   SwitchSupport
+   SwitchSupport,
+   SavePregnantSummary
 } from './DrawerComps';
 
 //defaults
@@ -44,7 +45,10 @@ import { setAddHics, setEmrData, setHicsSeal } from '@Features/emrReducer';
 // style css
 import './style.css';
 
+import { types } from './DrawerComps/send-prescription';
+
 const SentService = ({ patient, hicsSeal, parentHicsSeal, inspectionNoteId, incomeEmrData, addHics }) => {
+   console.log('patient', patient);
    const navigate = useNavigate();
    const dispatch = useDispatch();
    const [insuranceForm] = Form.useForm();
@@ -126,67 +130,6 @@ const SentService = ({ patient, hicsSeal, parentHicsSeal, inspectionNoteId, inco
 
    const sentService = async (values) => {
       try {
-         const {
-            civilId: patientCivilId,
-            familyName: patientSurname,
-            aimagCityCode: patientAimagCode,
-            aimagCityName: patientAimagName,
-            soumDistrictCode: patientSoumCode,
-            soumDistrictName: patientSoumName,
-            contacts: patientContacts,
-            ...otherInfoPatient
-         } = patient;
-         const dataa = {
-            patientRegno: patient.registerNumber,
-            patientFingerprint: values.patientFingerprint,
-            patientFirstname: patient.firstName,
-            patientLastname: patient.lastName,
-            startDate: hicsSeal?.startAt,
-            endDate: new Date(),
-            hicsServiceId: hicsSeal.hicsServiceId,
-            parentServiceNumber: parentHicsSeal?.hicsServiceId,
-            doctorServiceNumber: values.doctorServiceNumber,
-            sent13RequestNo: values.sent13RequestNo,
-            departNo: values.departNo,
-            departName: values.departName,
-            isForeign: 0,
-            freeTypeId: 0,
-            historyCode: values.historyCode,
-            phoneNo: patient.phoneNo,
-            bloodType: values.bloodType,
-            diagnosis: values.diagnosis,
-            isLiver: patient.isLiver ? 1 : 2,
-            startCode: hicsSeal.hicsStartCode,
-            xypResponse: {
-               requestId: patient.requestId,
-               resultMsg: patient.resultMsg
-            },
-            personalInfo: {
-               patientCivilId: patientCivilId,
-               isRaped: 2,
-               surname: patientSurname,
-               aimagCode: patientAimagCode,
-               aimgName: patientAimagName,
-               soumCode: patientSoumCode,
-               soumName: patientSoumName,
-               parentPhoneNo: parseInt(patientContacts?.[0]?.contactPhoneNo) || null,
-               ...otherInfoPatient,
-               age: 27,
-               workplace: '1'
-               // isDonor: 2
-               // donorTypeId
-               // donorTypeName
-            },
-            employment: {
-               ...values.employment,
-               employmentId: patient.employmentId || '1',
-               employmentName: patient.employmentName || '- Цалин хөлстэй ажиллагч',
-               isEmployment: patient.isEmployment,
-               emplessDescriptionId: patient.emplessDescriptionId,
-               emplessDescription: patient.emplessDescription
-            },
-            healthInfo: values.healthInfo
-         };
          const apiMap = {
             [HST.savePrescription]: healthInsuranceApi.savePrescription,
             [HST.switchSupport]: healthInsuranceApi.postStartHics,
@@ -204,25 +147,13 @@ const SentService = ({ patient, hicsSeal, parentHicsSeal, inspectionNoteId, inco
             [HST.skipHics]: healthInsuranceApi.postSkipHicsService,
             [HST.esbMedicalExam]: healthInsuranceApi.postSendEsbMedicalExamHistory,
             [HST.sendEsbNotf]: healthInsuranceApi.postEsbNotification,
-            [HST.sendHospitalInfo]: async (values) => {
-               const transformedValues = {
-                  ...values,
-                  hasBranch: values.hasBranch?.[0],
-                  hasInsurance: values.hasInsurance?.[0]
-               };
-               await healthInsuranceApi.postHostpitalInfo(transformedValues).then(async ({ data }) => {
-                  if (data.code === 200) {
-                     openNofi('success', 'Амжилттай', data.description);
-                     setOpen(false);
-                     insuranceForm.resetFields();
-                  }
-               });
-            },
+            [HST.sendHospitalInfo]: healthInsuranceApi.postHostpitalInfo,
             [HST.sendCheckLicenseInfo]: healthInsuranceApi.postCheckLicenseInfo,
             [HST.sendEditMedicalLink]: healthInsuranceApi.postEditMedicalLink,
             [HST.sendAddHicsService]: healthInsuranceApi.postAddHicsService,
             [HST.sendDirectService]: healthInsuranceApi.postDirectSendService,
-            [HST.sendFormData]: healthInsuranceApi.postSendFormData
+            [HST.sendFormData]: healthInsuranceApi.postSendFormData,
+            [HST.savePregnantSummary]: healthInsuranceApi.postSavePregnantSummary
          };
          const selectedApi = apiMap[chooseService];
          if (!selectedApi) throw new Error('Unknown service type');
@@ -318,14 +249,87 @@ const SentService = ({ patient, hicsSeal, parentHicsSeal, inspectionNoteId, inco
                   navigate(0);
                }
             });
+         } else if (chooseService === HST.savePrescription) {
+            console.log('======>', values);
+            Promise.all(
+               types?.map(async (type) => {
+                  if (values[type.name]?.length > 0) {
+                     return await selectedApi({
+                        receiptType: type.value,
+                        receiptDiag: values.receiptDiag,
+                        desc: values.desc,
+                        patient: {
+                           regNo: patient.registerNumber,
+                           fingerImage: values.patient.fingerImage
+                        },
+                        doctor: {
+                           fingerImage: values.doctor.fingerImage
+                        },
+                        survey: { ...values.survey },
+                        tablets: values[type.name]
+                     }).then(({ data }) => {
+                        if (data.respMsgCode === '400') {
+                           openNofi('error', 'Алдаа', data.respMsg);
+                           return undefined;
+                        } else {
+                           openNofi('success', 'Амжилттай', type.label);
+                           return data;
+                        }
+                     });
+                  }
+                  return undefined;
+               })
+            )
+               .then((results) => {
+                  // Filter out any undefined results (in case some API calls failed)
+                  console.log(results.filter((result) => result !== undefined));
+                  updateNaruto(results.filter((result) => result !== undefined));
+               })
+               .catch((error) => {
+                  // Handle any errors that occurred during Promise.all
+                  console.error('Error in Promise.all', error);
+               });
+
+            // Promise.all([
+
+            //    await selectedApi()
+            // ]);
+            // const allReceiptType = Object.groupBy(values?.tablets, ({ receiptType }) => receiptType);
+            // let resDatas = [];
+            // Promise.all(
+            //    Object.entries(allReceiptType)?.map(async ([key, value]) => {
+            //       try {
+            //          const { data } = await selectedApi({
+            //             receiptType: Number(key),
+            //             receiptDiag: values.receiptDiag,
+            //             desc: values.desc,
+            //             patient: {
+            //                regNo: patient.registerNumber,
+            //                fingerImage: values.patient.fingerImage
+            //             },
+            //             doctor: {
+            //                fingerImage: values.doctor.fingerImage
+            //             },
+            //             survey: { ...values.survey },
+            //             tablets: value
+            //          });
+
+            //          // Check the response message code
+
+            //       } catch (error) {
+            //          console.error('Error during API call', error);
+            //          openNofi('error', 'Алдаа гарлаа', error.message);
+            //       }
+            //    })
+            // )
          } else {
-            const response = await selectedApi(values);
-            const { data } = response;
-            if (data.code === 200 || data.respMsgCode === 200) {
-               message.success(data.description || data.respMsg);
-            } else {
-               message.warn(data.description || data.respMsg);
-            }
+            // const response = await selectedApi(values);
+            // const { data } = response;
+            // if (data.code === 200 || data.respMsgCode === 200) {
+            //    message.success(data.description || data.respMsg);
+            // } else {
+            //    message.warn(data.description || data.respMsg);
+            // }
          }
       } catch (error) {
          console.log('err', error);
@@ -364,10 +368,24 @@ const SentService = ({ patient, hicsSeal, parentHicsSeal, inspectionNoteId, inco
          [HST.sendEditMedicalLink]: <SendEditMedicalLink form={insuranceForm} />,
          [HST.sendAddHicsService]: <SentAddHicsService form={insuranceForm} />,
          [HST.sendDirectService]: <SendDirectService form={insuranceForm} />,
-         [HST.sendFormData]: <SendFormData form={insuranceForm} />
+         [HST.sendFormData]: <SendFormData form={insuranceForm} />,
+         [HST.savePregnantSummary]: <SavePregnantSummary form={insuranceForm} patient={patient} />
       };
 
       return formMap[chooseService] || null;
+   };
+
+   const updateNaruto = async (data) => {
+      if (hicsSeal.id) {
+         await insuranceApi.requestHicsSeal(hicsSeal.id, {
+            prescription: data
+         });
+      }
+      if (addHics.id) {
+         await insuranceApi.requestAddHics(addHics.id, {
+            prescription: data
+         });
+      }
    };
 
    useEffect(() => {

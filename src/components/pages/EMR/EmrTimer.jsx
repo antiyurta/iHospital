@@ -18,7 +18,8 @@ import appointmentApi from '@ApiServices/appointment/api-appointment-service';
 //comp
 import Clock from './Clock';
 import Finger from '@Comman/Finger/Finger';
-import { setSealForHics } from '@Utils/config/insurance';
+//utils
+import { RequireTenMinIds, setSealForHics } from '@Utils/config/insurance';
 
 const EmrTimer = ({ startDate, endDate, inspection }) => {
    const navigate = useNavigate();
@@ -51,13 +52,22 @@ const EmrTimer = ({ startDate, endDate, inspection }) => {
       try {
          const isEndEMD = values.conclusion?.includes('confirmed');
          if (isInsurance) {
-            if (hicsSeal.process === 0) {
-               if (hicsSeal.hicsServiceId === 20120 && addHics?.checkupId > 1) {
-                  await addHicsService(hicsSeal.hicsSealCode);
-               } else {
-                  const ourHicsResponse = await setSealForHics(currentPatient, hicsSeal.id, values, isInsurance);
-                  dispatch(setHicsSeal(ourHicsResponse));
-                  if (ourHicsResponse.hicsServiceId === 20120) {
+            if (hicsSeal.hicsServiceId === 20120 && addHics?.checkupId > 1) {
+               await addHicsService(hicsSeal.hicsSealCode);
+            } else {
+               if (hicsSeal.process === 0) {
+                  const ourHicsResponse = await setSealForHics(
+                     currentPatient,
+                     hicsSeal.id,
+                     values,
+                     isInsurance,
+                     addHics.id
+                  );
+                  console.log('ourHicsResponse', ourHicsResponse);
+                  if (ourHicsResponse) {
+                     dispatch(setHicsSeal(ourHicsResponse));
+                  }
+                  if (ourHicsResponse?.hicsServiceId === 20120) {
                      await addHicsService(ourHicsResponse.hicsSealCode);
                   }
                }
@@ -73,9 +83,9 @@ const EmrTimer = ({ startDate, endDate, inspection }) => {
                });
                if (sentHicsSealResponse.data.code === 200) {
                   openNofi('success', 'Амжиллтай', 'Үзлэг амжиллтай хадгалагдлаа ');
-                  navigate(-1);
                }
             }
+            // navigate(-1);
          } else {
             await patchAppointment({
                slotId: appointmentType === 0 ? location?.state?.slotId : null,
@@ -159,7 +169,11 @@ const EmrTimer = ({ startDate, endDate, inspection }) => {
                startDate={startDate}
                endDate={endDate}
                isDisable={(state) => {
-                  setDisable(state);
+                  if (RequireTenMinIds.includes(hicsSeal.hicsServiceId)) {
+                     setDisable(state);
+                  } else {
+                     setDisable(false);
+                  }
                }}
             />
             <p>{`${dayjs(startDate).format('YYYY/MM/DD hh:mm')} эхэлсэн`}</p>
@@ -313,7 +327,7 @@ const EmrTimer = ({ startDate, endDate, inspection }) => {
                               <Input />
                            </Finger>
                         </div>
-                        {hicsSeal.hicsServiceId === 20150 && watchedConclusion?.includes('confirmed') ? (
+                        {hicsSeal?.hicsServiceId === 20150 && watchedConclusion?.includes('confirmed') ? (
                            <>
                               <div className="bg-[#F2F3F5] p-2 rounded-lg w-full flex flex-col gap-1">
                                  <p

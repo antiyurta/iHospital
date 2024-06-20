@@ -3,14 +3,13 @@ import { useSelector } from 'react-redux';
 //comp
 import DoctorNotes from '../EMR/DoctorNotes';
 import PatientInformation from '../PatientInformation';
-import BeforeInPatientTabs from './BeforeInPatientTabs';
-import BeforeAmbulatoryTabs from './BeforeAmbulatoryTabs';
 //context
 import { EmrContextProvider } from '@Features/EmrContext';
 //redux
 import { selectCurrentEmrData } from '@Features/emrReducer';
 //api
 import PatientApi from '@ApiServices/pms/patient.api';
+import EnrTabs from './EnrTabs';
 
 function BeforeAmbulatoryDetail() {
    const incomeENRData = useSelector(selectCurrentEmrData);
@@ -33,14 +32,15 @@ function BeforeAmbulatoryDetail() {
                </div>
             </div>
             <div className="w-full p-3 overflow-auto bg-[#f5f6f7]">
-               {incomeENRData.usageType === 'OUT' ? (
+               <EnrTabs incomeENRData={incomeENRData} />
+               {/* {incomeENRData.usageType === 'OUT' ? (
                   <BeforeAmbulatoryTabs
                      appointmentType={incomeENRData.type}
                      reasonComming={incomeENRData.reasonComming}
                   />
                ) : (
                   <BeforeInPatientTabs departmentId={incomeENRData.departmentId} />
-               )}
+               )} */}
             </div>
          </div>
       </EmrContextProvider>

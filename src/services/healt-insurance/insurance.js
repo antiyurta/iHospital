@@ -30,7 +30,7 @@ class ApiInsurance {
    }
    /** 20120 дуусгавар болгох */
    async requestHicsSealConfirm(id, data) {
-      return await jwtInterceopter.patch(`hics-seal/confirm/${id}`);
+      return await jwtInterceopter.patch(`hics-seal/confirm/${id}`, data);
    }
    /** Цогц дээр эмчин үзлэг нээх */
    async createAddHics(data) {

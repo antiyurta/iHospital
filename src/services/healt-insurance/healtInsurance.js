@@ -12,6 +12,14 @@ class HealthInsurance {
    async savePrescription(data) {
       return await jwtInterceopter.post('health-insurance/save-prescription', data);
    }
+   /** 4.7 Онош-д хамаарах эмийн мэдээлэл лавлах сервис*/
+   async getTabletByDiagnosis(data) {
+      return await jwtInterceopter.get('health-insurance/tablet-by-diagnosis', {
+         params: {
+            ...data
+         }
+      });
+   }
    /** 4.17 Эрүүл мэндийн тусламж үйлчилгээг цуцлах */
    async cancelService(data) {
       return await jwtInterceopter.post('health-insurance/cancel-service', data);
@@ -235,12 +243,88 @@ class HealthInsurance {
    }
    /** 4.70 Төрсөн хүүхдийн мэдээлэл лавлах сервис */
    async getCt4(regno) {
-      return await jwtInterceopter.get('sadasd', {
+      return await jwtInterceopter.get('health-insurance/ct-4', {
          params: {
             regno
          }
       });
    }
+   /** 4.71 Иргэний дүрс оношилгоо, шинжилгээ, үзлэгийн маягтын линкүүдийг багцаар харах хүсэлт үүсгэх сервис  */
+   async postSendMedLinkRequest(body) {
+      return await jwtInterceopter.post('health-insurance/send-med-link-request', body);
+   }
+   /** 4.72 Багц үүсгэсэн линкүүдийг лавлах сервис */
+   async postGetMedLinkRequestByRequestNo(regNo, reqeustNo) {
+      return await jwtInterceopter.post('health-insurance/get-med-link-request', {
+         regNo,
+         reqeustNo
+      });
+   }
+   /** 4.73 Жирэмсний хяналтын дэвтрийн ерөнхий мэдээллийг илгээх сервис  */
+   /** Энэхүү сервисээр тухайн ээжийн ерөнхий мэдээллийг илгээх ба жирэмсний дугаар үүсгэх юм */
+   async postSavePregnantSummary(body) {
+      return await jwtInterceopter.post('health-insurance/save-pregnant-summary', body);
+   }
+   /** 4.74 Идэвхтэй жирэмсний мэдээллийг лавлах сервис */
+   async getPregnantSummary(regNo) {
+      return await jwtInterceopter.get(`health-insurance/get-pregnant-summary/${regNo}`);
+   }
+   /** 4.75 Жирэмсний хяналтын дэвтрийн тухайн товлол дахь мэдээллийг илгээх сервис */
+   async postSendPregnantFormData(body) {
+      return await jwtInterceopter.post('health-insurance/send-pregnant-form-data', body);
+   }
+   /** 4.76 Тухайн жирэмсний хяналт дээр бүртгэгдсэн жирэмсний товлолуудыг лавлах сервис */
+   async getPregnantAppointment(pregnancyNo, regNo) {
+      return await jwtInterceopter.get('health-insurance/get-pregnant-appointment', {
+         params: {
+            pregnancyNo,
+            regNo
+         }
+      });
+   }
+   /** 4.77 Жирэмсний хяналтын дэвтрийн тухайн товлол дахь мэдээллийг лавлах сервис */
+   async getPregnantFormData(pregnancyNo, regno, appointWeek) {
+      return await jwtInterceopter.get('health-insurance/get-pregnant-form-data', {
+         params: {
+            pregnancyNo,
+            regno,
+            appointWeek
+         }
+      });
+   }
+   /** 4.78 Тухайн үүсгэсэн багц дотор тухайн линк байгаа эсэхийг лавлах сервис */
+   async postVerifyMedLink(body) {
+      return await jwtInterceopter.post('health-insurance/verify-med-link', body);
+   }
+   /** 4.79 Эх хүүхдийн цахим дэвтрийг нээх сервис */
+   /** Энэхүү сервисээр хүүхдийн төрөлтийн талаарх мэдээллийг бүртгэх бөгөөд Эх хүүхдийн дэвтрийн цахим дугаарыг үүсгэх юм. */
+   async postCreateRequestChildBook(body) {
+      return await jwtInterceopter.post('health-insurance/create-request-child-book', body);
+   }
+   /** 4.80 Эх хүүхдийн цахим дэвтрийн ерөнхий мэдээллийг лавлах сервис */
+   async getChildBook(type, regno) {
+      return await jwtInterceopter.get('health-insurance/get-child-book', {
+         params: {
+            type,
+            regno
+         }
+      });
+   }
+   /** 4.81 Тухайн эх хүүхдийн дэвтрийн формын мэдээллийг илгээх сервис */
+   async postSendChildBookData(body) {
+      return await jwtInterceopter.post('health-insurance/send-child-book-data', body);
+   }
+   /** 4.82 Тухайн эх хүүхдийн дэвтрийн илгээгдсэн мэдээллийг лавлах сервис */
+   async getChildBookData(regno, bookNo, catId) {
+      return await jwtInterceopter.get('health-insurance/get-child-book-data', {
+         params: {
+            regno,
+            bookNo,
+            catId
+         }
+      });
+   }
+
    async getTabletCategories() {
       return await jwtInterceopter.get('health-insurance/tablet-categories');
    }
@@ -258,9 +342,6 @@ class HealthInsurance {
    }
    async getVaccineByRegno() {
       return await jwtInterceopter.get('health-insurance/get-vaccine-by-regno');
-   }
-   async getCt4() {
-      return await jwtInterceopter.get('health-insurance/get-ct4');
    }
    async getDrgType() {
       return await jwtInterceopter.get('health-insurance/drg-type');

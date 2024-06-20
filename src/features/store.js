@@ -1,9 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { combineReducers } from '@reduxjs/toolkit';
 import storage from 'redux-persist/lib/storage';
-import { persistReducer, persistStore } from 'redux-persist';
+import { FLUSH, PAUSE, PERSIST, PURGE, REGISTER, REHYDRATE, persistReducer, persistStore } from 'redux-persist';
 import { encryptTransform } from 'redux-persist-transform-encrypt';
-import thunkMiddleware from 'redux-thunk';
 import authReducer from './authReducer';
 import hospitalReducer from './hospitalReducer';
 import emrReducer from './emrReducer';
@@ -35,7 +34,12 @@ const persistedReducers = persistReducer(persistConfig, reducers);
 
 const store = configureStore({
    reducer: persistedReducers,
-   middleware: [thunkMiddleware]
+   middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({
+         serializableCheck: {
+            ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
+         }
+      })
 });
 
 const Persistor = persistStore(store);

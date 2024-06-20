@@ -160,7 +160,7 @@ const CreateStory = () => {
                })
                   .then(async ({ data: { response } }) => {
                      if (response) {
-                        const ourHicsRes = await setSealForHics(patient, hicsSealId, {}, isInsurance);
+                        const ourHicsRes = await setSealForHics(patient, hicsSealId, {}, isInsurance, null);
                         console.log('res', ourHicsRes);
                         if (!ourHicsRes) {
                            // Assuming response has a success field
@@ -224,13 +224,17 @@ const CreateStory = () => {
    }, []);
 
    const getHicsSeal = async () => {
-      await InsuranceApi.getByIdHicsSeals(hicsSealId).then(({ data: { response } }) => {
-         dispatch(setHicsSeal(response));
-      });
+      if (hicsSealId) {
+         await InsuranceApi.getByIdHicsSeals(hicsSealId).then(({ data: { response } }) => {
+            dispatch(setHicsSeal(response));
+         });
+      } else {
+         dispatch(setHicsSeal({}));
+      }
    };
 
    useEffect(() => {
-      hicsSealId && getHicsSeal();
+      getHicsSeal();
    }, [hicsSealId]);
 
    return (

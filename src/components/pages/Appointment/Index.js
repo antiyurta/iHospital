@@ -33,6 +33,7 @@ import StructureApi from '@ApiServices/organization/structure';
 import InsuranceApi from '@ApiServices/healt-insurance/insurance';
 import HealtInsuranceApi from '@ApiServices/healt-insurance/healtInsurance';
 import AppointmentApi from '@ApiServices/appointment/api-appointment-service';
+import { isRequireHicsServiceIds } from '@Utils/config/insurance';
 //defualt
 const { TextArea } = Input;
 function Index({ selectedPatient, type, invoiceData, handleClick, prevAppointmentId, isExtraGrud }) {
@@ -117,10 +118,9 @@ function Index({ selectedPatient, type, invoiceData, handleClick, prevAppointmen
       setIsSent(false);
       setIsUrgent(info.isUrgent);
       setSelectedInfo(info);
-      const isRequireHicsServiceIds = [20340, 24040];
       const hicsServiceIds = info.schedule.cabinet.hicsServiceIds;
       const isRequireApproval = Array.isArray(hicsSupports)
-         ? hicsServiceIds.some((id) => isRequireHicsServiceIds.includes(id))
+         ? hicsServiceIds?.some((id) => isRequireHicsServiceIds.includes(id))
          : isRequireHicsServiceIds.includes(hicsServiceIds);
       if (isRequireApproval && !state && !invoiceData?.isCheckInsurance) {
          await getHicsSupports(hicsServiceIds);

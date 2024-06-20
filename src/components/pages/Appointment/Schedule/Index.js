@@ -176,6 +176,7 @@ function Index({ type }) {
                   if (editMode) {
                      await ScheduleApi.patchSchedule(id, arr).then(({ data: { success } }) => {
                         if (success) {
+                           openNofi('success', 'Цаг оруулах', 'Цаг оруулах амжилттай');
                            setEditMode(false);
                            getCurrentMonth(firstDayOfMonth, lastDayOfMonth);
                            form.resetFields();
@@ -184,6 +185,7 @@ function Index({ type }) {
                   } else {
                      await ScheduleApi.postSchedule(arr).then(({ data: { success } }) => {
                         if (success) {
+                           openNofi('success', 'Цаг оруулах', 'Цаг оруулах амжилттай');
                            getCurrentMonth(firstDayOfMonth, lastDayOfMonth);
                         }
                      });
@@ -402,13 +404,23 @@ function Index({ type }) {
                </Form>
             </Card>
          </div>
-         <div className="w-full md:w-full lg:w-3/5 p-1">
+         <div
+            className="w-full md:w-full lg:w-3/5 p-1"
+            style={{
+               height: 'calc(100vh - 100px)'
+            }}
+         >
             <Card bordered={false} className="criclebox tablespace mb-24">
                <div className="flex flex-wrap">
                   <div className="w-full m-2">
                      <DatePicker locale={mn} onChange={changeMonth} picker="month" />
                   </div>
-                  <div className="w-full">
+                  <div
+                     className="w-full overflow-auto"
+                     style={{
+                        height: 'calc(100vh - 150px)'
+                     }}
+                  >
                      <Collapse accordion collapsible="header" className="m-2">
                         {days.map((day, index) => {
                            return (

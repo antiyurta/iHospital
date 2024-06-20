@@ -21,7 +21,8 @@ export const HEALTH_SERVICES_TITLE = {
    sendAddHicsService: 'ADD_HICS_SERVICE',
    sendDirectService: 'DIRECT_SEND_SERVICE',
    sendFormData: 'SEND_FORM_DATA',
-   sendFixDoctorExams: 'FIX_DOCTOR_EXAMS'
+   sendFixDoctorExams: 'FIX_DOCTOR_EXAMS',
+   savePregnantSummary: 'SAVE_PREGNANT_SUMMARY'
 };
 
 export const HICS_PROCESS = {
@@ -60,7 +61,8 @@ export const HEALTH_SERVCES_DESCRIPTION = (title) =>
       [HST.sendDirectService]:
          '4.62 Тусламж үйлчилгээг дуусгавар болгох сервис – Зөвхөн Амбулаторийн цогц тусламж, үйлчилгээ',
       [HST.sendFormData]: '4.64 Жирэмсний хяналтын дэвтрийн мэдээллийг илгээх сервис',
-      [HST.sendFixDoctorExams]: '4.66 Эмчийн үзлэгийн мэдээлэл засварлах сервис/Зөвхөн амбулаторийн цогц тусламж'
+      [HST.sendFixDoctorExams]: '4.66 Эмчийн үзлэгийн мэдээлэл засварлах сервис/Зөвхөн амбулаторийн цогц тусламж',
+      [HST.savePregnantSummary]: '4.73 Жирэмсний хяналтын дэвтрийн ерөнхий мэдээллийг илгээх сервис'
    })[title];
 
 /** Амбулторийн тусламж үйлчилгээний DRGCODE */
@@ -84,4 +86,3 @@ const SUPPORT_CARE = [
 const SUPPORT_CARE_DIAGNOSE = 'C';
 /** Эрхтэн шилжүүлэх тусламж, үйлчилгээ дээр заавал secondRegno дамжуулна. */
 export const SUPPORT_ORGAN_TRANSPLANT = 20540;
-

@@ -82,7 +82,24 @@ const RegisterPatient = ({ patientId, onFinish }) => {
                      </Radio.Group>
                   </Form.Item>
                )}
-               {/* registerType == 'citizen' &&  */}
+               {registerType == 'foreignCitizen' && (
+                  <>
+                     <Form.Item
+                        name="username"
+                        label="Нэвтрэх нэр"
+                        rules={[{ required: true, message: 'Хэрэглэгчийн нэр оруулна уу!' }]}
+                     >
+                        <Input />
+                     </Form.Item>
+                     <Form.Item
+                        name="password"
+                        label="Нууц үг"
+                        rules={[{ required: true, message: 'Нууц үг оруулна уу!' }]}
+                     >
+                        <Input />
+                     </Form.Item>
+                  </>
+               )}
             </>
          )
       },
@@ -182,6 +199,7 @@ const RegisterPatient = ({ patientId, onFinish }) => {
             if (current === 0) {
                authType == 1 && registerOtp(regnum);
                registerType == 'children' && childrenInfo();
+               registerType == 'foreignCitizen' && foreignPersonInfo();
             } else if (current === 1) {
                if (authType === 0) {
                   // manual registration
@@ -258,10 +276,27 @@ const RegisterPatient = ({ patientId, onFinish }) => {
          if (response.return.resultCode != 0) {
             openNofi('warning', 'ХУР-сервис', response.return.resultMessage);
          } else {
+            form.setFieldValue('requestId', response.return.requestId);
             setChildrens(response.return.response.listData);
             openNofi('success', 'ХУР-сервис', response.return.resultMessage);
          }
       });
+   };
+   const foreignPersonInfo = async () => {
+      xypApi
+         .foreignPersonInfo(
+            form.getFieldValue('regnum'),
+            form.getFieldValue('username'),
+            form.getFieldValue('password')
+         )
+         .then(({ data: { response } }) => {
+            if (response.return.resultCode != 0) {
+               openNofi('warning', 'ХУР-сервис', response.return.resultMessage);
+            } else {
+               setChildrens(response.return.response.listData);
+               openNofi('success', 'ХУР-сервис', response.return.resultMessage);
+            }
+         });
    };
    const sentXyp = async (values) => {
       setIsLoading(true);
@@ -305,8 +340,11 @@ const RegisterPatient = ({ patientId, onFinish }) => {
             familyName: children.lastname,
             lastName: children.childLastname,
             firstName: children.firstname,
-            registerNumber: children.regnum
-            // aimagCityName: Todo
+            registerNumber: children.regnum,
+            aimagCityCode: children.addressData.aimagCityCode,
+            soumDistrictCode: children.addressData.soumDistrictCode,
+            bagKhorooCode: children.addressData.bagKhorooCode,
+            addressDetail: children.fullAddress,
          });
       }
    };

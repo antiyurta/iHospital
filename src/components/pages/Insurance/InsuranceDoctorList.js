@@ -38,6 +38,7 @@ const basicRule = [
 
 function InsuranceDocterList() {
    const [cancelForm] = Form.useForm();
+   const [confirmForm] = Form.useForm();
    const [editForm] = Form.useForm();
    const [data, setData] = useState([]);
    const [meta, setMeta] = useState({});
@@ -46,6 +47,7 @@ function InsuranceDocterList() {
    const [hicsGroups, setHicsGroups] = useState([]);
    const [hicsService, setHicsService] = useState([]);
    const [isOpenCancelModal, setOpenCancelModal] = useState(false);
+   const [isOpenConfirmModal, setOpenConfirmModal] = useState(false);
    const [isOpenEditModal, setIsOpenEditModal] = useState(false);
    //
    const getList = async (page, pageSize, filterValues) => {
@@ -85,6 +87,15 @@ function InsuranceDocterList() {
          icd9Code: data.diagnosis.icd9Code
       });
       setIsOpenEditModal(true);
+   };
+   const getConfirmInsurance = async (values) => {
+      await insuranceApi
+         .requestHicsSealConfirm(values.hicsSealId, {
+            reason: values.reason
+         })
+         .then(({ data }) => {
+            openNofi('success', 'Амжилттай', data.description);
+         });
    };
    const getCancelInsurance = async (values) => {
       await insuranceApi
@@ -133,11 +144,6 @@ function InsuranceDocterList() {
    const getHicsService = async () => {
       await healtInsuranceApi.getHicsService().then(({ data }) => {
          setHicsService(data.result);
-      });
-   };
-   const confirmPackage = async (row) => {
-      await insuranceApi.requestHicsSealConfirm(row.id).then(({ data }) => {
-         console.log('=========>', data);
       });
    };
    const getInfoProcess = (process) => {
@@ -221,7 +227,15 @@ function InsuranceDocterList() {
          width: 100,
          title: 'Үйлчилгээний нэр',
          dataIndex: 'hicsServiceId',
-         render: (text) => hicsService.find((service) => service.id === text)?.name
+         render: (text) => {
+            const current = hicsService.find((service) => service.id === text)?.name;
+            return (
+               <p>
+                  <span>{current}</span>
+                  <span>{text}</span>
+               </p>
+            );
+         }
       },
       {
          title: 'Урсгал',
@@ -275,7 +289,11 @@ function InsuranceDocterList() {
                      danger
                      icon={<CloseOutlined />}
                      onClick={() => {
-                        confirmPackage(row);
+                        confirmForm.setFieldsValue({
+                           hicsSealId: row.id,
+                           reason: null
+                        });
+                        setOpenConfirmModal(true);
                      }}
                   />
                );
@@ -358,6 +376,36 @@ function InsuranceDocterList() {
                </ConfigProvider>
             </Card>
          </div>
+         <Modal
+            title="Цогц дуусгавар болгох"
+            open={isOpenConfirmModal}
+            onCancel={() => setOpenConfirmModal(false)}
+            onOk={() => {
+               confirmForm.validateFields().then(getConfirmInsurance);
+            }}
+         >
+            <Form form={confirmForm} layout="vertical">
+               <Form.Item hidden name={'hicsSealId'}>
+                  <InputNumber disabled={true} />
+               </Form.Item>
+               <Form.Item
+                  name={'reason'}
+                  label="Цуцлах болсон шалтгаан"
+                  rules={[
+                     {
+                        required: true,
+                        message: 'Цуцлах болсон шалтгаан заавал'
+                     },
+                     {
+                        min: 30,
+                        message: 'Үйлчилгээг цуцлаж байгаа шалтгаан 30-с багагүй'
+                     }
+                  ]}
+               >
+                  <TextArea />
+               </Form.Item>
+            </Form>
+         </Modal>
          <Modal
             title="Цуцлах"
             open={isOpenCancelModal}

@@ -213,7 +213,7 @@ function MainPatientHistory({ handleClick }) {
                children: <Tab3Content />
             });
             newItems.push({
-               label: 'Жирэмсэний дэвтэр',
+               label: 'Жирэмсний хяналт',
                key: 'item-pregnancy-info',
                children: <Tab4Content />
             });
@@ -272,7 +272,7 @@ function MainPatientHistory({ handleClick }) {
                children: <Tab3Content />
             });
             newItems.push({
-               label: 'Жирэмсэний дэвтэр',
+               label: 'Жирэмсний хяналт',
                key: 'item-pregnancy-info',
                children: <Tab4Content />
             });

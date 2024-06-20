@@ -203,7 +203,7 @@ const NewDiagnose = ({ patientId, appointmentId, inpatientRequestId, usageType, 
             <Select
                allowClear
                onClear={() => {
-                  hicsDiagnosisForm.resetFields(['diagnosis', 'icdCode1']);
+                  hicsDiagnosisForm.resetFields(['diagnosis', 'icdCode1', 'amount']);
                }}
                showSearch
                filterOption={(input, option) => option.label.toLowerCase().includes(input.toLowerCase())}
@@ -340,6 +340,7 @@ const NewDiagnose = ({ patientId, appointmentId, inpatientRequestId, usageType, 
 
    const openModal = () => {
       const data = addHics?.checkupId >= 1 ? addHics : hicsSeal;
+      console.log('data', data);
       if (data?.diagnosis) {
          getIcdFormField(data.diagnosis.icdCode);
          hicsDiagnosisForm.setFieldsValue({
@@ -564,7 +565,7 @@ const NewDiagnose = ({ patientId, appointmentId, inpatientRequestId, usageType, 
                                     </Form.Item>
                                     <DualDiagnose />
                                  </div>
-                                 <div className="grid grid-cols-3 gap-2">
+                                 <div className="flex flex-col gap-2">
                                     <Form.Item
                                        label="Оношийн хамааралтай бүлэг"
                                        name={['diagnosis', 'drgCode']}

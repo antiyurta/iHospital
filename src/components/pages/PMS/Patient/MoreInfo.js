@@ -10,7 +10,22 @@ import {
    employment,
    emplessDescription
 } from '@Utils/config/xypField.js';
+import xypApi from '@ApiServices/xyp/xyp.api';
+import { openNofi } from '@Comman/common';
+
 function MoreInfo({ form }) {
+   const getBloodType = () => {
+      if (!form.getFieldValue('registerNumber')) {
+         openNofi('warning', 'Үйлчлүүлэгчийн мэдээлэл', 'Регистрийн дугаарын мэдээлэл хоосон байна.');
+      }
+      xypApi.bloodType(form.getFieldValue('registerNumber')).then(({ data: { response } }) => {
+         if (response.return.resultCode > 0) {
+            openNofi('warning', 'ХУР-сервис', response.return.resultMessage);
+         } else {
+            form.setFieldValue('bloodType', response.return.response.bloodGroup);
+         }
+      });
+   };
    return (
       <div className="rounded-md bg-[#F3F4F6] p-2 flex flex-col gap-2">
          <Form.Item className="mb-0 white-radio" label="Оршин суугч эсэх:" name="isLiver">
@@ -139,6 +154,23 @@ function MoreInfo({ form }) {
                   </>
                )
             }
+         </Form.Item>
+         <Form.Item
+            className="mb-0"
+            label={
+               <div className="flex gap-1">
+                  Цусны бүлэг:{' '}
+                  <div
+                     className="cursor-pointer font-semibold text-indigo-600 hover:text-indigo-500"
+                     onClick={() => getBloodType()}
+                  >
+                     Мэдээлэл татах
+                  </div>
+               </div>
+            }
+            name="bloodType"
+         >
+            <Input />
          </Form.Item>
       </div>
    );

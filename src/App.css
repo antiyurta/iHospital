@@ -987,7 +987,6 @@ table .formTable tr > td {
 .steps-content {
    padding: 8px 8px;
    min-height: 200px;
-   text-align: center;
    background-color: #f5f6f7;
    border-radius: 12px;
 }
