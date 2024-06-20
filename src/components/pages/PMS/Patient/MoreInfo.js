@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form, Input, Radio, Select } from 'antd';
 //utils
 import {
@@ -11,9 +11,11 @@ import {
    emplessDescription
 } from '@Utils/config/xypField.js';
 import xypApi from '@ApiServices/xyp/xyp.api';
+import healtInsuranceApi from '@ApiServices/healt-insurance/healtInsurance';
 import { openNofi } from '@Comman/common';
 
 function MoreInfo({ form }) {
+   const [freeType, setFreeType] = useState([]);
    const getBloodType = () => {
       if (!form.getFieldValue('registerNumber')) {
          openNofi('warning', 'Үйлчлүүлэгчийн мэдээлэл', 'Регистрийн дугаарын мэдээлэл хоосон байна.');
@@ -26,6 +28,14 @@ function MoreInfo({ form }) {
          }
       });
    };
+   const getFreeType = async () => {
+      await healtInsuranceApi.getFreeType().then(({ data }) => {
+         setFreeType(data.result || []);
+      });
+   };
+   useEffect(() => {
+      getFreeType();
+   }, []);
    return (
       <div className="rounded-md bg-[#F3F4F6] p-2 flex flex-col gap-2">
          <Form.Item className="mb-0 white-radio" label="Оршин суугч эсэх:" name="isLiver">
@@ -159,7 +169,7 @@ function MoreInfo({ form }) {
             className="mb-0"
             label={
                <div className="flex gap-1">
-                  Цусны бүлэг:{' '}
+                  Цусны бүлэг:
                   <div
                      className="cursor-pointer font-semibold text-indigo-600 hover:text-indigo-500"
                      onClick={() => getBloodType()}
@@ -171,6 +181,23 @@ function MoreInfo({ form }) {
             name="bloodType"
          >
             <Input />
+         </Form.Item>
+         <Form.Item
+            label="Төр хариуцах иргэн"
+            name="freeTypeId"
+            rules={[
+               {
+                  required: true,
+                  message: 'Төр хариуцах иргэн заавал'
+               }
+            ]}
+         >
+            <Select
+               options={freeType?.map((type) => ({
+                  label: type.name,
+                  value: type.id
+               }))}
+            />
          </Form.Item>
       </div>
    );

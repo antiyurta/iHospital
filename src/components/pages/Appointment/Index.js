@@ -118,7 +118,7 @@ function Index({ selectedPatient, type, invoiceData, handleClick, prevAppointmen
       setIsSent(false);
       setIsUrgent(info.isUrgent);
       setSelectedInfo(info);
-      const hicsServiceIds = info.schedule.cabinet.hicsServiceIds;
+      const hicsServiceIds = info.schedule?.cabinet?.hicsServiceIds;
       const isRequireApproval = Array.isArray(hicsSupports)
          ? hicsServiceIds?.some((id) => isRequireHicsServiceIds.includes(id))
          : isRequireHicsServiceIds.includes(hicsServiceIds);

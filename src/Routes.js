@@ -8,8 +8,6 @@ const DocumentUpload = React.lazy(() => import('./components/pages/Document/inde
 //
 const DocForRoleList = React.lazy(() => import('./components/pages/611/DocForRoleList'));
 const InsuranceDoctorList = React.lazy(() => import('./components/pages/Insurance/InsuranceDoctorList'));
-const HicsCost = React.lazy(() => import('./components/pages/Insurance/HicsCost'));
-const hicsList = React.lazy(() => import('./components/pages/Insurance/HicsLists'));
 // tsagiin huwiar
 const Schedule = React.lazy(() => import('./components/pages/Appointment/Schedule/Schedule'));
 // tohooromj tsagin huwiar
@@ -30,7 +28,16 @@ const SetOrder = React.lazy(() => import('./components/pages/service/SetOrder'))
 // tohorolmj xray ego ekg
 const Device = React.lazy(() => import('./components/pages/DeviceAppointment/DeviceAppointment'));
 // ekg jagsaalt
-const BeforeEkgRequest = React.lazy(() => import('./components/pages/Ekg/BeforeEkgRequest'));
+const BeforeEkgRequest = React.lazy(() =>
+   import('./components/pages/XRayExo/IndexBefore').then((module) => ({
+      default: (props) => (
+         <div className="p-3 w-full h-full bg-red">
+            <module.default {...props} type={2} />
+         </div>
+      )
+   }))
+);
+
 // odorin orlogoin tailan
 const DailyIncome = React.lazy(() => import('./components/pages/EPayment/DailyIncome/DailyIncome'));
 // uzlegin minut
@@ -70,16 +77,33 @@ const Treatment = React.lazy(() => import('./components/pages/service/Treatment'
 // halgaa list
 const Surgury = React.lazy(() => import('./components/pages/service/Surgury'));
 // mes zasal
-const SurgeryList = React.lazy(() => import('./components/pages/Surgery/SurgeryList'));
 const SurgeryDashboard = React.lazy(() => import('./components/pages/Surgery/Dashboard'));
-const SurgeryListStatus = React.lazy(() => import('./components/pages/Surgery/SurgeryListStatus'));
-
-// const SurguryNurse =
-// const SurguryPlan =
-// const SurguryBoss =
+const SurgeryList = React.lazy(() =>
+   import('./components/pages/BeforeAmbulatory/Lists/Index/Index').then((module) => ({
+      default: (props) => (
+         <div className="p-3 w-full h-full bg-[#f5f6f7]">
+            <module.default {...props} type={3} isDoctor={true} isSurgeyBoss={false} />
+         </div>
+      )
+   }))
+);
+const SurgeryListStatus = React.lazy(() =>
+   import('./components/pages/BeforeAmbulatory/Lists/Index/Index').then((module) => ({
+      default: (props) => (
+         <div className="p-3 w-full h-full bg-[#f5f6f7]">
+            <module.default {...props} type={3} isDoctor={false} isSurgeyBoss={true} />
+         </div>
+      )
+   }))
+);
 // mes ajilbar list
 const Operation = React.lazy(() => import('./components/pages/service/Operation'));
-const OperationRequests = React.lazy(() => import('@Pages/Operation/OperationRequest'));
+const OperationRequests = React.lazy(() =>
+   import('./components/pages/XRayExo/IndexAfter').then((module) => ({
+      default: (props) => <module.default {...props} type={3} params={'0,1,2'} />
+   }))
+);
+
 // emr list
 const BeforeAmbulatoryList = React.lazy(() => import('./components/pages/BeforeAmbulatory/BeforeAmbulatoryList'));
 // emiin bus gasaalt
@@ -87,7 +111,12 @@ const TreatmentRequest = React.lazy(() => import('./components/pages/treatment/B
 // Оношилгооны жагсаалт
 const XrayRequest = React.lazy(() => import('./components/pages/Xray/XrayRequest'));
 //EXO жагсаалт
-const ExoRequest = React.lazy(() => import('./components/pages/Exo/ExoRequest'));
+const ExoRequest = React.lazy(() =>
+   import('./components/pages/XRayExo/IndexAfter').then((module) => ({
+      default: (props) => <module.default {...props} type={2} params={'0,1,2'} />
+   }))
+);
+
 // enr list
 const BeforeAmbulatoryListEnr = React.lazy(() => import('./components/pages/BeforeAmbulatory/BeforeAmbulatoryListEnr'));
 //Оношилгооны өмнөх жагсаалт
@@ -356,18 +385,6 @@ export const ProtectedRoutes = [
       mnName: 'Үзлэгийн минут',
       url: '/settings',
       element: Settings
-   },
-   {
-      name: 'hicsList',
-      mnName: 'Даатгалын Үнэ',
-      url: '/hicsList',
-      element: hicsList
-   },
-   {
-      name: 'hicsCost',
-      mnName: 'Даатгалын Өртөг',
-      url: '/hicsCost',
-      element: HicsCost
    },
    {
       name: 'InsuranceDoctor',

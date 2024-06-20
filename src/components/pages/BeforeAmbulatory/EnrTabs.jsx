@@ -43,7 +43,15 @@ const EnrTabs = ({ incomeENRData }) => {
                      data.push(document);
                   })
                );
-               setDocuments(data);
+               // setDocuments(data);
+            }
+            if (incomeENRData.reasonComming === 2) {
+               setDocuments([
+                  {
+                     docName: 'Түргэн тусламж',
+                     value: 'callEmergency'
+                  }
+               ]);
             }
          })
          .catch((error) => {

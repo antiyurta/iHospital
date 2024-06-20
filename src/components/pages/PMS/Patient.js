@@ -56,6 +56,7 @@ function Patient() {
          });
    };
    const showModal = () => {
+      setId(null);
       setEditMode(false);
       setIsModalVisible(true);
    };
@@ -388,9 +389,10 @@ function Patient() {
             onCancel={() => setIsModalVisible(false)}
             width="16cm"
             footer={null}
+            destroyOnClose
             confirmLoading={isConfirmLoading}
          >
-            <RegisterPatient onFinish={onFinish} patientId={id} />
+            <RegisterPatient onFinish={onFinish} patientId={id} editMode={editMode} />
          </Modal>
          <Modal
             title="Яаралтай бүртгэл"

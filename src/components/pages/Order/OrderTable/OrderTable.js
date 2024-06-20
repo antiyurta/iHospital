@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import { Button, Checkbox, DatePicker, Form, Input, InputNumber, Modal, Popconfirm, Space, Table, message } from 'antd';
 import OrderForm from './OrderForm';
-import TextArea from 'antd/lib/input/TextArea';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
 import { ClockCircleOutlined, MinusCircleOutlined } from '@ant-design/icons';
-import { NewInputNumber } from '../../../Input/Input';
 import { useDispatch, useSelector } from 'react-redux';
 import Appointment from '@Pages/Appointment/Index';
 //api
@@ -12,6 +10,8 @@ import regularApi from '@ApiServices/regular.api';
 import invoiceApi from '@ApiServices/payment/invoice';
 //redux
 import { selectCurrentEmrData, selectCurrentOtsData, setOtsData } from '@Features/emrReducer';
+
+const { TextArea } = Input;
 
 const checkNumber = (event) => {
    var charCode = event.charCode;
@@ -358,7 +358,7 @@ function OrderTable(props) {
                         rules={minRule(index, 'repeatTime')}
                         editing={!isDisable(index, 'repeatTime')}
                      >
-                        <NewInputNumber defualtvalue={1} controls={false} min={1} onKeyPress={checkNumber} />
+                        <InputNumber defualtvalue={1} controls={false} min={1} onKeyPress={checkNumber} />
                      </OrderForm>
                   )
                },
@@ -372,7 +372,7 @@ function OrderTable(props) {
                         rules={minRule(index, 'dayCount')}
                         editing={!isDisable(index, 'dayCount')}
                      >
-                        <NewInputNumber defualtvalue={1} controls={false} min={1} onKeyPress={checkNumber} />
+                        <InputNumber defualtvalue={1} controls={false} min={1} onKeyPress={checkNumber} />
                      </OrderForm>
                   )
                },

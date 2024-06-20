@@ -129,7 +129,7 @@ const InternalOrder = (props) => {
                   };
                   if (item.examCode && IncomeEMRData.isInsurance && item.isInsurance && isDoctor) {
                      const currentSeal = addHics || hicsSeal;
-                     const freeTypeId = 0;
+                     const freeTypeId = selectedPatient.freeTypeId || 0;
                      const currentIcdCode = currentSeal?.diagnosis?.icdCode;
                      let currentExam = hicsExams.find((exam) => exam.examCode === item.examCode);
                      if (currentExam) {

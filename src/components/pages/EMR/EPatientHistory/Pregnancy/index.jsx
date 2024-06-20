@@ -1,16 +1,15 @@
-import React, { Suspense, useEffect, useState } from 'react';
-import { Button, Collapse, DatePicker, Drawer, Form, InputNumber, Modal, Select, Spin, Tabs } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Button, DatePicker, Form, InputNumber, Modal, Select, Spin } from 'antd';
 import { useSelector } from 'react-redux';
 import { ListPatientInfo } from '@Comman/ListInjection';
 import { selectPatient } from '@Features/patientReducer';
 import pregnantWomenImg from './pregnantWomen.png';
 
-import { EyeOutlined, ReadOutlined } from '@ant-design/icons';
-import { PregnantInfoItem } from './pregnantInfo';
+import { EyeOutlined } from '@ant-design/icons';
 import { PregnantBookItem } from './pregnantBook';
 
 //sdsa
-import { isImpairment, relationship, employment } from '@Utils/config/xypField';
+import { relationship, employment } from '@Utils/config/xypField';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
 const trueOrFalse = [
    {
@@ -44,10 +43,8 @@ export const PregnancyInfo = () => {
    const patient = useSelector(selectPatient);
    const [summary, setSummary] = useState({});
    const [summaryData, setSummaryData] = useState({});
-   const [extraFormData, setExtraFormData] = useState({});
    const [open, setOpen] = useState(false);
    const [openCreate, setOpenCreate] = useState(false);
-   const [isOpenExtra, setOpenExtra] = useState(false);
 
    const getFormList = async () => {
       setLoading(true);

@@ -52,7 +52,7 @@ const EmrTimer = ({ startDate, endDate, inspection }) => {
       try {
          const isEndEMD = values.conclusion?.includes('confirmed');
          if (isInsurance) {
-            if (hicsSeal.hicsServiceId === 20120 && addHics?.checkupId > 1) {
+            if (hicsSeal.hicsServiceId === 20120 && addHics?.checkupId > 1 && !addHics.isSent) {
                await addHicsService(hicsSeal.hicsSealCode);
             } else {
                if (hicsSeal.process === 0) {
@@ -132,7 +132,8 @@ const EmrTimer = ({ startDate, endDate, inspection }) => {
             if (data.code === 200) {
                openNofi('success', 'Амжилттай', data.description);
                await insuranceApi.requestAddHics(addHics.id, {
-                  hasExam: addHics.hasExam
+                  hasExam: addHics.hasExam,
+                  isSent: true
                });
             } else if (data.code === 400) {
                openNofi('error', 'Амжилтгүй', data.description);

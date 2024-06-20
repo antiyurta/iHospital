@@ -17,12 +17,16 @@ import {
 import PatientInfo from './PatientInfo';
 import dayjs from 'dayjs';
 
-const RegisterPatient = ({ patientId, onFinish }) => {
+const RegisterPatient = ({ patientId, onFinish, editMode }) => {
    const [form] = Form.useForm();
    const registerType = Form.useWatch('registerType', form);
    const [isLoading, setIsLoading] = useState(false);
    const [current, setCurrent] = useState(0);
    const [childrens, setChildrens] = useState([]);
+
+   useEffect(() => {
+      !editMode && form.resetFields();
+   }, [editMode]);
 
    const steps = [
       {
@@ -232,7 +236,9 @@ const RegisterPatient = ({ patientId, onFinish }) => {
             setCurrent(current + 1);
          })
          .catch((info) => {
-            message.warning(info);
+            info.errorFields?.map((errorMsg) => {
+               message.error(errorMsg.errors[0]);
+            });
          });
    };
 
@@ -344,7 +350,7 @@ const RegisterPatient = ({ patientId, onFinish }) => {
             aimagCityCode: children.addressData.aimagCityCode,
             soumDistrictCode: children.addressData.soumDistrictCode,
             bagKhorooCode: children.addressData.bagKhorooCode,
-            addressDetail: children.fullAddress,
+            addressDetail: children.fullAddress
          });
       }
    };
@@ -385,7 +391,12 @@ const RegisterPatient = ({ patientId, onFinish }) => {
          <div className="steps-content">{steps[current].content}</div>
          <div className="steps-action">
             {current > 0 && (
-               <Button style={{ margin: '0 8px' }} onClick={() => prev()} icon={<CaretLeftOutlined />}>
+               <Button
+                  disabled={editMode}
+                  style={{ margin: '0 8px' }}
+                  onClick={() => prev()}
+                  icon={<CaretLeftOutlined />}
+               >
                   Өмнөх
                </Button>
             )}
