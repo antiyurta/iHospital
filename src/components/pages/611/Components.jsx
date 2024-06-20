@@ -111,7 +111,7 @@ const Paragraph = ({ isBold, isUpper, align, style, children }) => {
    );
 };
 
-const Box = ({ width, maxWidth, minWidth, top, right, bottom, left, children }) => {
+const Box = ({ width, maxWidth, minWidth, top, right, bottom, left, children, style }) => {
    return (
       <div
          style={{
@@ -122,12 +122,44 @@ const Box = ({ width, maxWidth, minWidth, top, right, bottom, left, children }) 
             borderRight: right && '1px solid black',
             borderBottom: bottom && '1px solid black',
             borderLeft: left && '1px solid black',
-            padding: '0px 6px'
+            padding: '0px 6px',
+            ...style
          }}
       >
          {children}
       </div>
    );
 };
+const TextUnderline = ({ value, title, groupValue }) => {
+   const isChecked = groupValue?.includes(value);
 
-export { FlexRow, FlexCol, GridColTwo, Paragraph, DocumentCheckbox, DocumentCheckboxGroup, Box };
+   return (
+      <div>
+         <Paragraph style={{ textDecoration: isChecked ? 'underline' : 'none', }}>{title}</Paragraph>
+      </div>
+   );
+};
+const TextUnderlineGroup = ({ value, children, style }) => {
+   const entireChild = (child) => {
+      if (child.props?.children?.length > 0) {
+         return child.props?.children?.map((prop) => entireChild(prop));
+      }
+      return React.cloneElement(child, { groupValue: value });
+   };
+   return (
+      <div
+         style={{
+            gap: 2,
+            ...style
+         }}
+      >
+         {React.Children.map(children, (child) => entireChild(child))}
+      </div>
+   );
+}; const TextWithUnderline = ({ children }) => {
+   return (
+      <span className="px-2 border-b border-black h-fit"> {children}</span>
+   );
+}
+
+export { FlexRow, FlexCol, GridColTwo, Paragraph, DocumentCheckbox, DocumentCheckboxGroup, Box, TextUnderline, TextUnderlineGroup, TextWithUnderline };

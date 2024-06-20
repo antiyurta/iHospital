@@ -1,6 +1,7 @@
 import React from 'react';
 import { Checkbox, Input } from 'antd';
 import { Table } from 'react-bootstrap';
+import { TextWithUnderline } from './utils';
 const CT_1_Setgets = (props) => {
    const {
       data: { formData }
@@ -46,11 +47,13 @@ const CT_1_Setgets = (props) => {
                               </Checkbox>
                               <Checkbox value={'q3-2'}>
                                  Хэвийн бус
-                                 <Input
+                                 {/* <Input
                                     className=" w-10"
                                     value={formData?.['q3-2-1']}
                                     style={{ textAlign: 'center' }}
-                                 />
+                                 /> */}
+                                 <TextWithUnderline>{formData?.['q3-2-1'] || ''}</TextWithUnderline>
+
                               </Checkbox>
                            </Checkbox.Group>
                         </th>
@@ -66,7 +69,7 @@ const CT_1_Setgets = (props) => {
                         <th id="child" className="w-[220px]">
                            {' '}
                            Амьсгал 1 минутанд
-                           <Input className="w-10" value={formData?.q4} />
+                           <Input className="w-8" style={{ textAlign: 'center' }} value={formData?.q4} />
                            удаа
                         </th>
                         <th colSpan={3}>
@@ -202,11 +205,12 @@ const CT_1_Setgets = (props) => {
                               <Checkbox value={'q13-2'}>Гүн тэмтрэлтээр</Checkbox>
                               <Checkbox value={'q13-3'} className="">
                                  Эмзэглэлтэй (байрлал
-                                 <Input
+                                 {/* <Input
                                     className=" w-8"
                                     value={formData?.['q13-3-1']}
                                     style={{ textAlign: 'center' }}
-                                 />
+                                 /> */}
+                                 <TextWithUnderline>{formData?.['q13-3-1'] || ''}</TextWithUnderline>
                                  )
                               </Checkbox>
                            </Checkbox.Group>
@@ -409,7 +413,7 @@ const CT_1_Setgets = (props) => {
                            <p className="ml-4 mt-4">
                               Ухамсарт ухааны хүрээ (ухаан дэмийрэн, зүүдчилэн, бүрийтэн, будангуйран,нойрмоглон
                               балартах)
-                              <p className="ml-2 underline">{`: ${formData?.q21}`}</p>
+                              <p className="ml-2 ">{`: ${formData?.q21}`}</p>
                            </p>
                         </th>
                      </tr>
@@ -421,7 +425,7 @@ const CT_1_Setgets = (props) => {
                         <tr className="border-t-0 h-12">
                            <th>
                               <p className="mt-5">
-                                 <Input className=" w-full " style={{ textAlign: 'center' }} />
+                                 <Input className="w-full " style={{ textAlign: 'center' }} />
                               </p>
                            </th>
                         </tr>
@@ -434,7 +438,7 @@ const CT_1_Setgets = (props) => {
                         <th>
                            <p className="flex items-center">
                               <p>Хам шинжийн онош</p>
-                              <p className="ml-2 underline" id="child">{`: ${formData?.q22}`}</p>
+                              <p className="ml-2 " id="child">{`: ${formData?.q22}`}</p>
                            </p>
                         </th>
                      </tr>
@@ -446,7 +450,7 @@ const CT_1_Setgets = (props) => {
                         <th>
                            <p className="flex items-center">
                               <p>Эмчилгээ сувилгааны заалт</p>
-                              <p className="ml-2 underline" id="child">{`: ${formData?.q23}`}</p>
+                              <p className="ml-2 " id="child">{`: ${formData?.q23}`}</p>
                            </p>
                         </th>
                      </tr>

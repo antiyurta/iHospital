@@ -1,6 +1,7 @@
 import React from 'react';
 import { Table } from 'react-bootstrap';
 import { Checkbox, Input } from 'antd';
+import { TextWithUnderline } from './utils';
 const CT_1_Zurh = (props) => {
    const {
       data: { formData }
@@ -47,7 +48,14 @@ const CT_1_Zurh = (props) => {
                               </Checkbox>
                               <Checkbox value={'q3-2'}>
                                  Хэвийн бус
-                                 <Input className=" w-10" value={'q3-2-1'} style={{ textAlign: 'center' }} />
+                                 {/* <Input
+                                    className=" w-10"
+                                    value={formData?.['q3-2-1']}
+                                    style={{ textAlign: 'center' }}
+                                 /> */}
+
+                                 <TextWithUnderline>{formData?.['q3-2-1'] || ''}</TextWithUnderline>
+
                               </Checkbox>
                            </Checkbox.Group>
                         </th>
@@ -63,7 +71,7 @@ const CT_1_Zurh = (props) => {
                         <th className="w-[220px]">
                            {' '}
                            Амьсгал 1 минутанд
-                           <Input value={formData?.q4} />
+                           <Input className="w-10" style={{ textAlign: 'center' }} value={formData?.q4} />
                            удаа
                         </th>
                         <th colSpan={3}>
@@ -120,11 +128,14 @@ const CT_1_Zurh = (props) => {
                            </Checkbox.Group>
                            <th id="child">
                               АД баруун талд
-                              <Input className=" w-8" value={formData?.q10} style={{ textAlign: 'center' }} />
+                              <TextWithUnderline>{formData?.q10 || ''}</TextWithUnderline>
+                              {/* <Input className=" w-8" value={formData?.q10} style={{ textAlign: 'center' }} /> */}
                            </th>
                            <th id="child">
                               Зүүн талд
-                              <Input className=" w-8" value={formData?.q11} style={{ textAlign: 'center' }} />
+                              {/* <Input className=" w-8" value={formData?.q11} style={{ textAlign: 'center' }} /> */}
+                              <TextWithUnderline>{formData?.q11 || ''}</TextWithUnderline>
+
                            </th>
                         </th>
                      </tr>
@@ -154,11 +165,14 @@ const CT_1_Zurh = (props) => {
                               <Checkbox value={'q13-2'}>Гүн тэмтрэлтээр</Checkbox>
                               <Checkbox value={'q13-6'}>
                                  Эмзэглэлтэй (байрлал
-                                 <Input
+                                 {/* <Input
                                     className=" w-8"
                                     value={formData?.['q13-6-1']}
                                     style={{ textAlign: 'center' }}
-                                 />
+                                 /> */}
+
+                                 <TextWithUnderline>{formData?.['q13-6-1'] || ''}</TextWithUnderline>
+
                                  )
                               </Checkbox>
                            </Checkbox.Group>
@@ -233,7 +247,7 @@ const CT_1_Zurh = (props) => {
                         <th colSpan={4} className="h-16">
                            <div className="flex items-center">
                               <p>Зовиур, өвчний түүх:</p>
-                              <p className="ml-2 underline" id="child">{` ${formData?.q18}`}</p>
+                              <p className="ml-2 " id="child">{` ${formData?.q18}`}</p>
                            </div>
                         </th>
                      </tr>
@@ -241,7 +255,7 @@ const CT_1_Zurh = (props) => {
                         <th colSpan={4} className="h-16">
                            <div className="flex items-center">
                               <p> Зүрх судасны эрсдэлт хүчин зүйлс:</p>
-                              <p className="ml-2 underline" id="child">{` ${formData?.q19}`}</p>
+                              <p className="ml-2 " id="child">{` ${formData?.q19}`}</p>
                            </div>
                         </th>
                      </tr>
@@ -309,11 +323,13 @@ const CT_1_Zurh = (props) => {
                               <Checkbox value={'q21-1'}>Үгүй</Checkbox>
                               <Checkbox value={'q21-2'}>
                                  Тийм
-                                 <Input
+                                 {/* <Input
                                     className=" w-40"
                                     value={formData?.['q21-2-1']}
                                     style={{ textAlign: 'center' }}
-                                 />
+                                 /> */}
+                                 <TextWithUnderline>{formData?.['q21-2-1'] || ''}</TextWithUnderline>
+
                               </Checkbox>
                            </Checkbox.Group>
                            <th id="child">Захын хаван бий эсэх:</th>
@@ -321,11 +337,13 @@ const CT_1_Zurh = (props) => {
                               <Checkbox value={'q22-1'}>Үгүй</Checkbox>
                               <Checkbox value={'q22-2'}>
                                  Тийм
-                                 <Input
+                                 {/* <Input
                                     className=" w-40"
                                     value={formData?.['q22-2-1']}
                                     style={{ textAlign: 'center' }}
-                                 />
+                                 /> */}
+                                 <TextWithUnderline>{formData?.['q22-2-1'] || ''}</TextWithUnderline>
+
                               </Checkbox>
                            </Checkbox.Group>
                            <th id="child">Гүрээний венийн лугшилт</th>
@@ -713,7 +731,7 @@ const CT_1_Zurh = (props) => {
                         <th colSpan={2}>
                            <div className="flex items-center">
                               <p>Хийгдсэн шинжилгээний үр дүн:</p>
-                              <p className="ml-2 underline" id="child">{`: ${formData?.q46}`}</p>
+                              <p className="ml-2 " id="child">{`: ${formData?.q46}`}</p>
                            </div>
                         </th>
                      </tr>
@@ -721,7 +739,7 @@ const CT_1_Zurh = (props) => {
                         <th colSpan={4}>
                            <th className="flex items-center">
                               <p>Зүрхний цохилтын байдал:</p>
-                              <p className="ml-2 underline" id="child">{`: ${formData?.q47}`}</p>
+                              <p className="ml-2 " id="child">{`: ${formData?.q47}`}</p>
                            </th>
                            <th className="flex items-center">
                               <p id="child"> Давтамж:</p>
@@ -753,7 +771,7 @@ const CT_1_Zurh = (props) => {
                         <th colSpan={2} className="h-20 ">
                            <div className="flex items-center">
                               <p>Бусад шинжилгээ:</p>
-                              <p className="ml-2 underline" id="child">{`: ${formData?.q54}`}</p>
+                              <p className="ml-2 " id="child">{`: ${formData?.q54}`}</p>
                            </div>
                         </th>
                      </tr>
@@ -762,7 +780,7 @@ const CT_1_Zurh = (props) => {
                      </tr>
                      <tr>
                         <th colSpan={2} className="h-20">
-                           <p className="ml-2 underline" id="child">{` ${formData?.q55}`}</p>
+                           <p className="ml-2 " id="child">{` ${formData?.q55}`}</p>
                         </th>
                      </tr>
                      <tr>
@@ -770,7 +788,7 @@ const CT_1_Zurh = (props) => {
                      </tr>
                      <tr>
                         <th colSpan={2} className="h-20">
-                           <p className="ml-2 underline" id="child">{` ${formData?.q56}`}</p>
+                           <p className="ml-2 " id="child">{` ${formData?.q56}`}</p>
                         </th>
                      </tr>
                      <tr>
@@ -778,7 +796,7 @@ const CT_1_Zurh = (props) => {
                      </tr>
                      <tr>
                         <th colSpan={2} className="h-36">
-                           <p className="ml-2 underline" id="child">{` ${formData?.q57}`}</p>
+                           <p className="ml-2 " id="child">{` ${formData?.q57}`}</p>
                         </th>
                      </tr>
                      <tr className="h-8">
@@ -795,6 +813,7 @@ const CT_1_Zurh = (props) => {
             </div>
          </div>
       </div>
+
    );
 };
 export default CT_1_Zurh;
