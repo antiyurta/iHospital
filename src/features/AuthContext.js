@@ -1,5 +1,5 @@
 import React, { createContext, useState } from 'react';
-import jwt_decode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 //redux
@@ -15,7 +15,7 @@ export const AuthContextProvider = ({ children }) => {
    const [user, setUser] = useState(() => {
       if (localStorage.getItem('tokens')) {
          let tokens = JSON.parse(localStorage.getItem('tokens'));
-         return jwt_decode(tokens.accessToken);
+         return jwtDecode(tokens.accessToken);
       }
       return null;
    });
@@ -26,7 +26,7 @@ export const AuthContextProvider = ({ children }) => {
          .then(({ data: { response } }) => {
             dispatch(login(response.accessToken));
             localStorage.setItem('tokens', JSON.stringify(response));
-            setUser(jwt_decode(response.accessToken));
+            setUser(jwtDecode(response.accessToken));
             navigate('/profile');
          })
          .catch((error) => {

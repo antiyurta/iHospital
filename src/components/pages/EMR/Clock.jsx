@@ -18,6 +18,8 @@ const Clock = ({ startDate, endDate, isDisable }) => {
       const differenceInMinutes = endMoment.diff(startMoment, 'minutes');
       if (differenceInMinutes >= 10) {
          isDisable(false);
+      } else {
+         isDisable(true);
       }
    }, [time]);
    useEffect(() => {

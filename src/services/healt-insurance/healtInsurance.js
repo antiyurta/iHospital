@@ -12,6 +12,14 @@ class HealthInsurance {
    async savePrescription(data) {
       return await jwtInterceopter.post('health-insurance/save-prescription', data);
    }
+   /** 4.7 Онош-д хамаарах эмийн мэдээлэл лавлах сервис*/
+   async getTabletByDiagnosis(data) {
+      return await jwtInterceopter.get('health-insurance/tablet-by-diagnosis', {
+         params: {
+            ...data
+         }
+      });
+   }
    /** 4.17 Эрүүл мэндийн тусламж үйлчилгээг цуцлах */
    async cancelService(data) {
       return await jwtInterceopter.post('health-insurance/cancel-service', data);

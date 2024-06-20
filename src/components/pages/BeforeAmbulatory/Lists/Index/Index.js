@@ -27,6 +27,8 @@ import healthInsuranceApi from '@ApiServices/healt-insurance/healtInsurance';
 import AppointmentApi from '@ApiServices/appointment/api-appointment-service';
 //columns
 import { outDoctorColumns, outNurseColumns, inColumns, surguryColumns } from './columns';
+//utils
+import { RequireTenMinIds, RequireCreateSealIds } from '@Utils/config/insurance';
 
 function Index({ type, isDoctor, isSurgeyBoss }) {
    //type 0 bol ambultor
@@ -47,6 +49,7 @@ function Index({ type, isDoctor, isSurgeyBoss }) {
    const [spinner, setSpinner] = useState(false);
    // suul newew 8.1
    const [selectedRow, setSelectedRow] = useState();
+   const [selectedHicsService, setSelectedHicsService] = useState({});
    const [isOpenModalStartService, setIsOpenModalStartService] = useState(false);
    const [hicsSupports, setHicsSupports] = useState([]);
    //
@@ -138,10 +141,16 @@ function Index({ type, isDoctor, isSurgeyBoss }) {
             if (row.startDate === null && isDoctor) {
                if (row.isInsurance) {
                   if (row.type != 1) {
+                     startFormHics.resetFields();
                      const hicsServiceIds = row?.cabinet?.hicsServiceIds || [];
                      await healthInsuranceApi
                         .getHicsService()
                         .then(({ data }) => {
+                           if (row.hicsSeal?.hicsServiceId) {
+                              const current = data.result?.find((supp) => supp.id === row.hicsSeal?.hicsServiceId);
+                              setSelectedHicsService(current);
+                              startFormHics.setFieldValue('hicsServiceId', row.hicsSeal?.hicsServiceId);
+                           }
                            setHicsSupports(
                               data.result.filter((hicsService) => hicsServiceIds.includes(hicsService.id))
                            );
@@ -153,8 +162,6 @@ function Index({ type, isDoctor, isSurgeyBoss }) {
                               'Даатгалтай холбогдож чадсангүй та түр хүлээгээд дахин оролдоно уу'
                            );
                         });
-                     startFormHics.resetFields();
-                     startFormHics.setFieldValue('hicsServiceId', row.hicsSeal?.hicsServiceId);
                      setIsOpenModalStartService(true);
                   } else {
                      CreateHicsSeal(
@@ -321,7 +328,7 @@ function Index({ type, isDoctor, isSurgeyBoss }) {
                   });
                } else {
                   // create seal hiih
-                  CreateHicsSeal(selectedRow, data.result, 201);
+                  CreateHicsSeal(selectedRow, data.result, 299);
                }
             }
          });
@@ -392,6 +399,7 @@ function Index({ type, isDoctor, isSurgeyBoss }) {
             return Numberer.concat(surguryColumns, LastButton);
          }
       }
+      return [];
    };
    // column configure
    // filter
@@ -474,18 +482,16 @@ function Index({ type, isDoctor, isSurgeyBoss }) {
                startFormHics
                   .validateFields()
                   .then((values) => {
-                     if (!selectedRow.hicsSealId || !selectedRow.addHicsId) {
-                        if (values.hicsServiceId === 20110 || values.hicsServiceId === 20120) {
-                           startAmbulatory(values);
-                        } else if (values.hicsServiceId === 20150 || values.hicsServiceId === 20160) {
-                           CreateHicsSeal(
-                              selectedRow,
-                              {
-                                 hicsServiceId: values.hicsServiceId
-                              },
-                              201
-                           );
-                        }
+                     if (RequireTenMinIds.includes(values.hicsServiceId)) {
+                        startAmbulatory(values);
+                     } else if (RequireCreateSealIds.includes(values.hicsServiceId)) {
+                        CreateHicsSeal(
+                           selectedRow,
+                           {
+                              hicsServiceId: values.hicsServiceId
+                           },
+                           199
+                        );
                      } else {
                         hrefEMR(selectedRow, null, null);
                      }
@@ -498,22 +504,6 @@ function Index({ type, isDoctor, isSurgeyBoss }) {
          >
             <Form form={startFormHics} layout="vertical">
                <div className="w-full flex flex-col gap-3">
-                  <div className="rounded-md bg-[#F3F4F6] w-full inline-block p-2">
-                     <Finger
-                        form={startFormHics}
-                        insurance={true}
-                        noStyle
-                        name="fingerprint"
-                        rules={[
-                           {
-                              required: true,
-                              message: 'Иргэний хурууны хээ заавал'
-                           }
-                        ]}
-                     >
-                        <Input />
-                     </Finger>
-                  </div>
                   <Form.Item
                      label="Т.Ү-ний дугаар"
                      name="hicsServiceId"
@@ -529,6 +519,10 @@ function Index({ type, isDoctor, isSurgeyBoss }) {
                      className="mb-0"
                   >
                      <Select
+                        onSelect={(value) => {
+                           const current = hicsSupports?.find((supp) => supp.id === value);
+                           setSelectedHicsService(current);
+                        }}
                         disabled={selectedRow?.hicsSealId ? true : false}
                         placeholder="Үйлчилгээний төрөл сонгох"
                         options={hicsSupports.map((hicsSupport) => ({
@@ -537,6 +531,24 @@ function Index({ type, isDoctor, isSurgeyBoss }) {
                         }))}
                      />
                   </Form.Item>
+                  {selectedHicsService?.isFinger ? (
+                     <div className="rounded-md bg-[#F3F4F6] w-full inline-block p-2">
+                        <Finger
+                           form={startFormHics}
+                           insurance={true}
+                           noStyle
+                           name="fingerprint"
+                           rules={[
+                              {
+                                 required: true,
+                                 message: 'Иргэний хурууны хээ заавал'
+                              }
+                           ]}
+                        >
+                           <Input />
+                        </Finger>
+                     </div>
+                  ) : null}
                </div>
             </Form>
          </Modal>

@@ -145,10 +145,6 @@ class NewEmr extends React.Component {
       console.log('Үзлэг дуусав');
    }
    render() {
-      const RenderIcon = ({ state }) => {
-         if (state) return <FullscreenOutlined />;
-         return <FullscreenExitOutlined />;
-      };
       return (
          <EmrContextProvider>
             <div className="new-emr">
@@ -231,12 +227,18 @@ class NewEmr extends React.Component {
                                     <Button
                                        onClick={() => {
                                           this.setState({
-                                             isExpandHistory: !this.state.isExpandHistory,
+                                             isExpandHistory: true,
                                              isExpandInspection: !this.state.isExpandInspection,
                                              isExpandOneWindow: !this.state.isExpandOneWindow
                                           });
                                        }}
-                                       icon={<RenderIcon state={this.state.isExpandHistory} />}
+                                       icon={
+                                          this.state.isExpandHistory ? (
+                                             <FullscreenOutlined />
+                                          ) : (
+                                             <FullscreenExitOutlined />
+                                          )
+                                       }
                                     />
                                  </div>
                                  <div className="px-2">

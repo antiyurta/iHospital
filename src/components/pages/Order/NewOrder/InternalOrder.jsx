@@ -110,7 +110,6 @@ const InternalOrder = (props) => {
          } else {
             await Promise.all(
                value.map(async (item) => {
-                  console.log('item', item);
                   let service = {
                      isCito: false,
                      id: item.id,
@@ -159,7 +158,6 @@ const InternalOrder = (props) => {
                         }
                      }
                   }
-
                   switch (item.type) {
                      case 0:
                         service.typeId = item.examinationTypeId;
@@ -197,7 +195,6 @@ const InternalOrder = (props) => {
                         service.total = 0;
                         break;
                   }
-
                   services.push(service);
                })
             );
@@ -269,7 +266,7 @@ const InternalOrder = (props) => {
          if (!selectedApi) throw new Error('Unknown service type');
          const exams = services.filter((service) => service.type === 0 || service.type === 1);
          await selectedApi(idMap[type], {
-            hasExam: exams?.length > 0 ? true : false
+            hasExam: addHics.hasExam ? true : exams?.length > 0 ? true : false
          }).then(({ data: { response } }) => {
             dispatch(dispatchMap[type](response));
             save(services);

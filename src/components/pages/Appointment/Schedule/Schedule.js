@@ -9,7 +9,7 @@ function Schedule() {
       { label: 'Оношилгооны хуваарь', key: 3, children: <Index type={3} /> }
    ];
    return (
-      <div className="p-3 w-full bg-[#f5f6f7] overflow-auto">
+      <div className="p-3 w-full bg-[#f5f6f7] h-screen">
          <Tabs type="card" items={tabs} />
       </div>
    );

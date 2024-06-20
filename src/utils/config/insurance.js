@@ -1,16 +1,13 @@
-const AmbulatoryGroupIds = [201];
-
-const OperationIds = [];
-
-const xrayTreatmentIds = [20120, 20340];
-
-const AmbulatoryGroupId = 201;
+/** 10 min shaarddag service uud */
+const RequireTenMinIds = [20110, 20120, 20810];
+/** seal uusgeh */
+const RequireCreateSealIds = [20150, 20160];
+// ** approval
+const isRequireHicsServiceIds = [20340, 20820];
 
 const InpatientGroupIds = [208, 212];
 
-const UrgentGroupId = 201;
-
-export { AmbulatoryGroupId, AmbulatoryGroupIds, InpatientGroupIds, UrgentGroupId, xrayTreatmentIds };
+export { RequireTenMinIds, RequireCreateSealIds, InpatientGroupIds, isRequireHicsServiceIds };
 
 //api
 import inspectionNoteApi from '@ApiServices/emr/inspectionNote';
@@ -28,6 +25,20 @@ const getInspectionNote = async (id) => {
    return 'TEST';
 };
 
+const getAddHics = async (id) => {
+   if (id) {
+      return await insuranceApi
+         .getByIdAddHics(id)
+         .then(({ data: { response } }) => response)
+         .catch((error) => {
+            return error;
+         });
+   }
+   return {
+      description: 'Битүүмж олдохгүй байна'
+   };
+};
+
 const getHicsSeal = async (id) => {
    if (id) {
       return await insuranceApi
@@ -42,11 +53,12 @@ const getHicsSeal = async (id) => {
    };
 };
 
-export const setSealForHics = async (patient, hicsSealId, values, isInsurance) => {
+export const setSealForHics = async (patient, hicsSealId, values, isInsurance, addHicsId) => {
    try {
-      console.log('hicsSeal=========>', hicsSealId);
       const hicsSeal = await getHicsSeal(hicsSealId);
-      console.log('hicsSeal=========>', hicsSeal);
+      const addHics = await getAddHics(addHicsId);
+      const currentHics = hicsSeal.diagnosis || addHics.diagnosis;
+      console.log('currentHics=========>', currentHics);
       const data = {
          patientRegno: patient.registerNumber,
          patientFingerprint: values.finger,
@@ -67,7 +79,7 @@ export const setSealForHics = async (patient, hicsSealId, values, isInsurance) =
          phoneNo: patient.phoneNo,
          bloodType: hicsSeal.bloodType,
          diagnosis: {
-            ...(hicsSeal.diagnosis || addHics.diagnosis),
+            ...currentHics,
             description: hicsSeal.description || (await getInspectionNote())
          },
          isLiver: patient.isLiver ? 1 : 2,
