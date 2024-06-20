@@ -18,100 +18,96 @@ const DocumentViewer = () => {
 
    const htmlToPDF = async () => {
       try {
-         setPrintLoading(true);
+         // setPrintLoading(true);
          const currentContent = currentRef.current.innerHTML;
-         // ${currentContent}
-         const response = await DApi.generatePDF({
-            pages: [
-               {
+         const result = documentViewerInjection(currentContent);
+         if (result?.length > 0) {
+            const response = await DApi.generatePDF({
+               pages: result?.map((rslt) => ({
                   body: `<!DOCTYPE html>
-            <html>
-            <head>
-            <style>
-            .subpage {
-               padding: 1cm
+                  <html>
+                  <head>
+                  <style>
+                  /* paragraph style */
+                  .document-paragraph {
+                     font-size: 10pt;
+                  }
+                  .bold {
+                     font-weight: bold;
+                  }
+                  .upper {
+                     text-transform: uppercase;
+                  }
+                  .center {
+                     text-align: center;
+                  }
+                  .end {
+                     text-align: end;
+                  }
+                  .start {
+                     text-align: flex-start;
+                  }
+                  .document-box {
+                     padding: 0px 6px;
+                     border: 1px solid black;
+                  }
+                  .checkbox {
+                     width: 10px;
+                     min-width: 10px;
+                     height: 10px;
+                     border: 1px solid #000;
+                     display: inline-block;
+                  }
+                  .checkbox.checked:after {
+                     content: '';
+                     display: block;
+                     width: 4px;
+                     height: 7px;
+                     position: relative;
+                     top: 0px;
+                     left: 2px;
+                     border: solid #000;
+                     border-width: 0 2px 2px 0;
+                     transform: rotate(45deg);
+                  }
+                  .page {
+                     width: 100%;
+                  }
+                  .subpage {
+                     padding: 1cm;
+                  }
+                  </style>
+                  </head>
+                  <body>
+                     ${rslt.body}
+                  </body>
+                  </html>
+                  `,
+                  format: rslt.format,
+                  landscape: rslt.landscape
+               }))
+            });
+            if (!response.data.success) {
+               throw new Error(`HTTP error! Status: ${response.status}`);
             }
-            .border-1 {
-               border: 1px solid black;
-            }
-            .text-center {
-               text-align: center
-            }
-            .grid-cols-2 {
-               display:grid;
-               grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-            }
-            .break {
-               clear: both;
-               page-break-after: always;
-            }
-            </style>
-            </head>
-            <body>
-               ${currentContent}
-            </body>
-            </html>
-            `,
-                  format: 'a4',
-                  landscape: false
-               },
-               {
-                  body: `<!DOCTYPE html>
-            <html>
-            <head>
-            <style>
-            .subpage {
-               padding: 1cm
-            }
-            .border-1 {
-               border: 1px solid black;
-            }
-            .text-center {
-               text-align: center
-            }
-            .grid-cols-2 {
-               display:grid;
-               grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-            }
-            .break {
-               clear: both;
-               page-break-after: always;
-            }
-            </style>
-            </head>
-            <body>
-               ${currentContent}
-            </body>
-            </html>
-            `,
-                  format: 'a5',
-                  landscape: false
-               }
-            ]
-         });
-
-         if (!response.data.success) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+            const uint8Array = new Uint8Array(response.data.response.data);
+            const blob = new Blob([uint8Array], { type: 'application/pdf' });
+            const url = window.URL.createObjectURL(blob);
+            setPdfUrl(url);
+            // const newWindow = window.open(url, '_blank');
+            setPrintLoading(false);
+            // if (newWindow) {
+            //    newWindow.focus();
+            // } else {
+            //    console.error('Failed to open PDF in a new window');
+            // }
+            // window.URL.revokeObjectURL(url);
          }
-         const uint8Array = new Uint8Array(response.data.response.data);
-         const blob = new Blob([uint8Array], { type: 'application/pdf' });
-         const url = window.URL.createObjectURL(blob);
-
-         const newWindow = window.open(url, '_blank');
-         setPrintLoading(false);
-         if (newWindow) {
-            newWindow.focus();
-         } else {
-            console.error('Failed to open PDF in a new window');
-         }
-
-         window.URL.revokeObjectURL(url);
       } catch (error) {
          console.error('Error fetching PDF:', error);
          // Handle error as needed
       }
    };
-
    const handlePrint = useReactToPrint({
       onBeforeGetContent: () => setPrintLoading(true),
       onBeforePrint: () => setPrintLoading(false),
@@ -123,7 +119,6 @@ const DocumentViewer = () => {
       <>
          {document?.isExpand ? (
             <div className="new-form print-remove-p">
-
                <ReturnById
                   type={document.children[0]?.usageType}
                   id={document.documentId}
@@ -177,7 +172,6 @@ const DocumentViewer = () => {
                      <Each of={selectedDocument} render={(document) => <Body document={document} />} />
                   ) : null}
                </div>
-               ddddd
             </div>
             <div className="col-span-1 bg-white rounded-xl flex flex-col gap-2 p-2">
                <Button loading={printLoading} icon={<PrinterOutlined />} onClick={() => handlePrint()}>

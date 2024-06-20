@@ -1,3 +1,4 @@
+
 const AmbulatoryGroupIds = [201];
 
 const OperationIds = [];
@@ -137,3 +138,4 @@ export const getPersonalInfo = (patient) => {
       // donorTypeName
    };
 };
+

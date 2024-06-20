@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { getAge, numberToCurrency } from '../../../common';
 import dayjs from 'dayjs';
 import EmrContext from '../../../../features/EmrContext';
+import { Box, FlexRow, Paragraph, TextUnderline, TextUnderlineGroup, TextWithUnderline } from '../Components';
 const CT1End = (props) => {
    const { documentTrigger } = useContext(EmrContext);
    const [formData, setFormData] = useState({});
@@ -38,34 +39,20 @@ const CT1End = (props) => {
    return (
       <div className="page">
          <div className="subpage">
-            <p className="font-bold text-center text-lg">ЭМНЭЛГЭЭС ГАРАХ, ШИЛЖИХ ҮЕИЙН ДҮГНЭЛТ</p>
-            <div className="grid grid-cols-2">
-               <div className="flex flex-row gap-1">
-                  <p>Эцэг /эх/-ийн нэр:</p>
-                  <p
-                     style={{
-                        width: 'calc(100% - 140px)',
-                        borderBottom: '1px dotted black'
-                     }}
-                  >
-                     {history?.patientData?.lastName}
-                  </p>
-               </div>
-               <div className="flex flex-row gap-1">
-                  <p>Өөрийн нэр:</p>
-                  <p
-                     style={{
-                        width: 'calc(100% - 140px)',
-                        borderBottom: '1px dotted black'
-                     }}
-                  >
-                     {history?.patientData?.firstName}
-                  </p>
-               </div>
-            </div>
-            <div className="flex flex-row gap-4">
-               <div className="flex flex-row gap-1 items-center">
-                  <p>Хүйс:</p>
+            <Box>
+               <Paragraph style={{ textAlign: "center" }}>ЭМНЭЛГЭЭС ГАРАХ, ШИЛЖИХ ҮЕИЙН ДҮГНЭЛТ</Paragraph>
+            </Box>
+            <Box style={{ display: "flex", gap: "50px" }}>
+               <Paragraph>Эцэг /эх/-ийн нэр:
+                  <TextWithUnderline >{history?.patientData?.lastName}</TextWithUnderline>
+               </Paragraph>
+               <Paragraph>Өөрийн нэр:
+                  <TextWithUnderline>{history?.patientData?.firstName}</TextWithUnderline>
+               </Paragraph>
+            </Box>
+            <FlexRow>
+               <Box style={{ display: "flex", textAlign: 'center' }}>
+                  <Paragraph>Хүйс</Paragraph>
                   <Checkbox.Group className="story" value={[history?.patientData?.genderType]}>
                      <Checkbox value={'MAN'} className="test">
                         <span className="text-[13px]">эрэгтэй</span>
@@ -74,114 +61,84 @@ const CT1End = (props) => {
                         <span className="text-[13px]">эмэгтэй</span>
                      </Checkbox>
                   </Checkbox.Group>
-               </div>
-               <div className="flex flex-row gap-1">
-                  <p>Нас:</p>
-                  <p>{getAge(history?.patientData?.registerNumber)}</p>
-               </div>
-            </div>
-            <div className="grid grid-cols-2">
-               <div className="flex flex-row gap-1">
-                  <div className="grid grid-cols-3 w-full">
-                     <div className="flex flex-row gap-1 w-full">
-                        <p
-                           className="text-[14px] text-center w-full"
-                           style={{
-                              borderBottom: '1px dotted black'
-                           }}
-                        >
-                           {dayjs(history?.createdAt).format('YYYY')}
-                        </p>
-                        <p>оны</p>
-                     </div>
-                     <div className="flex flex-row gap-1 w-full">
-                        <p
-                           className="text-[14px] text-center w-full"
-                           style={{
-                              borderBottom: '1px dotted black'
-                           }}
-                        >
-                           {dayjs(history?.createdAt).format('MM')}
-                        </p>
-                        <p>сарын</p>
-                     </div>
-                     <div className="flex flex-row gap-1 w-full">
-                        <p
-                           className="text-[14px] text-center w-full"
-                           style={{
-                              borderBottom: '1px dotted black'
-                           }}
-                        >
-                           {dayjs(history?.createdAt).format('DD')}
-                        </p>
-                        <p>-нд</p>
-                     </div>
-                  </div>
-               </div>
-               <div className="flex flex-row gap-1">
-                  <p
-                     style={{
-                        textAlign: 'center',
-                        width: '100%',
-                        borderBottom: '1px dotted black'
-                     }}
-                  >
-                     {getIncomeDiagnose()}
-                  </p>
-               </div>
-            </div>
-            <p>оношоор эмнэлэгт __________ хоног хэвтэж эмчлүүлэв.</p>
-            <div className="flex flex-row gap-1 w-full">
-               <p className="text-[14px]">Нийт хэрэглэсэн эмийн зардал ( ₮ ): нийт дүн</p>
-               <p
-                  style={{
-                     textAlign: 'center',
-                     width: 'calc(100% - 600px)',
-                     borderBottom: '1px dotted black'
-                  }}
-               >
-                  {numberToCurrency(formData?.q1)}
-               </p>
-               <p className="text-[14px]">тасагт </p>
-            </div>
-            <div className="grid grid-cols-3">
-               <div className="flex flex-row gap-1 w-full">
-                  <p
-                     style={{
-                        textAlign: 'center',
-                        width: '100%',
-                        borderBottom: '1px dotted black'
-                     }}
-                  >
-                     {numberToCurrency(formData?.q2)}
-                  </p>
-                  <p>хагалгаанд</p>
-               </div>
-               <div className="flex flex-row gap-1 w-full">
-                  <p
-                     style={{
-                        textAlign: 'center',
-                        width: '45%',
-                        borderBottom: '1px dotted black'
-                     }}
-                  >
-                     {numberToCurrency(formData?.q3)}
-                  </p>
-                  <p>мэдээ алдуулалтанд</p>
-               </div>
-               <div className="flex flex-row gap-1 w-full">
-                  <p
-                     style={{
-                        textAlign: 'center',
-                        width: '100%',
-                        borderBottom: '1px dotted black'
-                     }}
-                  >
-                     {numberToCurrency(formData?.q4)}
-                  </p>
-               </div>
-            </div>
-            <Row className="flex justify-between">
+               </Box>
+               <Box>
+                  Нас:
+                  <TextWithUnderline>{getAge(history?.patientData?.registerNumber)}</TextWithUnderline>
+               </Box>
+               <Box style={{ display: "flex", gap: "10px" }}>
+                  <Paragraph>{dayjs(history?.createdAt).format('YYYY')}оны</Paragraph>
+                  <Paragraph>{dayjs(history?.createdAt).format('MM')}сарын</Paragraph>
+                  <Paragraph>{dayjs(history?.createdAt).format('DD')}-нд</Paragraph>
+                  <Paragraph>{getIncomeDiagnose()}</Paragraph>
+               </Box>
+            </FlexRow>
+            <Box>
+               <Paragraph>оношоор эмнэлэгт __________ хоног хэвтэж эмчлүүлэв.</Paragraph>
+            </Box>
+            <Box>
+               <Paragraph>Нийт хэрэглэсэн эмийн зардал ( ₮ ): нийт дүн <span className='p-10 underline'>{numberToCurrency(formData?.q1)}</span> тасагт</Paragraph>
+            </Box>
+            <Box>
+               <Paragraph><span className='p-10 underline'>{numberToCurrency(formData?.q2)}</span> хагалгаанд <span className='p-10 underline'>{numberToCurrency(formData?.q3)}</span> мэдээ алдуулалтанд <span className='p-10 underline'>{numberToCurrency(formData?.q4)}</span></Paragraph>
+            </Box>
+
+
+
+
+
+
+
+
+
+            <Box>
+               Үндсэн онош:<span className='p-10 underline text-center'>{getDiagnose()}</span>
+            </Box>
+            <Box>
+               Хүндрэл:<span className='p-10 underline  text-center'>{getDiagnose()}</span>
+            </Box>
+            <Box>
+               Дагалдах онош:<span className='p-10 underline  text-center'>{getDiagnose()}</span>
+            </Box>
+            <Box>
+               Шинжилгээний өөрчлөлтүүд /зөвхөн өөрчлөлт бүхий шинжилгээний үзүүлэлтүүдийг бичнэ/<span className='p-10 underline  text-center'>{formData?.q11}</span>
+            </Box>
+            <Box>
+               Цусны ерөнхий шинжилгээ:<span className='p-10 underline  text-center'>{formData?.q12}</span>
+            </Box>
+            <Box>
+               Цусны биохимийн шинжилгээ:<span className='p-10 underline  text-center'>{formData?.q13}</span>
+            </Box>
+            <Box>
+               Вирүс, маркерийн шинжилгээ: <span className='p-10 underline  text-center'>{formData?.q14}</span>
+            </Box>
+
+
+
+
+
+
+
+
+
+
+            <Box>
+               <Paragraph>Мэс заслын эмчилгээ -хийсэн,үгүй/зур/Мэс заслын нэр{formData?.q18}</Paragraph>
+            </Box>
+            <Box>
+               <Paragraph>Шарх эдгэрэлт - анхдагчаар, хоёрдогчоор /зур/{formData?.q19}</Paragraph>
+            </Box>
+            <Box>
+               <Paragraph>Мэс заслын дараах хүндрэл - байсан, үгүй /зур/{formData?.q20}</Paragraph>
+            </Box>
+            <Box>
+               <Paragraph>Мэс заслын дараах хүндрэл -{formData?.['q20-1-1']}</Paragraph>
+            </Box>
+            <Box>
+               <Paragraph>Эмчлэгч эмч _________________________</Paragraph>
+               <Paragraph> __________ он ______ сар ______ өдөр</Paragraph>
+            </Box>
+            {/* <Row className="flex justify-between">
                <Col span={8}>
                   <table
                      style={{
@@ -293,191 +250,82 @@ const CT1End = (props) => {
                      </tbody>
                   </table>
                </Col>
-            </Row>
-            <div className="flex flex-col gap-2">
-               <div className="flex flex-row gap-1">
-                  <p>Үндсэн онош:</p>
-                  <p
-                     style={{
-                        textAlign: 'center',
-                        width: '80%',
-                        borderBottom: '1px dotted black'
-                     }}
-                  >
-                     {getDiagnose()}
-                  </p>
-               </div>
-               <div className="flex flex-row gap-1">
-                  <p>Хүндрэл:</p>
-                  <p
-                     style={{
-                        textAlign: 'center',
-                        width: '80%',
-                        borderBottom: '1px dotted black'
-                     }}
-                  >
-                     {getDiagnose()}
-                  </p>
-               </div>
-               <div className="flex flex-row gap-1">
-                  <p>Дагалдах онош:</p>
-                  <p
-                     style={{
-                        textAlign: 'center',
-                        width: '80%',
-                        borderBottom: '1px dotted black'
-                     }}
-                  >
-                     {getDiagnose()}
-                  </p>
-               </div>
+            </Row> */}
+         </div>
+         {/* <Row className="flex justify-between">
+            {/* <Col span={8}>
+               <table
+                  style={{
+                     borderWidth: '1px',
+                     borderColor: '#aaaaaa',
+                     borderStyle: 'solid',
+                     width: '100%',
+                     marginTop: 20
+                  }}
+                  className="border-collapse border border-slate-500"
+               >
+                  <tbody>
+                     <tr>
+                        <td
+                           rowSpan={5}
+                           className="border border-slate-600"
+                           style={{
+                              writingMode: 'vertical-rl',
+                              textAlign: 'center',
+                              verticalAlign: 'middle',
+                              transform: 'rotate(180deg)',
+                              height: 120
+                           }}
+                        >
+                           Хийгдсэн эмчилгээ
+                        </td>
+                     </tr>
+                     <tr>
+                        <td className="border border-slate-600">Эмийн</td>
+                        <td className="border border-slate-600 text-center">{getBodyCondition(formData?.q15, 1)}</td>
+                     </tr>
+                     <tr>
+                        <td className="border border-slate-600">Эмийн бус</td>
+                        <td className="border border-slate-600 text-center">{getBodyCondition(formData?.q15, 2)}</td>
+                     </tr>
+                     <tr>
+                        <td className="border border-slate-600">Мэс заслын</td>
+                        <td className="border border-slate-600 text-center">{getBodyCondition(formData?.q15, 3)}</td>
+                     </tr>
+                     <tr>
+                        <td className="border border-slate-600">Бусад</td>
+                        <td className="border border-slate-600 text-center">{getBodyCondition(formData?.q15, 4)}</td>
+                     </tr>
+                  </tbody>
+               </table>
+            </Col> */}
+         {/* <Col span={14}>
+            <div className="border border-black mt-[20px]">
                <div className="flex flex-wrap">
-                  <p>
-                     {`Шинжилгээний өөрчлөлтүүд /зөвхөн өөрчлөлт бүхий шинжилгээний үзүүлэлтүүдийг бичнэ/: `}
-                     <span className="underline">{formData?.q11}</span>
+                  <p className="mt-2">
+                     {`Бусад эмчилгээ: `}
+                     <span className="underline">{formData?.q16}</span>
                   </p>
                </div>
-               <div className="flex flex-wrap">
-                  <p>
-                     {`Цусны ерөнхий шинжилгээ: `}
-                     <span className="underline">{formData?.q12}</span>
-                  </p>
-               </div>
-               <div className="flex flex-wrap">
-                  <p>
-                     {`Цусны биохимийн шинжилгээ: `}
-                     <span className="underline">{formData?.q13}</span>
-                  </p>
-               </div>
-               <div className="flex flex-wrap">
-                  <p>
-                     {`Вирүс, маркерийн шинжилгээ: `}
-                     <span className="underline">{formData?.q13}</span>
-                  </p>
-               </div>
-            </div>
-            <Row className="flex justify-between">
-               <Col span={8}>
-                  <table
-                     style={{
-                        borderWidth: '1px',
-                        borderColor: '#aaaaaa',
-                        borderStyle: 'solid',
-                        width: '100%',
-                        marginTop: 20
-                     }}
-                     className="border-collapse border border-slate-500"
-                  >
-                     <tbody>
-                        <tr>
-                           <td
-                              rowSpan={5}
-                              className="border border-slate-600"
-                              style={{
-                                 writingMode: 'vertical-rl',
-                                 textAlign: 'center',
-                                 verticalAlign: 'middle',
-                                 transform: 'rotate(180deg)',
-                                 height: 120
-                              }}
-                           >
-                              Хийгдсэн эмчилгээ
-                           </td>
-                        </tr>
-                        <tr>
-                           <td className="border border-slate-600">Эмийн</td>
-                           <td className="border border-slate-600 text-center">{getBodyCondition(formData?.q15, 1)}</td>
-                        </tr>
-                        <tr>
-                           <td className="border border-slate-600">Эмийн бус</td>
-                           <td className="border border-slate-600 text-center">{getBodyCondition(formData?.q15, 2)}</td>
-                        </tr>
-                        <tr>
-                           <td className="border border-slate-600">Мэс заслын</td>
-                           <td className="border border-slate-600 text-center">{getBodyCondition(formData?.q15, 3)}</td>
-                        </tr>
-                        <tr>
-                           <td className="border border-slate-600">Бусад</td>
-                           <td className="border border-slate-600 text-center">{getBodyCondition(formData?.q15, 4)}</td>
-                        </tr>
-                     </tbody>
-                  </table>
-               </Col>
-               <Col span={14}>
-                  <div className="border border-black mt-[20px]">
-                     <div className="flex flex-wrap">
-                        <p className="mt-2">
-                           {`Бусад эмчилгээ: `}
-                           <span className="underline">{formData?.q16}</span>
-                        </p>
-                     </div>
-                     <Checkbox.Group className="story" value={[formData?.q17]}>
-                        {`Цус, цусан бүтээгдэхүүн сэлбэсэн эсэх `}
-                        <Checkbox value={'q17-1'} className="test">
-                           <span className="text-[13px]">тийм</span>
-                        </Checkbox>
-                        ,
-                        <Checkbox value={'q17-2'} className="test">
-                           <span className="text-[13px]">үгүй</span>
-                        </Checkbox>
-                        - /зур/
-                     </Checkbox.Group>
-                  </div>
-               </Col>
-            </Row>
-            <div className="flex flex-col gap-1 pt-2">
-               <div className="flex flex-wrap">
-                  <span>
-                     <Checkbox.Group className="story" value={[formData?.q18]}>
-                        {`Мэс заслын эмчилгээ - `}
-                        <Checkbox value={'q18-1'} className="test">
-                           <span className="text-[13px]">хийсэн</span>
-                        </Checkbox>
-                        ,
-                        <Checkbox value={'q18-2'} className="test">
-                           <span className="text-[13px]">үгүй</span>
-                        </Checkbox>
-                        {` /зур/ `}
-                     </Checkbox.Group>
-                     {`Мэс заслын нэр `}
-                     <span className="underline">{formData?.q11}</span>
-                  </span>
-               </div>
-               <Checkbox.Group className="story" value={[formData?.q19]}>
-                  {`Шарх эдгэрэлт - `}
-                  <Checkbox value={'q19-1'} className="test">
-                     <span className="text-[13px]">анхдагчаар</span>
+               <Checkbox.Group className="story" value={[formData?.q17]}>
+                  {`Цус, цусан бүтээгдэхүүн сэлбэсэн эсэх `}
+                  <Checkbox value={'q17-1'} className="test">
+                     <span className="text-[13px]">тийм</span>
                   </Checkbox>
                   ,
-                  <Checkbox value={'q19-2'} className="test">
-                     <span className="text-[13px]">хоёрдогчоор</span>
+                  <Checkbox value={'q17-2'} className="test">
+                     <span className="text-[13px]">үгүй</span>
                   </Checkbox>
-                  /зур/
+                  - /зур/
                </Checkbox.Group>
-               <div className="flex flex-wrap">
-                  <span>
-                     <Checkbox.Group className="story" value={[formData?.q20]}>
-                        {`Мэс заслын дараах хүндрэл - `}
-                        <Checkbox value={'q20-1'} className="test">
-                           <span className="text-[13px]">байсан</span>
-                        </Checkbox>
-                        ,
-                        <Checkbox value={'q20-2'} className="test">
-                           <span className="text-[13px]">үгүй</span>
-                        </Checkbox>
-                        {` /зур/ `}
-                     </Checkbox.Group>
-                     {` Хүндрэлийн нэр `}
-                     <span className="underline">{formData?.q11}</span>
-                  </span>
-               </div>
             </div>
-            <div className="flex flex-col gap-1 items-center">
-               <p>Эмчлэгч эмч _________________________</p>
-               <p>__________ он ______ сар ______ өдөр</p>
-            </div>
+         </Col>
+      </Row> * /} */}
+         <div className="flex flex-col gap-1 items-center">
+            <p>Эмчлэгч эмч _________________________</p>
+            <p>__________ он ______ сар ______ өдөр</p>
          </div>
-      </div>
+      </div >
    );
 };
 export default CT1End;
