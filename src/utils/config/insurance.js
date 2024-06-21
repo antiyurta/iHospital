@@ -8,12 +8,41 @@ const isRequireHicsServiceIds = [20340, 20820];
 const InpatientGroupIds = [208, 212];
 
 export { RequireTenMinIds, RequireCreateSealIds, InpatientGroupIds, isRequireHicsServiceIds };
-
+import { openNofi } from '@Comman/common';
 //api
 import inspectionNoteApi from '@ApiServices/emr/inspectionNote';
 import insuranceApi from '@ApiServices/healt-insurance/insurance';
 import healtInsurance from '@ApiServices/healt-insurance/healtInsurance';
-import { openNofi } from '@Comman/common';
+
+export const findInclueDiagnosis = (hicsSeal, addHics) => {
+   if (hicsSeal.diagnosis != null) {
+      return hicsSeal;
+   }
+   return addHics;
+};
+
+export const isPayAmountCit = (freeTypeId, hicsSeal, amounts) => {
+   const icdCode = hicsSeal.diagnosis?.icdCode || null;
+   if (
+      (amounts.amountCit > 0 && freeTypeId > 0) ||
+      (amounts.amountCit > 0 &&
+         icdCode &&
+         ['A', 'B', 'P', 'F', 'O'].some((char) => char.toLowerCase() === icdCode[0].toLowerCase()))
+   ) {
+      return {
+         amountCit: 0,
+         amountHi: hicsSeal.hicsServiceId === 20120 ? amounts.amountHi : amounts.amountTotal,
+         price: amounts.amountTotal,
+         oPrice: amounts.amountTotal
+      };
+   }
+   return {
+      amountCit: amounts.amountCit,
+      amountHi: amounts.amountHi,
+      price: amounts.amountTotal,
+      oPrice: amounts.amountTotal
+   };
+};
 
 const getInspectionNote = async (id) => {
    if (id) {
@@ -74,7 +103,7 @@ export const setSealForHics = async (patient, hicsSealId, values, isInsurance, a
          departNo: hicsSeal.department?.id,
          departName: hicsSeal.department?.name,
          isForeign: 0,
-         freeTypeId: 0,
+         freeTypeId: patient.freeTypeId,
          historyCode: hicsSeal.patientHistoryCode,
          phoneNo: patient.phoneNo,
          bloodType: hicsSeal.bloodType,

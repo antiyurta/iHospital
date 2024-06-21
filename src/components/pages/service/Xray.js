@@ -114,15 +114,21 @@ function Xray() {
          col: 12
       },
       {
-         index: 'hicsExamId',
-         label: 'ЭМД үйлчилгээ',
+         index: 'drgCode',
+         label: 'DRGCODE',
+         isView: true,
+         isSearch: false,
+         input: 'input',
+         col: 12
+      },
+      {
+         index: 'drgTypeCode',
+         label: 'drgTypeCode',
          isView: true,
          isSearch: false,
          input: 'select',
-         inputData: hicsExams,
-         relIndex: 'examName',
-         relValueIndex: 'examCode',
-         col: 24
+         input: 'numberInput',
+         col: 12
       }
    ];
    return (

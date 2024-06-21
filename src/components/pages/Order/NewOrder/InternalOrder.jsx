@@ -18,6 +18,7 @@ import dayjs from 'dayjs';
 import { useDispatch, useSelector } from 'react-redux';
 //common
 import { numberToCurrency, openNofi } from '@Comman/common';
+import { findInclueDiagnosis } from '@Utils/config/insurance';
 //redux
 import {
    delOtsData,
@@ -119,45 +120,14 @@ const InternalOrder = (props) => {
                      specimen: item.specimen,
                      description: item.description,
                      examCode: item.examCode,
-                     amountCit: null,
-                     amountHi: null,
+                     amountCit: item.amountCit,
+                     amountHi: item.amountHi,
                      price: usageType === 'IN' ? item.inpatientPrice : item.price,
                      oPrice: usageType === 'IN' ? item.inpatientPrice : item.price,
                      requestDate: dayjs(new Date()).format('YYYY-MM-DD'),
-                     sealData: null,
-                     approvalData: null
+                     sealData: item.sealData
                   };
-                  if (item.examCode && IncomeEMRData.isInsurance && item.isInsurance && isDoctor) {
-                     const currentSeal = addHics || hicsSeal;
-                     const freeTypeId = selectedPatient.freeTypeId || 0;
-                     const currentIcdCode = currentSeal?.diagnosis?.icdCode;
-                     let currentExam = hicsExams.find((exam) => exam.examCode === item.examCode);
-                     if (currentExam) {
-                        if (currentExam.drgCode) {
-                           service.sealData = {
-                              serviceId: currentExam.serviceId,
-                              drgCode: currentExam.drgCode,
-                              oldServiceId: hicsSeal.hicsServiceId
-                           };
-                        }
-                        service.amountCit = currentExam?.amountCit || 0;
-                        service.amountHi = currentExam?.amountHi || 0;
-                        service.price = currentExam?.amountTotal || 0;
-                        service.oPrice = currentExam?.amountTotal || 0;
-                        if (
-                           (currentExam.amountCit > 0 && freeTypeId > 0) ||
-                           (currentExam.amountCit > 0 &&
-                              currentIcdCode &&
-                              ['A', 'B', 'P', 'F', 'O'].some(
-                                 (char) => char.toLowerCase() === currentIcdCode[0].toLowerCase()
-                              ))
-                        ) {
-                           service.amountCit = 0;
-                           service.price -= currentExam?.amountCit;
-                           service.oPrice -= currentExam?.amountCit;
-                        }
-                     }
-                  }
+
                   switch (item.type) {
                      case 0:
                         service.typeId = item.examinationTypeId;
@@ -195,6 +165,7 @@ const InternalOrder = (props) => {
                         service.total = 0;
                         break;
                   }
+                  console.log('end', service);
                   services.push(service);
                })
             );
@@ -325,8 +296,23 @@ const InternalOrder = (props) => {
             {showSetOrder && <SetOrder handleclick={handleClickSetOrder} />}
             {showRecentRepice && <RecentRecipe />}
             {showSetOrder || showRecentRepice ? <div className="h-full w-[1px] bg-[#c9cdd4]" /> : null}
-            {showExamination && <Examination handleclick={handleclick} />}
-            {showXray && <Xray handleclick={handleclick} />}
+            {showExamination && (
+               <Examination
+                  hicsExams={hicsExams}
+                  selectedPatient={selectedPatient}
+                  hasInsurance={IncomeEMRData.isInsurance}
+                  currentSeal={findInclueDiagnosis(hicsSeal, addHics)}
+                  handleclick={handleclick}
+               />
+            )}
+            {showXray && (
+               <Xray
+                  selectedPatient={selectedPatient}
+                  hasInsurance={IncomeEMRData.isInsurance}
+                  currentSeal={findInclueDiagnosis(hicsSeal, addHics)}
+                  handleclick={handleclick}
+               />
+            )}
             {showTreatment && <Treatment handleclick={handleclick} />}
             {showMedicine && <Medicine usageType={usageType} handleclick={handleclick} />}
             {showSurgery && (

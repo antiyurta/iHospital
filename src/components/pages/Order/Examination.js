@@ -8,22 +8,90 @@ import removeButtonIcon from './removeButton.svg';
 import { ListCareType } from './list-type';
 import { CARE_TYPE } from './care-enum';
 import { ListSupport } from './list-support';
+import { isPayAmountCit } from '@Utils/config/insurance';
 
-export const Examination = ({ handleclick }) => {
+export const Examination = ({ hicsExams, selectedPatient, hasInsurance, currentSeal, handleclick }) => {
+   const [isLoading, setLoading] = useState(false);
    const [isOpenModal, setIsOpenModal] = useState(false);
    const [selectedTypeId, setSelectedTypeId] = useState(null);
    const [selectedExaminations, setSelectedExaminations] = useState([]);
 
-   const add = (examination) => {
+   const add = (examination, isJump) => {
       const state = selectedExaminations.some((exam) => exam.id === examination.id);
       if (state) {
          openNofi('warning', 'Анхааруулга', 'Шинжилгээ сонгогдсон байна');
       } else {
-         var clone = { ...examination };
-         clone.type = examination.type?.type;
-         setSelectedExaminations([...selectedExaminations, clone]);
+         const currentExam = hicsExams.find((exam) => exam.examCode === examination.examCode);
+         if (!isJump && examination.isInsurance && examination.examCode && hasInsurance && currentExam) {
+            setLoading(true);
+            const sealData = currentExam.drgCode
+               ? {
+                    serviceId: currentExam.serviceId,
+                    drgCode: currentExam.drgCode,
+                    oldServiceId: currentSeal.hicsServiceId
+                 }
+               : null;
+            add(
+               {
+                  ...examination,
+                  ...isPayAmountCit(selectedPatient.freeTypeId, currentSeal, currentExam),
+                  sealData: sealData
+               },
+               true
+            );
+            setLoading(false);
+         } else {
+            setSelectedExaminations((prevExaminations) => [
+               ...prevExaminations,
+               {
+                  ...examination,
+                  type: examination.type.type
+               }
+            ]);
+         }
       }
    };
+
+   const columns = [
+      {
+         title: 'Нэр',
+         dataIndex: 'name',
+         render: (name) => <p className="whitespace-normal text-black">{name}</p>
+      },
+      {
+         title: 'Үнэ',
+         children: [
+            {
+               title: 'Даатгал',
+               width: 120,
+               dataIndex: 'amountHi',
+               render: (price) => numberToCurrency(price)
+            },
+            {
+               title: 'Иргэн төлөх',
+               width: 120,
+               dataIndex: 'amountCit',
+               render: (price) => numberToCurrency(price)
+            },
+            {
+               title: 'Нийт',
+               width: 120,
+               dataIndex: 'price',
+               render: (price) => numberToCurrency(price)
+            }
+         ]
+      },
+      {
+         title: '',
+         width: 40,
+         render: (_text, _row, index) => (
+            <div className="flex justify-center hover:cursor-pointer" onClick={() => remove(index)}>
+               <img src={removeButtonIcon} />
+            </div>
+         )
+      }
+   ];
+
    const remove = (index) => {
       var arr = [...selectedExaminations];
       arr.splice(index, 1);
@@ -74,7 +142,13 @@ export const Examination = ({ handleclick }) => {
                </div>
                <div className="grid sm:grid-cols-1 sm:col-span-2 xl:grid-cols-2 lg:col-span-3 gap-2">
                   <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
-                     <ListSupport careType={CARE_TYPE.Examination} careTypeId={selectedTypeId} add={add} />
+                     <ListSupport
+                        careType={CARE_TYPE.Examination}
+                        careTypeId={selectedTypeId}
+                        add={(value) => {
+                           add(value, false);
+                        }}
+                     />
                   </div>
                   <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
                      <div className="p-2">
@@ -85,38 +159,8 @@ export const Examination = ({ handleclick }) => {
                               y: 400
                            }}
                            locale={{ emptyText: <Empty description={'Хоосон'} /> }}
-                           columns={[
-                              {
-                                 title: 'Нэр',
-                                 dataIndex: 'name',
-                                 align: 'left',
-                                 render: (text) => {
-                                    return <p className="whitespace-pre-wrap text-black">{text}</p>;
-                                 }
-                              },
-                              {
-                                 title: 'Үнэ',
-                                 dataIndex: 'price',
-                                 width: 100,
-                                 render: (text) => {
-                                    return numberToCurrency(text);
-                                 }
-                              },
-                              {
-                                 title: '',
-                                 width: 40,
-                                 render: (_text, _row, index) => {
-                                    return (
-                                       <div
-                                          className="flex justify-center hover:cursor-pointer"
-                                          onClick={() => remove(index)}
-                                       >
-                                          <img src={removeButtonIcon} />
-                                       </div>
-                                    );
-                                 }
-                              }
-                           ]}
+                           columns={columns}
+                           loading={isLoading}
                            dataSource={selectedExaminations}
                            pagination={false}
                         />

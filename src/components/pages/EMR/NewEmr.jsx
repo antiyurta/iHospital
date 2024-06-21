@@ -90,10 +90,16 @@ class NewEmr extends React.Component {
       //       okText: 'За'
       //    });
       // } else {
-      this.setState({
-         isOpenWarningModal: true,
-         temporarilyType: value
-      });
+      const currentDiagnosis = this.props.hicsSeal.diagnosis || this.props.addHics.diagnosis;
+      if (currentDiagnosis?.icdCode === undefined || currentDiagnosis?.icdCode === null) {
+         openNofi('error', 'Амжилтгүй', 'Та ямар нэг онош тавина уу');
+      } else {
+         this.setState({
+            isOpenWarningModal: true,
+            temporarilyType: value
+         });
+      }
+
       // }
    };
    saveOrder = async (value) => {
