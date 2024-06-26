@@ -13,8 +13,11 @@ import EBarimtApi from '@ApiServices/ebarimt/ebarimt';
 import PatientApi from '@ApiServices/pms/patient.api';
 import PaymentApi from '@ApiServices/payment/payment';
 import ServiceRequestApi from '@ApiServices/serviceRequest';
+import { useDispatch } from 'react-redux';
+import { delEmrData } from '@Features/emrReducer';
 
 function Invoice() {
+   const dispatch = useDispatch();
    const [orderModal, setOrderModal] = useState(false);
    const [isOpen, setIsOpen] = useState(false);
    const [isLoadingEbarimt, setIsLoadingEbarimt] = useState(false);
@@ -259,6 +262,7 @@ function Invoice() {
    }, [isOpenBeforePaymentModal]);
    useEffect(() => {
       getInformation();
+      dispatch(delEmrData());
    }, []);
    return (
       <div className="w-full flex flex-col">

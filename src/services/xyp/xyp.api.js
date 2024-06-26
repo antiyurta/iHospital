@@ -1,3 +1,4 @@
+import axios from 'axios';
 import jwtInterceopter from '../../components/jwtInterceopter';
 class XypApi {
    /** Иргэний үнэмлэхний мэдээлэл дамжуулах сервис */
@@ -67,6 +68,24 @@ class XypApi {
    /** Эмнэлгийн хуудас бичихэд шаардлагатай байгууллагын мэдээлэл */
    async organizationInfo(regnum) {
       return await jwtInterceopter.get('xyp/organization-info' + regnum);
+   }
+   /** Баталгаажуулах */
+   async verifyDS(signature, regno) {
+      return await jwtInterceopter.get('/crypto/verify', {
+         params: {
+            signature,
+            regno
+         }
+      });
+   }
+   async verifyDSById(id, signature, regno) {
+      return await axios.get(`${process.env.REACT_APP_DEV_URL}crypto/` + id, {
+         params: {
+            signature,
+            regno
+         },
+         responseType: 'blob'
+      });
    }
 }
 export default new XypApi();

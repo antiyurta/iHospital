@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import UTable from '../../UTable';
 import api from '@ApiServices/healt-insurance/healtInsurance';
+import careTypeApi from '@ApiServices/reference/care-type.api';
 
 function Examination() {
    const [examinationTypeData, setExaminationTypeData] = useState([]);

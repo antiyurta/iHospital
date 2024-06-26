@@ -41,6 +41,8 @@ const InternalOrder = (props) => {
    const dispatch = useDispatch();
    const hicsSeal = useSelector(selectCurrentHicsSeal);
    const addHics = useSelector(selectCurrentAddHics);
+   console.log('hicsSeal', hicsSeal);
+   console.log('addHics', addHics);
    const IncomeOTSData = useSelector(selectCurrentOtsData);
    const IncomeEMRData = useSelector(selectCurrentEmrData);
    const [hicsExams, setHicsExams] = useState([]);
@@ -408,7 +410,7 @@ const InternalOrder = (props) => {
                               const newServices = services.filter(
                                  (service) => !service.requestId && !service.invoiceId
                               );
-                              if (addHics.id && hicsSeal.id) {
+                              if (addHics.id && hicsSeal.id && isDoctor) {
                                  if (addHics?.checkupId >= 1) {
                                     updateHics('addHics', newServices);
                                  } else {

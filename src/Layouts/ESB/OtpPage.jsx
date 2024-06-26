@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Button, Form, Input, InputNumber } from 'antd';
+import { Button, Form, InputNumber } from 'antd';
 import XypApi from '@ApiServices/xyp/xyp.api';
 import OTPInput from 'react-otp-input';
 import { openNofi } from '@Comman/common';
-const OTPPage = ({ regNo, setLoading }) => {
+const OTPPage = ({ id, regNo, signature, setLoading, getFile }) => {
+   const [form] = Form.useForm();
    const [otp, setOtp] = useState('');
    const [current, setCurrent] = useState(1);
    const FirstStep = () => {
@@ -26,7 +27,7 @@ const OTPPage = ({ regNo, setLoading }) => {
 
       return (
          <div>
-            <Form layout="vertical" onFinish={getOTP}>
+            <Form form={form} layout="vertical">
                <Form.Item
                   label="Утасны дугаар"
                   name="phoneNum"
@@ -39,7 +40,12 @@ const OTPPage = ({ regNo, setLoading }) => {
                >
                   <InputNumber placeholder="Утасны дугаар" />
                </Form.Item>
-               <Button htmlType="submit" type="primary">
+               <Button
+                  type="primary"
+                  onClick={() => {
+                     form.validateFields().then(getOTP);
+                  }}
+               >
                   илгээх
                </Button>
             </Form>
@@ -51,12 +57,33 @@ const OTPPage = ({ regNo, setLoading }) => {
       await XypApi.checkOtp(regNo, otp).then(({ data: { response } }) => {
          if (response.return.resultCode === 0) {
             setLoading(false);
+            verifyDS();
             openNofi('success', response.return.resultMessage);
          } else {
             openNofi('error', response.return.resultMessage);
             setLoading(false);
          }
       });
+   };
+   const verifyDS = async () => {
+      setLoading(true);
+      await XypApi.verifyDSById(id, signature, regNo)
+         .then(({ data }) => {
+            if (data) {
+               const file = new Blob([data], { type: 'application/pdf' });
+               const fileUrl = URL.createObjectURL(file);
+               getFile(fileUrl);
+               openNofi('success', 'Амжилттай');
+            } else {
+               openNofi('error', 'Алдаа');
+            }
+         })
+         .catch(() => {
+            openNofi('error', 'Баталгаажуулалт амжилтгүй');
+         })
+         .finally(() => {
+            setLoading(false);
+         });
    };
    return (
       <div>
