@@ -113,7 +113,7 @@ const XrayRequest = React.lazy(() => import('./components/pages/Xray/XrayRequest
 //EXO жагсаалт
 const ExoRequest = React.lazy(() =>
    import('./components/pages/XRayExo/IndexAfter').then((module) => ({
-      default: (props) => <module.default {...props} type={2} params={'0,1,2'} />
+      default: (props) => <module.default {...props} type={1} params={'0,1,2'} />
    }))
 );
 
