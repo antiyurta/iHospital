@@ -1,32 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import {
-   Button,
-   Card,
-   ConfigProvider,
-   DatePicker,
-   Form,
-   Input,
-   InputNumber,
-   Modal,
-   Select,
-   Table,
-   message
-} from 'antd';
-import { localMn, openNofi } from '../../common';
+import { Button, Card, DatePicker, Form, Input, InputNumber, Modal, Select, Table } from 'antd';
 import { CloseOutlined, EditOutlined, RollbackOutlined } from '@ant-design/icons';
 import MonitorCriteria from './MonitorCriteria';
-import mnMN from 'antd/es/calendar/locale/mn_MN';
-import moment from 'moment';
+//common
+import { openNofi } from '@Comman/common';
 //comp
+import { message } from '@Features/AppGlobal';
 import { ListPatientInfo } from '../../ListInjection';
 //api
 import insuranceApi from '@ApiServices/healt-insurance/insurance';
 import healtInsuranceApi from '@ApiServices/healt-insurance/healtInsurance';
-
-//request service uud
-
+import dayjs from 'dayjs';
+//defaults
 const { RangePicker } = DatePicker;
-const { Option } = Select;
 const { TextArea } = Input;
 
 const basicRule = [
@@ -58,10 +44,10 @@ function InsuranceDocterList() {
       };
       if (filterValues) {
          if (filterValues.date) {
-            const start = moment(filterValues.date[0]).set({ hour: 0, minute: 0, second: 0 });
-            const end = moment(filterValues.date[1]).set({ hour: 23, minute: 59, second: 59 });
-            params.fromAt = moment(start).format('YYYY-MM-DD HH:mm');
-            params.endAt = moment(end).format('YYYY-MM-DD HH:mm');
+            const start = dayjs(filterValues.date[0]).set({ hour: 0, minute: 0, second: 0 });
+            const end = dayjs(filterValues.date[1]).set({ hour: 23, minute: 59, second: 59 });
+            params.fromAt = dayjs(start).format('YYYY-MM-DD HH:mm');
+            params.endAt = dayjs(end).format('YYYY-MM-DD HH:mm');
          }
          params.groupId = filterValues.groupId;
          params.serviceType = filterValues.serviceType;
@@ -131,10 +117,9 @@ function InsuranceDocterList() {
          .getHicsServiceGroup()
          .then(({ data }) => {
             if (data.code == 200) {
-               console.log('dada', data);
                setHicsGroups(data.result);
             } else {
-               message.warn(data.description);
+               message.warning(data.description);
             }
          })
          .catch((error) => {
@@ -166,7 +151,7 @@ function InsuranceDocterList() {
          width: 100,
          render: (text) => {
             if (text) {
-               return moment(text).format('YYYY-MM-DD hh:mm:ss');
+               return dayjs(text).format('YYYY-MM-DD hh:mm:ss');
             }
             return;
          }
@@ -177,7 +162,7 @@ function InsuranceDocterList() {
          width: 100,
          render: (text) => {
             if (text) {
-               return moment(text).format('YYYY-MM-DD hh:mm:ss');
+               return dayjs(text).format('YYYY-MM-DD hh:mm:ss');
             }
             return;
          }
@@ -228,7 +213,7 @@ function InsuranceDocterList() {
          title: 'Үйлчилгээний нэр',
          dataIndex: 'hicsServiceId',
          render: (text) => {
-            const current = hicsService.find((service) => service.id === text)?.name;
+            const current = hicsService?.find((service) => service.id === text)?.name;
             return (
                <p>
                   <span>{current}</span>
@@ -314,7 +299,7 @@ function InsuranceDocterList() {
                   <Form form={filterForm}>
                      <div className="grid grid-cols-4 gap-3">
                         <Form.Item label="Огноо" name="date">
-                           <RangePicker locale={mnMN} />
+                           <RangePicker />
                         </Form.Item>
                         <Form.Item label="Бүлэг" name="groupId" className="mb-0">
                            <Select
@@ -353,27 +338,25 @@ function InsuranceDocterList() {
                </div>
             </div>
             <Card bordered={false} className="header-solid max-h-max rounded-md" title="Жагсаалт">
-               <ConfigProvider locale={localMn()}>
-                  <Table
-                     rowKey={'id'}
-                     bordered
-                     loading={isLoading}
-                     columns={columns}
-                     dataSource={data}
-                     pagination={{
-                        position: ['bottomCenter'],
-                        size: 'small',
-                        current: meta.page,
-                        total: meta.itemCount,
-                        showTotal: (total, range) => `${range[0]}-ээс ${range[1]}, Нийт ${total}`,
-                        pageSize: meta.limit,
-                        showSizeChanger: true,
-                        pageSizeOptions: ['5', '10', '20', '50'],
-                        showQuickJumper: true,
-                        onChange: (page, pageSize) => getList(page, pageSize, filterForm.getFieldsValue())
-                     }}
-                  />
-               </ConfigProvider>
+               <Table
+                  rowKey={'id'}
+                  bordered
+                  loading={isLoading}
+                  columns={columns}
+                  dataSource={data}
+                  pagination={{
+                     position: ['bottomCenter'],
+                     size: 'small',
+                     current: meta.page,
+                     total: meta.itemCount,
+                     showTotal: (total, range) => `${range[0]}-ээс ${range[1]}, Нийт ${total}`,
+                     pageSize: meta.limit,
+                     showSizeChanger: true,
+                     pageSizeOptions: ['5', '10', '20', '50'],
+                     showQuickJumper: true,
+                     onChange: (page, pageSize) => getList(page, pageSize, filterForm.getFieldsValue())
+                  }}
+               />
             </Card>
          </div>
          <Modal

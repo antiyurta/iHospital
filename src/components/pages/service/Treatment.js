@@ -1,27 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { selectCurrentInsurance, selectCurrentToken } from '../../../features/authReducer';
+import { selectCurrentInsurance } from '../../../features/authReducer';
 import UTable from '../../UTable';
-
 //api
 import careTypeApi from '@ApiServices/reference/care-type.api';
-import { Get } from '@Comman/common';
 
 function Treatment() {
-   const token = useSelector(selectCurrentToken);
    const isInsurance = useSelector(selectCurrentInsurance);
    const [treatmentTypeData, setTreatmentTypeData] = useState([]);
    const [hicsServices, setHicsServices] = useState([]);
-   const config = {
-      headers: {},
-      params: {
-         type: 2
-      }
-   };
 
    const getTreatmentTypeData = async () => {
-      const response = await Get('reference-care-type', token, config);
-      setTreatmentTypeData(response.data);
+      await careTypeApi
+         .get({
+            params: {
+               type: 2
+            }
+         })
+         .then(({ data: { response } }) => {
+            setTreatmentTypeData(response.data);
+         });
    };
    const getInsuranceService = async () => {
       // const conf = {

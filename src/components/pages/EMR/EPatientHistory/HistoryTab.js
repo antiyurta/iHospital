@@ -8,23 +8,74 @@ import Step5 from './Step5';
 import Step6 from './Step6';
 import Step7 from './Step7';
 import Step8 from './Step8';
-
 import dayjs from 'dayjs';
 import { useSelector } from 'react-redux';
-import { selectCurrentEmrData } from '../../../../features/emrReducer';
-
-import patientHistoryService from '../../../../services/emr/patientHistory';
-import { openNofi } from '../../../common';
-
-const { Panel } = Collapse;
+//common
+import { openNofi } from '@Comman/common';
+//redux
+import { selectCurrentEmrData } from '@Features/emrReducer';
+//api
+import patientHistoryApi from '@ApiServices/emr/patientHistory';
 
 export default function HistoryTab() {
    const incomeEMRData = useSelector(selectCurrentEmrData);
    const [historyForm] = Form.useForm();
    const [id, setId] = useState(null);
    const [editMode, setEditMode] = useState(false);
+
+   const collapseItems = [
+      {
+         key: '1',
+         label: 'Төрөлт, өсөлт бойжилт',
+         forceRender: true,
+         children: <Step1 />
+      },
+      {
+         key: '2',
+         label: 'Өвчний түүх',
+         forceRender: true,
+         children: <Step2 />
+      },
+      {
+         key: '3',
+         label: 'Амьдралын хэв маяг',
+         forceRender: true,
+         children: <Step3 />
+      },
+      {
+         key: '4',
+         label: 'Амьдралын нөхцөл',
+         forceRender: true,
+         children: <Step4 />
+      },
+      {
+         key: '5',
+         label: 'Харшил',
+         forceRender: true,
+         children: <Step5 />
+      },
+      {
+         key: '6',
+         label: 'Эмийн хэрэглээ',
+         forceRender: true,
+         children: <Step6 />
+      },
+      {
+         key: '7',
+         label: 'Тархвар зүйн асуумж',
+         forceRender: true,
+         children: <Step7 />
+      },
+      {
+         key: '8',
+         label: 'Удамшлын асуумж',
+         forceRender: true,
+         children: <Step8 />
+      }
+   ];
+
    const saveHistory = async (values) => {
-      await patientHistoryService
+      await patientHistoryApi
          .postPatientHistory({
             patientId: incomeEMRData.patientId,
             ...values
@@ -36,7 +87,7 @@ export default function HistoryTab() {
          });
    };
    const updateHistory = async (values) => {
-      await patientHistoryService
+      await patientHistoryApi
          .patchPatientHistory(id, values)
          .then(({ data: { success } }) => {
             if (success) {
@@ -48,7 +99,7 @@ export default function HistoryTab() {
          });
    };
    const getPatientHistory = async () => {
-      await patientHistoryService
+      await patientHistoryApi
          .getPatientHistory({
             params: {
                patientId: incomeEMRData.patientId
@@ -77,32 +128,7 @@ export default function HistoryTab() {
          className="h-full"
       >
          <div className="emr-ins flex flex-col gap-1 justify-between">
-            <Collapse accordion>
-               <Panel header="Төрөлт, өсөлт бойжилт" key="1" forceRender={true}>
-                  <Step1 />
-               </Panel>
-               <Panel header="Өвчний түүх" key="2" forceRender={true}>
-                  <Step2 />
-               </Panel>
-               <Panel header="Амьдралын хэв маяг" key="3" forceRender={true}>
-                  <Step3 />
-               </Panel>
-               <Panel header="Амьдралын нөхцөл" key="14" forceRender={true}>
-                  <Step4 />
-               </Panel>
-               <Panel header="Харшил" key="5" forceRender={true}>
-                  <Step5 />
-               </Panel>
-               <Panel header="Эмийн хэрэглээ" key="6" forceRender={true}>
-                  <Step6 />
-               </Panel>
-               <Panel header="Тархвар зүйн асуумж" key="7" forceRender={true}>
-                  <Step7 />
-               </Panel>
-               <Panel header="Удамшлын асуумж" key="8" forceRender={true}>
-                  <Step8 />
-               </Panel>
-            </Collapse>
+            <Collapse accordion items={collapseItems} />
             <Form.Item noStyle>
                <Button
                   type="primary"

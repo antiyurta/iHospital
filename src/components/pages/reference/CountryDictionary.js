@@ -1,40 +1,31 @@
-import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { selectCurrentToken } from '../../../features/authReducer';
 import UTable from '../../UTable';
-const DEV_URL = process.env.REACT_APP_DEV_URL;
-const API_KEY = process.env.REACT_APP_API_KEY;
+//api
+import CountryApi from '@ApiServices/reference/country';
 function CountryDictionary() {
-   const token = useSelector(selectCurrentToken);
    const [provice, setProvice] = useState([]);
    const [country, setCountry] = useState([]);
-   const config = {
-      headers: {
-         Authorization: `Bearer ${token}`,
-         'x-api-key': API_KEY
-      },
-      params: {
-         type: null
-      }
-   };
    const getProvice = async () => {
-      config.params.type = 2;
-      await axios
-         .get(DEV_URL + 'reference/country', config)
-         .then((response) => {
-            setProvice(response.data.response.data);
+      await CountryApi.getByPageFilter({
+         params: {
+            type: 2
+         }
+      })
+         .then(({ data: { response } }) => {
+            setProvice(response.data);
          })
          .catch(() => {
             console.log('dasd');
          });
    };
    const getCountry = async () => {
-      config.params.type = 1;
-      await axios
-         .get(DEV_URL + 'reference/country', config)
-         .then((response) => {
-            setCountry(response.data.response.data);
+      await CountryApi.getByPageFilter({
+         params: {
+            type: 1
+         }
+      })
+         .then(({ data: { response } }) => {
+            setCountry(response.data);
          })
          .catch(() => {
             console.log('dasd');

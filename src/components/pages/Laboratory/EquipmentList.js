@@ -1,20 +1,20 @@
+import React, { useEffect, useState } from 'react';
 import { Badge, Button, Card, Form, Input, message, Modal, Select, Space, Switch, Upload } from 'antd';
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { selectCurrentToken } from '../../../features/authReducer';
-import { Get, Patch, Post } from '../../common';
+import { selectCurrentToken } from '@Features/authReducer';
 import { EditOutlined, LoadingOutlined, MinusCircleOutlined, PlusOutlined, SettingOutlined } from '@ant-design/icons';
 import Meta from 'antd/lib/card/Meta';
+//api
+import DeviceApi from '@ApiServices/device.api';
+//defualts
 const DEV_URL = process.env.REACT_APP_DEV_URL;
 const API_KEY = process.env.REACT_APP_API_KEY;
 
 function EquipmentList() {
    const token = useSelector(selectCurrentToken);
-   const config = {
-      headers: {},
-      params: {}
-   };
+   const [form] = Form.useForm();
+   const [referenceForm] = Form.useForm();
    const [equipments, setEquipments] = useState([]);
    const [searchField, setSearchField] = useState('');
    const [isOpenModal, setIsOpenModal] = useState(false);
@@ -24,8 +24,6 @@ function EquipmentList() {
    const [imageUrl, setImageUrl] = useState();
    const [photoId, setPhotoId] = useState(Number);
    const [id, setId] = useState(Number);
-   const [form] = Form.useForm();
-   const [referenceForm] = Form.useForm();
    const basisRule = [
       {
          required: true,
@@ -92,14 +90,15 @@ function EquipmentList() {
       setIsOpenModal(true);
    };
    const getEquipments = async () => {
-      const { data } = await Get('equipment', token, config);
-      await Promise.all(
-         data.map(async (equip) => {
-            const equipPhotoSrc = await getPhoto(equip.photoId);
-            equip['photoSrc'] = equipPhotoSrc;
-         })
-      );
-      setEquipments(data);
+      await DeviceApi.getEquipment().then(async ({ data }) => {
+         await Promise.all(
+            data.map(async (equip) => {
+               const equipPhotoSrc = await getPhoto(equip.photoId);
+               equip['photoSrc'] = equipPhotoSrc;
+            })
+         );
+         setEquipments(data);
+      });
    };
    const getPhoto = async (id) => {
       const response = await axios.get(DEV_URL + 'local-files/' + id, {
@@ -241,17 +240,15 @@ function EquipmentList() {
                form.validateFields().then(async (values) => {
                   values['photoId'] = photoId;
                   if (editMode) {
-                     const response = await Patch('equipment/' + id, token, config, values);
-                     if (response === 200) {
+                     await DeviceApi.patchEquipment(id, values).then(() => {
                         setIsOpenModal(false);
                         getEquipments();
-                     }
+                     });
                   } else {
-                     const response = await Post('equipment', token, config, values);
-                     if (response === 201) {
+                     await DeviceApi.postEquipment(values).then(() => {
                         setIsOpenModal(false);
                         getEquipments();
-                     }
+                     });
                   }
                })
             }

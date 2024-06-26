@@ -1,12 +1,9 @@
+import React, { useEffect, useState } from 'react';
 import { ReloadOutlined } from '@ant-design/icons';
 import { Button, Card, Empty, Table } from 'antd';
 import moment from 'moment';
-import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { selectCurrentToken } from '../../../../../features/authReducer';
-import { Get } from '../../../../common';
+
 function MiddleTable({ typeId }) {
-   const token = useSelector(selectCurrentToken);
    const [spinner, setSpinner] = useState(false);
    const [data, setData] = useState([]);
    const [meta, setMeta] = useState({});
@@ -20,7 +17,8 @@ function MiddleTable({ typeId }) {
             mt_type: type
          }
       };
-      const response = await Get('finance/expense-header', token, conf);
+      const response = {};
+      // const response = await Get('finance/expense-header', token, conf);
       setData(response.data);
       setMeta(response.meta);
       setSpinner(false);

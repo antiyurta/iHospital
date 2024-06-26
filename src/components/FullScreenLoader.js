@@ -13,7 +13,7 @@ const FullScreenLoader = ({ full = true }) => {
             alignItems: 'center'
          }}
       >
-         <Spin tip="Уншиж байна" size="large" indicator={loadingIcon} />
+         <Spin tip="Уншиж байна" size="large" fullscreen={full} indicator={loadingIcon} />
       </div>
    );
 };

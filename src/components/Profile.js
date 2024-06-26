@@ -146,42 +146,26 @@ function Profile() {
       });
    };
    return (
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 h-screen bg-[#f5f6f7] p-4">
          <div className="profile-nav-bg" style={{ backgroundImage: 'url(' + profileBg + ')' }}></div>
-         <Card
-            className="card-profile-head rounded-md h-28"
-            bodyStyle={{ display: 'none' }}
-            title={
-               <Row justify="space-between" align="middle" gutter={[24, 0]}>
-                  <Col span={24} md={12} className="col-info">
-                     <div className="flex flex-row gap-2 items-center">
-                        <ImageUpload setImageId={changeProfileImg} />
-                        <div className="avatar-info">
-                           <h4 className="font-semibold m-0">
-                              {user.employee?.lastName + ' ' + user.employee?.firstName}
-                           </h4>
-                           <p>
-                              {user.role?.name} / {user.role?.description}
-                           </p>
-                        </div>
-                     </div>
-                  </Col>
-                  <Col
-                     span={24}
-                     md={12}
-                     style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'flex-end'
-                     }}
-                  ></Col>
-               </Row>
-            }
-         ></Card>
+         <div className="card-profile-head rounded-md h-30 p-2 bg-blue-50">
+            <div className="flex flex-row gap-2 items-center">
+               <ImageUpload setImageId={changeProfileImg} />
+               <div className="avatar-info">
+                  <h4 className="font-semibold m-0">{user.employee?.lastName + ' ' + user.employee?.firstName}</h4>
+                  <p>
+                     {user.role?.name} / {user.role?.description}
+                  </p>
+               </div>
+            </div>
+         </div>
          <Card
             bordered={false}
+            classNames={{
+               header: 'header-solid card-profile-information rounded-md',
+               body: 'pt-0 pb-4'
+            }}
             title={<h6 className="font-semibold m-0">Профайл мэдээлэл</h6>}
-            className="header-solid card-profile-information rounded-md"
             extra={
                <>
                   <Button className="mx-1" type="primary" icon={<UserOutlined />} onClick={() => setProfileModal(true)}>
@@ -201,7 +185,6 @@ function Profile() {
                   </Button>
                </>
             }
-            bodyStyle={{ paddingTop: 0, paddingBottom: 16 }}
          >
             <hr className="my-2" />
             <Descriptions>

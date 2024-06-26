@@ -1,21 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { ConfigProvider, DatePicker, Input } from 'antd';
-import locale from 'antd/es/locale/mn_MN';
-import 'moment/locale/mn';
+import { DatePicker, Input } from 'antd';
 import Pagination from './pagination';
-import moment from 'moment';
+import dayjs from 'dayjs';
 const { RangePicker } = DatePicker;
 
 const ListFilter = ({ meta, appointmentsLength, getList, otherParams, children }) => {
    const today = new Date();
-   const [rangePickerValue, setRangePickerValue] = useState([moment(), moment()]);
+   const [rangePickerValue, setRangePickerValue] = useState([dayjs(), dayjs()]);
    const [start, setStart] = useState(new Date().toString());
    const [end, setEnd] = useState(new Date().toString());
    const [currentPage, setCurrentPage] = useState(1);
    const [currentLimit, setCurrentLimit] = useState(10);
    const get = (page, limit, start, end) => {
-      const incomeStartDate = moment(new Date(start)).set('hour', 0).set('minute', 0).set('second', 0);
-      const incomeEndDate = moment(new Date(end)).set('hour', 23).set('minute', 59).set('second', 59);
+      const incomeStartDate = dayjs(new Date(start)).set('hour', 0).set('minute', 0).set('second', 0);
+      const incomeEndDate = dayjs(new Date(end)).set('hour', 23).set('minute', 59).set('second', 59);
       setStart(incomeStartDate);
       setEnd(incomeEndDate);
       setCurrentPage(page);
@@ -36,7 +34,7 @@ const ListFilter = ({ meta, appointmentsLength, getList, otherParams, children }
          <div className="left">
             <button
                onClick={() => {
-                  setRangePickerValue([moment(today), moment(today)]);
+                  setRangePickerValue([dayjs(today), dayjs(today)]);
                   get(1, currentLimit, today, today);
                }}
             >
@@ -45,7 +43,7 @@ const ListFilter = ({ meta, appointmentsLength, getList, otherParams, children }
             <button
                onClick={() => {
                   const first = new Date().setDate(today.getDate() - 7);
-                  setRangePickerValue([moment(first), moment(today)]);
+                  setRangePickerValue([dayjs(first), dayjs(today)]);
                   get(1, currentLimit, first, today);
                }}
             >
@@ -54,26 +52,24 @@ const ListFilter = ({ meta, appointmentsLength, getList, otherParams, children }
             <button
                onClick={() => {
                   const first = new Date().setMonth(today.getMonth() - 1);
-                  setRangePickerValue([moment(first), moment(today)]);
+                  setRangePickerValue([dayjs(first), dayjs(today)]);
                   get(1, currentLimit, first, today);
                }}
             >
                Сар
             </button>
-            <ConfigProvider locale={locale}>
-               <RangePicker
-                  onChange={(e) => {
-                     if (e != null) {
-                        setRangePickerValue(e);
-                        get(1, currentLimit, e[0], e[1]);
-                     } else {
-                        setRangePickerValue([]);
-                        get(1, currentLimit, today, today);
-                     }
-                  }}
-                  value={rangePickerValue}
-               />
-            </ConfigProvider>
+            <RangePicker
+               onChange={(e) => {
+                  if (e != null) {
+                     setRangePickerValue(e);
+                     get(1, currentLimit, e[0], e[1]);
+                  } else {
+                     setRangePickerValue([]);
+                     get(1, currentLimit, today, today);
+                  }
+               }}
+               value={rangePickerValue}
+            />
             {children}
          </div>
          <div className="right">

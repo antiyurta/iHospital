@@ -1,14 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Tabs, Card, Row, Col, Modal, Table } from 'antd';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, ArcElement, Tooltip, Legend, Title } from 'chart.js';
 import { Pie, Bar } from 'react-chartjs-2';
-import { useSelector } from 'react-redux';
-import { selectCurrentToken } from '../../../features/authReducer';
-import { Get } from '../../common';
 import { BarChartOutlined } from '@ant-design/icons';
 
 export default function Dashboard() {
-   const token = useSelector(selectCurrentToken);
    const [data, setData] = useState({});
    const config = {
       headers: {},
@@ -83,29 +79,29 @@ export default function Dashboard() {
       };
       // Кабинетэд үйлчлүүлсэн өвчтөний тоо
       const getInvoice = async () => {
-         const response = await Get('report/service/receipt', token, config);
-         if (response.length != 0) {
-            // console.log("get Invoice=======>", response);
-            setTotalReport(response);
-         }
+         // const response = await Get('report/service/receipt', token, config);
+         // if (response.length != 0) {
+         //    // console.log("get Invoice=======>", response);
+         //    setTotalReport(response);
+         // }
       };
       const getInvoiceDetail = async (type) => {
-         const response = await Get(`report/service-detail/receipt?type=${type}`, token, config);
-         if (response.length != 0) {
-            // console.log("get InvoiceDetail=======>", response);
-            response.map((el, index) => {
-               setTableData((oldData) => [
-                  ...oldData,
-                  {
-                     key: index,
-                     name: el.name,
-                     totalAmount: el.totalAmount,
-                     countPatients: el.countPatients
-                  }
-               ]);
-            });
-            setDataLoading(false);
-         }
+         // const response = await Get(`report/service-detail/receipt?type=${type}`, token, config);
+         // if (response.length != 0) {
+         //    // console.log("get InvoiceDetail=======>", response);
+         //    response.map((el, index) => {
+         //       setTableData((oldData) => [
+         //          ...oldData,
+         //          {
+         //             key: index,
+         //             name: el.name,
+         //             totalAmount: el.totalAmount,
+         //             countPatients: el.countPatients
+         //          }
+         //       ]);
+         //    });
+         //    setDataLoading(false);
+         // }
       };
 
       useEffect(() => {
@@ -155,14 +151,15 @@ export default function Dashboard() {
       ];
 
       const getInspectionReport = async () => {
-         const response = await Get('report/inspection/receipt', token, config);
-         console.log('get InspectionReport=======>', response);
-         if (response.length != 0) {
-            setChart1Label(response);
-         }
+         // const response = await Get('report/inspection/receipt', token, config);
+         // console.log('get InspectionReport=======>', response);
+         // if (response.length != 0) {
+         //    setChart1Label(response);
+         // }
       };
       const getDoctorReceipt = async () => {
-         const response = await Get('report/doctor/receipt', token, config);
+         const response = [];
+         // const response = await Get('report/doctor/receipt', token, config);
          console.log('get DoctorReceipt=======>', response);
          setDataLoadingDoctor(false);
          if (response.length != 0) {

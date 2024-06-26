@@ -1,18 +1,15 @@
-import { DeleteOutlined, EditOutlined, MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Card, Col, Form, Input, InputNumber, Modal, Row } from 'antd';
 import React, { useEffect, useState } from 'react';
+import { Button, Card, Col, Form, Input, Modal, Row } from 'antd';
+import { DeleteOutlined, EditOutlined, MinusCircleOutlined } from '@ant-design/icons';
 import { Table } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
-import { selectCurrentToken } from '../../../features/authReducer';
-import { Delete, Get, Patch, Post } from '../../common';
+//comp
 import Order from '../Order/Order';
+//api
+import SetOrderApi from '@ApiServices/service/service';
+//defaults
+const { TextArea } = Input;
 
 function SetOrder() {
-   const token = useSelector(selectCurrentToken);
-   const config = {
-      headers: {},
-      params: {}
-   };
    const [isOpenModal, setIsOpenModal] = useState(false);
    const [isOpenSecondModal, setIsOpenSecondModal] = useState(false);
    const [data, setData] = useState([]);
@@ -20,7 +17,6 @@ function SetOrder() {
    const [meta, setMeta] = useState({});
    const [editMode, setEditMode] = useState(false);
    const [form] = Form.useForm();
-   const { TextArea } = Input;
    const categories = [
       {
          //shinejilgee
@@ -43,14 +39,6 @@ function SetOrder() {
          name: 'Endo'
       }
    ];
-   const checkNumber = (event) => {
-      var charCode = event.charCode;
-      if (charCode > 31 && (charCode < 48 || charCode > 57) && charCode !== 46) {
-         event.preventDefault();
-      } else {
-         return true;
-      }
-   };
    const showModal = () => {
       setIsOpenModal(true);
       setEditMode(false);
@@ -58,11 +46,12 @@ function SetOrder() {
    };
 
    const editModal = async (id) => {
-      const response = await Get('service/setorder/' + id, token, config);
-      form.setFieldsValue(response);
-      setEditMode(true);
-      setId(response.id);
-      setIsOpenModal(true);
+      await SetOrderApi.getSetOrderById(id).then(({ data: { response } }) => {
+         form.setFieldsValue(response);
+         setEditMode(true);
+         setId(response.id);
+         setIsOpenModal(true);
+      });
    };
 
    const deleteModal = async (id) => {
@@ -72,8 +61,9 @@ function SetOrder() {
          closable: true,
          content: <div>Устгасан тохиолдолд дахин сэргээгдэхгүй болно</div>,
          async onOk() {
-            await Delete('service/setorder/' + id, token, config);
-            getPackages();
+            await SetOrderApi.deleteSetOrder(id).then(() => {
+               getPackages();
+            });
          }
       });
    };
@@ -92,17 +82,15 @@ function SetOrder() {
          .validateFields()
          .then(async (value) => {
             if (editMode) {
-               const response = await Patch('service/setorder/' + id, token, config, value);
-               if (response === 200) {
+               await SetOrderApi.patchSetOrder(id, value).then(() => {
                   getPackages();
                   setIsOpenModal(false);
-               }
+               });
             } else {
-               const response = await Post('service/setorder', token, config, value);
-               if (response === 201) {
+               await SetOrderApi.postSetOrder(value).then(() => {
                   getPackages();
                   setIsOpenModal(false);
-               }
+               });
             }
          })
          .catch((error) => {
@@ -111,9 +99,13 @@ function SetOrder() {
    };
 
    const getPackages = async () => {
-      const response = await Get('service/setorder', token, config);
-      setData(response.data);
-      setMeta(response.meta);
+      await SetOrderApi.getSetOrder({
+         page: 1,
+         limit: 10
+      }).then(({ data: { response } }) => {
+         setData(response.data);
+         setMeta(response.meta);
+      });
    };
 
    useEffect(() => {

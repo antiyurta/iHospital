@@ -1,10 +1,39 @@
 import jwtInterceopter from '../../components/jwtInterceopter';
 class Service {
+   /** service/package */
+   async getPackage(params) {
+      return await jwtInterceopter.get('service/package', {
+         params
+      });
+   }
+   async getPackageById(id) {
+      return await jwtInterceopter.get('service/package/' + id);
+   }
+   async postPackage(body) {
+      return await jwtInterceopter.post('service/package', body);
+   }
+   async patchPackage(id, body) {
+      return await jwtInterceopter.patch('service/package/' + id, body);
+   }
+   async deletePackage(id) {
+      return await jwtInterceopter.delete('service/package/' + id);
+   }
+   /** service/package */
+   //** set-order */
    async getSetOrder(conf) {
       return await jwtInterceopter.get('service/setorder', conf);
    }
+   async getSetOrderById(id) {
+      return await jwtInterceopter.get('service/setorder/' + id);
+   }
    async postSetOrder(data) {
       return await jwtInterceopter.post('service/setorder', data);
+   }
+   async patchSetOrder(id, data) {
+      return await jwtInterceopter.patch('service/setorder/' + id, data);
+   }
+   async deleteSetOrder(id) {
+      return await jwtInterceopter.delete('service/setorder/' + id);
    }
    async getXrayRequest(conf) {
       return await jwtInterceopter.get('service/xrayRequest', conf);
@@ -33,12 +62,6 @@ class Service {
    async postInpatientRequest(data) {
       return await jwtInterceopter.post('service/inpatient-request', data);
    }
-   async patchSetOrder(id, data) {
-      return await jwtInterceopter.patch('service/setorder/' + id, data);
-   }
-   async deleteSetOrder(id) {
-      return await jwtInterceopter.delete('service/setorder/' + id);
-   }
    async getServiceErequest(conf) {
       return await jwtInterceopter.get('service/erequest', conf);
    }
@@ -50,6 +73,7 @@ class Service {
    async patchErequestDetail(id, body) {
       return await jwtInterceopter.patch('service/examination-request-detail/' + id, body);
    }
+   //** service parameter */
    async getErequestParameter(conf) {
       return await jwtInterceopter.get('service/parameter', conf);
    }
@@ -59,6 +83,10 @@ class Service {
    async patchErequestParameter(id, body) {
       return await jwtInterceopter.patch('service/parameter/' + id, body);
    }
+   async deleteErequestParameter(id) {
+      return await jwtInterceopter.delete('service/parameter/' + id);
+   }
+   //
    async getResultForExamination(conf) {
       return await jwtInterceopter.get('service/examinationResult', conf);
    }

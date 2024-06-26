@@ -291,17 +291,13 @@ function Index({ selectedPatient, type, invoiceData, handleClick, prevAppointmen
       <>
          <div className="flex flex-col gap-4">
             <Card
-               className="rounded-xl"
-               bodyStyle={{
-                  padding: 10
-               }}
                title="Цаг захиалга"
                extra={
                   <div className="flex flex-row gap-3">
                      {type === 1 ? (
                         <Button
-                           className="bg-red-500"
-                           type="danger"
+                           type="primary"
+                           danger
                            onClick={() => {
                               filterForm
                                  .validateFields()

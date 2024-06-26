@@ -210,10 +210,12 @@ function List(props) {
          <Card
             title=""
             className="rounded-lg"
-            bodyStyle={{
-               padding: 10,
-               overflow: 'auto',
-               height: 'calc(100vh - 360px)'
+            styles={{
+               body: {
+                  padding: 10,
+                  overflow: 'auto',
+                  height: 'calc(100vh - 360px)'
+               }
             }}
          >
             {Object.entries(dd)?.length > 0 ? (
@@ -222,202 +224,205 @@ function List(props) {
                      <div key={index}>
                         <Divider orientation="left">{key}</Divider>
                         {value?.length > 0 ? (
-                           <Collapse onChange={(id) => setSelectedScheduleId(id)} accordion>
-                              {value?.map((schedule) => {
-                                 return (
-                                    <Panel
-                                       forceRender={false}
-                                       key={schedule.id}
-                                       header={
-                                          <div>
-                                             <b>Өрөө:</b> {schedule.room?.roomNumber}
-                                             <b className="ml-2">Тасаг:</b> {schedule.structure?.name}
-                                             <b className="ml-2">Кабинет:</b> {schedule.cabinet?.name}
-                                             <b className="ml-2">Эмч:</b> {schedule.doctor?.firstName}
-                                          </div>
-                                       }
-                                    >
-                                       <Table
-                                          rowKey="id"
-                                          bordered
-                                          loading={isLoadingSlot}
-                                          columns={[
-                                             {
-                                                title: 'Цаг',
-                                                width: 50,
-                                                render: (_, row) => (
-                                                   <div className="inline-flex flex-row gap-1 items-center">
-                                                      <span>{row.startTime?.substr(0, 5)}</span>
-                                                      <ClockCircleOutlined />
-                                                      <span>{row.endTime?.substr(0, 5)}</span>
-                                                   </div>
-                                                )
-                                             },
-                                             {
-                                                title: 'Өвчтөн',
-                                                dataIndex: [`${columnName[type]}`, 'patient'],
-                                                render: (patient) => (
-                                                   <div className="ambo-list-user">
-                                                      <Avatar
-                                                         style={{
-                                                            minWidth: 32
-                                                         }}
-                                                      />
-                                                      <div className="info">
-                                                         <p className="name">
-                                                            {formatNameForDoc(patient?.lastName, patient?.firstName)}
-                                                         </p>
-                                                         <p>{patient?.registerNumber}</p>
-                                                      </div>
-                                                   </div>
-                                                )
-                                             },
-                                             {
-                                                title: 'Нас',
-                                                width: 100,
-                                                dataIndex: [`${columnName[type]}`, 'patient', 'registerNumber'],
-                                                render: (text) => (
-                                                   <span
+                           <Collapse
+                              accordion
+                              onChange={(key) => {
+                                 console.log(key);
+                                 if (key?.length > 0) {
+                                    setSelectedScheduleId(Number(key[0]));
+                                 }
+                              }}
+                              items={value?.map((schedule) => ({
+                                 key: schedule.id,
+                                 label: (
+                                    <div className="flex flex-row gap-2">
+                                       <b>Өрөө:</b> {schedule.room?.roomNumber}
+                                       <b>Тасаг:</b> {schedule.structure?.name}
+                                       <b>Кабинет:</b> {schedule.cabinet?.name}
+                                       <b>Эмч:</b> {schedule.doctor?.firstName}
+                                    </div>
+                                 ),
+                                 children: (
+                                    <Table
+                                       rowKey="id"
+                                       bordered
+                                       loading={isLoadingSlot}
+                                       columns={[
+                                          {
+                                             title: 'Цаг',
+                                             width: 50,
+                                             render: (_, row) => (
+                                                <div className="inline-flex flex-row gap-1 items-center">
+                                                   <span>{row.startTime?.substr(0, 5)}</span>
+                                                   <ClockCircleOutlined />
+                                                   <span>{row.endTime?.substr(0, 5)}</span>
+                                                </div>
+                                             )
+                                          },
+                                          {
+                                             title: 'Өвчтөн',
+                                             dataIndex: [`${columnName[type]}`, 'patient'],
+                                             render: (patient) => (
+                                                <div className="ambo-list-user">
+                                                   <Avatar
                                                       style={{
-                                                         whiteSpace: 'normal'
+                                                         minWidth: 32
                                                       }}
-                                                   >
-                                                      {getAge(text)}
-                                                   </span>
-                                                )
-                                             },
-                                             {
-                                                title: 'Хүйс',
-                                                width: 40,
-                                                dataIndex: [`${columnName[type]}`, 'patient', 'gender'],
-                                                render: (gender) => {
-                                                   return getGender(gender);
-                                                }
-                                             },
-                                             {
-                                                title: 'Статус',
-                                                dataIndex: 'slotStatus',
-                                                render: (slotStatus, row) => {
-                                                   if (row?.[columnName[type]]) {
-                                                      if (slotStatus === 0) {
-                                                         return 'Ирээгүй';
-                                                      } else if (slotStatus === 1) {
-                                                         return 'Ирсэн';
-                                                      } else if (slotStatus === 2) {
-                                                         return 'Үзлэгт орсон';
-                                                      }
-                                                   }
-                                                   return;
-                                                }
-                                             },
-                                             {
-                                                title: 'Захиалсан огноо',
-                                                dataIndex: [`${columnName[type]}`, 'createdAt'],
-                                                render: (createdAt, row) => {
-                                                   if (row?.[columnName[type]]) {
-                                                      return dayjs(createdAt).format('YYYY/MM/DD HH:mm');
-                                                   }
-                                                }
-                                             },
-                                             {
-                                                title: 'Бүртгэсэн',
-                                                render: (_, row) =>
-                                                   formatNameForDoc(row.createdLastName, row.createdFirstName)
-                                             },
-                                             {
-                                                title: 'Үйлдэл',
-                                                children: [
-                                                   {
-                                                      title: 'Цаг захиалах',
-                                                      render: (_, row) => {
-                                                         if (isExtraGrud.isCreate && !row?.[columnName[type]]) {
-                                                            return (
-                                                               <Button
-                                                                  onClick={() => {
-                                                                     if (selectedPatient.id) {
-                                                                        orderAppointment(
-                                                                           {
-                                                                              isUrgent: false,
-                                                                              roomNumber: schedule.room.roomNumber,
-                                                                              structureName: schedule.structure.name,
-                                                                              time: {
-                                                                                 start: row.startTime,
-                                                                                 end: row.endTime
-                                                                              },
-                                                                              slotId: row.id,
-                                                                              cabinetId: schedule.cabinetId,
-                                                                              appointmentWorkDate: key,
-                                                                              schedule: schedule
-                                                                           },
-                                                                           false
-                                                                        );
-                                                                     } else {
-                                                                        openNofi(
-                                                                           'error',
-                                                                           'Анхааруулга',
-                                                                           'Өвчтөн сонгоогүй байна'
-                                                                        );
-                                                                     }
-                                                                  }}
-                                                                  icon={<PlusOutlined />}
-                                                                  className="bg-green-500 text-white"
-                                                               />
-                                                            );
-                                                         }
-                                                         return;
-                                                      }
-                                                   },
-                                                   {
-                                                      title: 'Цаг солих',
-                                                      render: (_, row) => {
-                                                         if (
-                                                            isExtraGrud.isChange &&
-                                                            row?.[columnName[type]] &&
-                                                            row.slotStatus === 0
-                                                         ) {
-                                                            return (
-                                                               <Button
-                                                                  onClick={() => changeSlot(row)}
-                                                                  icon={<SwapOutlined />}
-                                                                  className="bg-yellow-500 text-black"
-                                                               />
-                                                            );
-                                                         }
-                                                         return;
-                                                      }
-                                                   },
-                                                   {
-                                                      title: 'Цаг устгах',
-                                                      render: (_, row) => {
-                                                         if (
-                                                            isExtraGrud.isDelete &&
-                                                            row?.[columnName[type]] &&
-                                                            row.slotStatus === 0
-                                                         ) {
-                                                            return (
-                                                               <Button
-                                                                  danger
-                                                                  onClick={() => cancelSlot(row)}
-                                                                  icon={<DeleteOutlined />}
-                                                               />
-                                                            );
-                                                         }
-                                                         return;
-                                                      }
-                                                   }
-                                                ]
+                                                   />
+                                                   <div className="info">
+                                                      <p className="name">
+                                                         {formatNameForDoc(patient?.lastName, patient?.firstName)}
+                                                      </p>
+                                                      <p>{patient?.registerNumber}</p>
+                                                   </div>
+                                                </div>
+                                             )
+                                          },
+                                          {
+                                             title: 'Нас',
+                                             width: 100,
+                                             dataIndex: [`${columnName[type]}`, 'patient', 'registerNumber'],
+                                             render: (text) => (
+                                                <span
+                                                   style={{
+                                                      whiteSpace: 'normal'
+                                                   }}
+                                                >
+                                                   {getAge(text)}
+                                                </span>
+                                             )
+                                          },
+                                          {
+                                             title: 'Хүйс',
+                                             width: 40,
+                                             dataIndex: [`${columnName[type]}`, 'patient', 'gender'],
+                                             render: (gender) => {
+                                                return getGender(gender);
                                              }
-                                          ]}
-                                          scroll={{
-                                             x: 1000
-                                          }}
-                                          dataSource={slots}
-                                          pagination={false}
-                                       />
-                                    </Panel>
-                                 );
-                              })}
-                           </Collapse>
+                                          },
+                                          {
+                                             title: 'Статус',
+                                             dataIndex: 'slotStatus',
+                                             render: (slotStatus, row) => {
+                                                if (row?.[columnName[type]]) {
+                                                   if (slotStatus === 0) {
+                                                      return 'Ирээгүй';
+                                                   } else if (slotStatus === 1) {
+                                                      return 'Ирсэн';
+                                                   } else if (slotStatus === 2) {
+                                                      return 'Үзлэгт орсон';
+                                                   }
+                                                }
+                                                return;
+                                             }
+                                          },
+                                          {
+                                             title: 'Захиалсан огноо',
+                                             dataIndex: [`${columnName[type]}`, 'createdAt'],
+                                             render: (createdAt, row) => {
+                                                if (row?.[columnName[type]]) {
+                                                   return dayjs(createdAt).format('YYYY/MM/DD HH:mm');
+                                                }
+                                             }
+                                          },
+                                          {
+                                             title: 'Бүртгэсэн',
+                                             render: (_, row) =>
+                                                formatNameForDoc(row.createdLastName, row.createdFirstName)
+                                          },
+                                          {
+                                             title: 'Үйлдэл',
+                                             children: [
+                                                {
+                                                   title: 'Цаг захиалах',
+                                                   render: (_, row) => {
+                                                      if (isExtraGrud.isCreate && !row?.[columnName[type]]) {
+                                                         return (
+                                                            <Button
+                                                               onClick={() => {
+                                                                  if (selectedPatient.id) {
+                                                                     orderAppointment(
+                                                                        {
+                                                                           isUrgent: false,
+                                                                           roomNumber: schedule.room.roomNumber,
+                                                                           structureName: schedule.structure.name,
+                                                                           time: {
+                                                                              start: row.startTime,
+                                                                              end: row.endTime
+                                                                           },
+                                                                           slotId: row.id,
+                                                                           cabinetId: schedule.cabinetId,
+                                                                           appointmentWorkDate: key,
+                                                                           schedule: schedule
+                                                                        },
+                                                                        false
+                                                                     );
+                                                                  } else {
+                                                                     openNofi(
+                                                                        'error',
+                                                                        'Анхааруулга',
+                                                                        'Өвчтөн сонгоогүй байна'
+                                                                     );
+                                                                  }
+                                                               }}
+                                                               icon={<PlusOutlined />}
+                                                               className="bg-green-500 text-white"
+                                                            />
+                                                         );
+                                                      }
+                                                      return;
+                                                   }
+                                                },
+                                                {
+                                                   title: 'Цаг солих',
+                                                   render: (_, row) => {
+                                                      if (
+                                                         isExtraGrud.isChange &&
+                                                         row?.[columnName[type]] &&
+                                                         row.slotStatus === 0
+                                                      ) {
+                                                         return (
+                                                            <Button
+                                                               onClick={() => changeSlot(row)}
+                                                               icon={<SwapOutlined />}
+                                                               className="bg-yellow-500 text-black"
+                                                            />
+                                                         );
+                                                      }
+                                                      return;
+                                                   }
+                                                },
+                                                {
+                                                   title: 'Цаг устгах',
+                                                   render: (_, row) => {
+                                                      if (
+                                                         isExtraGrud.isDelete &&
+                                                         row?.[columnName[type]] &&
+                                                         row.slotStatus === 0
+                                                      ) {
+                                                         return (
+                                                            <Button
+                                                               danger
+                                                               onClick={() => cancelSlot(row)}
+                                                               icon={<DeleteOutlined />}
+                                                            />
+                                                         );
+                                                      }
+                                                      return;
+                                                   }
+                                                }
+                                             ]
+                                          }
+                                       ]}
+                                       scroll={{
+                                          x: 1000
+                                       }}
+                                       dataSource={slots}
+                                       pagination={false}
+                                    />
+                                 )
+                              }))}
+                           />
                         ) : (
                            <Empty description="Цагийн хувиар ороогүй байна" />
                         )}

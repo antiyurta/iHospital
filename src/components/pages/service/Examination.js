@@ -1,31 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { selectCurrentToken } from '../../../features/authReducer';
-import { Get } from '../../common';
 import UTable from '../../UTable';
-import apiInsuranceService from '../../../services/healt-insurance/insurance';
 import api from '@ApiServices/healt-insurance/healtInsurance';
 
 function Examination() {
-   const token = useSelector(selectCurrentToken);
    const [examinationTypeData, setExaminationTypeData] = useState([]);
-   const [types, setTypes] = useState([]);
    const [hicsExams, setHicsExams] = useState([]);
-
-   const config = {
-      headers: {},
-      params: {
-         type: 0
-      }
-   };
    const getExaminationTypeData = async () => {
-      const response = await Get('reference-care-type', token, config);
-      setExaminationTypeData(response.data);
-   };
-
-   const getServicesType = async () => {
-      const response = await Get('reference-care-type', token, config);
-      setTypes(response.data);
+      await careTypeApi
+         .get({
+            params: {
+               type: 0
+            }
+         })
+         .then(({ data: { response } }) => {
+            setExaminationTypeData(response.data);
+         });
    };
    const getHicsExams = async () => {
       await api.getHicsExam().then(({ data }) => {
@@ -37,7 +26,6 @@ function Examination() {
 
    useEffect(() => {
       getExaminationTypeData();
-      getServicesType();
       getHicsExams();
    }, []);
    const column = [

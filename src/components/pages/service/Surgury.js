@@ -1,22 +1,21 @@
-import { Col, Row } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { selectCurrentToken } from '../../../features/authReducer';
+import { Col, Row } from 'antd';
 import UTable from '../../UTable';
-import { Get } from '../../common';
+//api
+import careTypeApi from '@ApiServices/reference/care-type.api';
 
 function Surgery() {
-   const token = useSelector(selectCurrentToken);
    const [surgeryTypeData, setSurgeryTypeData] = useState([]);
-   const config = {
-      headers: {},
-      params: {
-         type: 3
-      }
-   };
    const getSurguryTypeData = async () => {
-      const response = await Get('reference-care-type', token, config);
-      setSurgeryTypeData(response.data);
+      await careTypeApi
+         .get({
+            params: {
+               type: 3
+            }
+         })
+         .then(({ data: { response } }) => {
+            setSurgeryTypeData(response.data);
+         });
    };
 
    useEffect(() => {

@@ -105,6 +105,10 @@ class HealthInsurance {
       return await jwtInterceopter.post('health-insurance/confirm-hics-service', data);
    }
    /** 4.41 Дахин баталгаажуулах сервис */
+   async getReceiptByRegNo(regNo) {
+      return await jwtInterceopter.get('health-insurance/receipt-by/' + regNo);
+   }
+   /** 4.42 Жорын дэлгэрэнгүй мэдээлэл авах сервис */
    async reConfirmService(data) {
       return await jwtInterceopter.post('health-insurance/re-confirm-service', data);
    }
@@ -142,11 +146,11 @@ class HealthInsurance {
    }
    /** 4.51 Асуумжийн бүлгийн мэдээлэл лавлах сервис */
    async getQuestionCategories(regNo) {
-      return await jwtInterceopter.get('health-insurance/send-esb-medical-exam-history/' + regNo);
+      return await jwtInterceopter.get('health-insurance/get-question-categories/' + regNo);
    }
    /** 4.52 Асуумжийн мэдээлэл лавлах сервис */
    async getQuestionsByCategory(regNo, category) {
-      return await jwtInterceopter.get('health-insurance/send-esb-medical-exam-history/', {
+      return await jwtInterceopter.get('health-insurance/get-question-category', {
          params: {
             regNo,
             category

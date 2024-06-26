@@ -257,7 +257,7 @@ const RegisterPatient = ({ patientId, onFinish, editMode }) => {
          .finally(() => setIsLoading(false));
    };
    const registerOtp = (regnum) => {
-      xypApi.registerOtp(regnum).then(({ data: { response } }) => {
+      xypApi.registerOtp(regnum, 0).then(({ data: { response } }) => {
          if (response.return.resultCode != 0) {
             openNofi('warning', 'ХУР-сервис', response.return.resultMessage);
          } else {

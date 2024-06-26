@@ -1,19 +1,21 @@
-import { Badge, Modal, Table, Tabs } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
+import { Badge, Modal, Table, Tabs } from 'antd';
 import { useSelector } from 'react-redux';
-import { selectCurrentAppId, selectCurrentDepId } from '../../../../features/authReducer';
-import { openNofi } from '../../../common';
-//services
-import DocumentsFormPatientService from '../../../../services/organization/document';
-import OrganizationDocumentRoleServices from '../../../../services/organization/documentRole';
-//
-import Customized from '../../BeforeAmbulatory/Customized/Index';
+//common
+import { openNofi } from '@Comman/common';
+//context
+import EmrContext from '@Features/EmrContext';
+//redux
+import { selectCurrentEmrData, selectCurrentHicsSeal } from '@Features/emrReducer';
+import { selectCurrentAppId, selectCurrentDepId } from '@Features/authReducer';
+//api
+import DocumentRoleApi from '@ApiServices/organization/documentRole';
+import DocumentFormPatientApi from '@ApiServices/organization/document';
+//comp
+import DocumentDraft from './DocumentDraft';
+import Customized from '@Pages/BeforeAmbulatory/Customized/Index';
 //
 import ArrowIcon from '../../EMR/NewEmrSupport/document/arrow.svg';
-import DocumentDraft from './DocumentDraft';
-import EmrContext from '../../../../features/EmrContext';
-import { selectCurrentEmrData } from '../../../../features/emrReducer';
-
 const MonitorType = {
    List: 'list',
    Document: 'document'
@@ -23,16 +25,89 @@ function MainInpatientHistory({ newUsageType }) {
    const AppIds = useSelector(selectCurrentAppId);
    const DepIds = useSelector(selectCurrentDepId);
    const incomeEmrData = useSelector(selectCurrentEmrData);
+   const hicsSeal = useSelector(selectCurrentHicsSeal);
    const { countOfDocument, countOfDraft, setDocumentCount, draftedDocuments, setIsReloadDocumentHistory } =
       useContext(EmrContext);
    const [isLoading, setIsLoading] = useState(false);
    const [currentMonitor, setCurrentMonitor] = useState(MonitorType.List);
    const [selectedDocument, setSelectedDocument] = useState();
    const [documents, setDocuments] = useState([]);
-   const [tabActiveKey, setTabActiveKey] = useState(1);
+   const [tabActiveKey, setTabActiveKey] = useState('1');
+
+   const OurDocuments = () => (
+      <div
+         style={{
+            height: 'calc(100vh - 365px)',
+            overflow: 'auto',
+            paddingRight: 12
+         }}
+      >
+         <Table
+            rowKey="value"
+            bordered
+            loading={isLoading}
+            columns={[
+               {
+                  title: '№',
+                  render: (_, _record, index) => index + 1,
+                  width: 40
+               },
+               {
+                  title: 'Нэр',
+                  dataIndex: 'docName',
+                  render: (label, record, index) => <p className="text-black">{label}</p>
+               },
+               {
+                  title: 'Дугаар',
+                  dataIndex: 'label',
+                  render: (label) => <p className="text-black">{label}</p>
+               },
+               {
+                  title: ' ',
+                  width: 50,
+                  render: (_, row) => (
+                     <img
+                        className="hover: cursor-pointer"
+                        onClick={() => {
+                           middleware(row);
+                        }}
+                        src={ArrowIcon}
+                        alt="ArrowIcon"
+                     />
+                  )
+               }
+            ]}
+            dataSource={documents}
+            pagination={false}
+         />
+      </div>
+   );
+   const [tabItems, setTabItems] = useState([
+      {
+         key: '1',
+         label: (
+            <div className="flex flex-row gap-2 items-end">
+               <p>Маягтууд</p>
+               <Badge showZero count={countOfDocument || 0} color="#2D8CFF" />
+            </div>
+         ),
+         children: <OurDocuments />
+      },
+      {
+         key: '2',
+         forceRender: true,
+         label: (
+            <div className="flex flex-row gap-2 items-end">
+               <p>Ноорог</p>
+               <Badge showZero count={countOfDraft || 0} color="#2D8CFF" />
+            </div>
+         ),
+         children: <DocumentDraft usageType={newUsageType} />
+      }
+   ]);
 
    const getDocuments = async () => {
-      await OrganizationDocumentRoleServices.getByPageFilterShow({
+      await DocumentRoleApi.getByPageFilterShow({
          params: {
             employeePositionIds: AppIds,
             structureIds: DepIds,
@@ -75,7 +150,7 @@ function MainInpatientHistory({ newUsageType }) {
          });
       } else {
          setIsLoading(true);
-         await DocumentsFormPatientService.getByDocument(incomeEmrData.patientId, {
+         await DocumentFormPatientApi.getByDocument(incomeEmrData.patientId, {
             type: 'FORM',
             usageType: newUsageType,
             saveType: 'Save'
@@ -131,81 +206,7 @@ function MainInpatientHistory({ newUsageType }) {
    return (
       <>
          {currentMonitor === MonitorType.List ? (
-            <Tabs
-               type="card"
-               activeKey={tabActiveKey}
-               onChange={(key) => setTabActiveKey(key)}
-               items={[
-                  {
-                     key: 1,
-                     label: (
-                        <div className="flex flex-row gap-2 items-end">
-                           <p>Маягтууд</p>
-                           <Badge showZero count={countOfDocument || 0} color="#2D8CFF" />
-                        </div>
-                     ),
-                     children: (
-                        <div
-                           style={{
-                              height: 'calc(100vh - 365px)',
-                              overflow: 'auto',
-                              paddingRight: 12
-                           }}
-                        >
-                           <Table
-                              rowKey="value"
-                              bordered
-                              loading={isLoading}
-                              columns={[
-                                 {
-                                    title: '№',
-                                    render: (_, _record, index) => index + 1,
-                                    width: 40
-                                 },
-                                 {
-                                    title: 'Нэр',
-                                    dataIndex: 'docName',
-                                    render: (label, record, index) => <p className="text-black">{label}</p>
-                                 },
-                                 {
-                                    title: 'Дугаар',
-                                    dataIndex: 'label',
-                                    render: (label) => <p className="text-black">{label}</p>
-                                 },
-                                 {
-                                    title: ' ',
-                                    width: 50,
-                                    render: (_, row) => (
-                                       <img
-                                          className="hover: cursor-pointer"
-                                          onClick={() => {
-                                             middleware(row);
-                                          }}
-                                          src={ArrowIcon}
-                                          alt="ArrowIcon"
-                                       />
-                                    )
-                                 }
-                              ]}
-                              dataSource={documents}
-                              pagination={false}
-                           />
-                        </div>
-                     )
-                  },
-                  {
-                     key: 2,
-                     forceRender: true,
-                     label: (
-                        <div className="flex flex-row gap-2 items-end">
-                           <p>Ноорог</p>
-                           <Badge showZero count={countOfDraft || 0} color="#2D8CFF" />
-                        </div>
-                     ),
-                     children: <DocumentDraft usageType={newUsageType} />
-                  }
-               ]}
-            />
+            <Tabs type="card" activeKey={tabActiveKey} onChange={(key) => setTabActiveKey(key)} items={tabItems} />
          ) : (
             <div className="flex flex-col gap-1">
                <p className="text-center font-semibold">{selectedDocument?.docName}</p>

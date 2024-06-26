@@ -13,6 +13,7 @@ import OrganizationRoomApi from '@ApiServices/organization/room';
 import ReferenceSettingsApi from '@ApiServices/reference/settings';
 import ReferenceDevicesApi from '@ApiServices/reference/devices';
 import ScheduleApi from '@ApiServices/schedule';
+import dayjs from 'dayjs';
 //
 const { Panel } = Collapse;
 const TimeFormat = 'HH:mm';
@@ -157,17 +158,20 @@ function Index({ type }) {
          .then(async (value) => {
             var arr = { ...value };
             if (Object.keys(arr).length > 0) {
-               arr.workDate = moment(date).utcOffset('+0800').format('YYYY-MM-DD HH:mm');
-               arr.startTime = moment(value.startTime).format('HH:mm');
-               arr.endTime = moment(value.endTime).format('HH:mm');
+               arr.workDate = dayjs(date).format('YYYY-MM-DD HH:mm');
+               arr.startTime = dayjs(value.startTime).format('HH:mm');
+               arr.endTime = dayjs(value.endTime).format('HH:mm');
                arr.type = type;
+               console.log('ene utguud', arr);
+               console.log('ene', new Date(arr.workDate).getDate());
+               console.log('ene', new Date(newScheduleDay).getDate());
                if (new Date(arr.workDate).getDate() < new Date(newScheduleDay).getDate()) {
                   openNofi('error', 'Цаг оруулах', 'Өнгөрсөн цаг дээр хувиар оруулах боломжгүй');
                } else if (
-                  moment().isAfter(
-                     moment(arr.workDate).set({
-                        hour: moment(arr.startTime, 'h:mma').get('hour'),
-                        minute: moment(arr.startTime, 'h:mma').get('minute')
+                  dayjs().isAfter(
+                     dayjs(arr.workDate).set({
+                        hour: dayjs(arr.startTime, 'h:mma').get('hour'),
+                        minute: dayjs(arr.startTime, 'h:mma').get('minute')
                      })
                   )
                ) {
@@ -270,7 +274,7 @@ function Index({ type }) {
                               }
                            ]}
                         >
-                           <TimePicker locale={mn} format={TimeFormat} />
+                           <TimePicker format={TimeFormat} />
                         </Form.Item>
                      </Col>
                      <Col span={12} className="p-1">
@@ -284,7 +288,7 @@ function Index({ type }) {
                               }
                            ]}
                         >
-                           <TimePicker locale={mn} format={TimeFormat} />
+                           <TimePicker format={TimeFormat} />
                         </Form.Item>
                      </Col>
                      <Col span={24} className="p-1">

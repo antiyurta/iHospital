@@ -3,17 +3,20 @@ import { Form, Button, Card, Descriptions, Input, Modal, Switch, Select, DatePic
 import React, { useRef, useState } from 'react';
 import { useEffect } from 'react';
 import { Table } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
-import { selectCurrentToken } from '../../../features/authReducer';
-import { Get, Patch, Post, ScrollRef } from '../../common';
+import { ScrollRef } from '../../common';
 import Spinner from 'react-bootstrap/Spinner';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
 import moment from 'moment';
+//api
+import RoleApi from '@ApiServices/reference/role';
+import DegreeApi from '@ApiServices/reference/degree';
+import EmployeeApi from '@ApiServices/organization/employee';
+import StructureApi from '@ApiServices/organization/structure';
+//defults
 const { Search } = Input;
 const { Option, OptGroup } = Select;
 
 function Employee() {
-   const token = useSelector(selectCurrentToken);
    const config = {
       headers: {},
       params: {}
@@ -49,127 +52,95 @@ function Employee() {
       form.resetFields();
       setEditMode(true);
       setId(id);
-      const response = await Get('organization/employee/' + id, token, config);
-      if (response.length != 0) {
+      await EmployeeApi.getEmployeeById(id).then(({ data: { response } }) => {
          response['dateInEmployment'] = moment(response['dateInEmployment']);
          response['dateOutEmployment'] = moment(response['dateOutEmployment']);
          form.setFieldsValue(response);
          setIsOpenCreateModal(true);
-      }
+      });
    };
    const onSearch = (value, index) => {
       config.params[index] = value;
       getEmployee(1);
    };
    const getEmployee = async (page) => {
-      config.params.limit = 10;
-      config.params.page = page;
-      const response = await Get('organization/employee', token, config);
-      if (response.data.length > 0) {
+      await EmployeeApi.getEmployee({
+         params: {
+            page: page,
+            limit: 10
+         }
+      }).then(({ data: { response } }) => {
          setEmployees(response.data);
          setMeta(response.meta);
          setSpinner(true);
-      }
-      config.params.limit = null;
-      config.params.page = null;
+      });
    };
    const viewModal = async (id) => {
-      const response = await Get('organization/employee/' + id, token, config);
-      if (response) {
+      await EmployeeApi.getEmployeeById(id).then(({ data: { response } }) => {
          setViewEmployee(response);
          setIsOpenViewModal(true);
-      }
+      });
    };
    const getDepartment = async (value) => {
-      config.params.type = value;
-      const response = await Get('organization/structure', token, config);
-      if (response.data.length != 0) {
+      await StructureApi.get({
+         params: {
+            type: value
+         }
+      }).then(({ data: { response } }) => {
          setDepartments(response.data);
-      }
-      config.params.type = null;
+      });
    };
    const getPositions = async () => {
-      config.params.type = 1;
-      const response = await Get('organization/structure', token, config);
-      setPositions(response.data);
-      config.params.type = null;
+      await StructureApi.get({
+         params: {
+            type: 1
+         }
+      }).then(({ data: { response } }) => {
+         setPositions(response.data);
+      });
    };
    const selectDepartment = async (value) => {
-      config.params.parentId = value?.toString();
-      config.params.type = 1;
-      const response = await Get('organization/structure', token, config);
-      if (response?.data?.length > 0) {
+      await StructureApi.get({
+         params: {
+            parentId: value?.toString(),
+            type: 1
+         }
+      }).then(({ data: { response } }) => {
          var result = response.data.reduce(function (r, a) {
             r[a.parentId] = r[a.parentId] || [];
             r[a.parentId].push(a);
             return r;
          }, Object.create(null));
          setPositions(result);
-      }
-      config.params.parentId = null;
-      config.params.type = null;
+      });
    };
    const getDegree = async () => {
-      config.params.page = null;
-      config.params.limit = null;
-      const response = await Get('reference/degree', token, config);
-      if (response.data.length != 0) {
+      await DegreeApi.get().then(({ data: { response } }) => {
          setDegrees(response.data);
-      }
+      });
    };
    const getRoles = async () => {
-      config.params.page = null;
-      config.params.limit = null;
-      const response = await Get('reference/role', token, config);
-      if (response.data.length != 0) {
+      await RoleApi.get().then(({ data: { response } }) => {
          setRoles(response.data);
-      }
-   };
-   const getMoblieStructure = async () => {
-      const conf = {
-         headers: {},
-         params: {}
-      };
-      const response = await Get('sub-organization', token, conf);
-      if (response.data.length != 0) {
-         setMoblie(response.data);
-      }
+      });
    };
    const getByIdStructureName = (parentId) => {
-      const name = departments?.find((e) => e.id === parseInt(parentId))?.name;
-      return name;
+      return departments?.find((e) => e.id === parseInt(parentId))?.name;
    };
-   const connectFinance = async (el) => {
-      data.clid = el.id;
-      data.ccode = el.id?.toString();
-      data.cname = el.firstName;
-      data.cregister = el.registerNumber;
-      data.cdirector = el.lastName;
-      data.cemail = el.email;
-      data.caddress = el.homeAddress;
-      data.cphone = el.phone;
-      data.cmobile = el.phoneNo;
-      config.params = {};
-      const response = await Post(`finance/client`, token, config, data);
-      if (response === 201) {
-         setTestParam(!testParam);
-      }
-   };
+
    const onFinish = async () => {
       form.validateFields().then(async (values) => {
          console.log(values);
          if (editMode) {
-            const response = await Patch('organization/employee/' + id, token, config, values);
-            if (response === 200) {
+            await EmployeeApi.patchEmployee(id, values).then(() => {
                getEmployee(1);
                setIsOpenCreateModal(false);
-            }
+            });
          } else {
-            const response = await Post('organization/employee', token, config, values);
-            if (response === 201) {
+            await EmployeeApi.postEmployee(values).then(() => {
                getEmployee(1);
                setIsOpenCreateModal(false);
-            }
+            });
          }
       });
    };
@@ -298,7 +269,7 @@ function Employee() {
                                              <CheckOutlined className="text-green-600" />
                                           ) : (
                                              <Button
-                                                onClick={() => connectFinance(employee)}
+                                                // onClick={() => connectFinance(employee)}
                                                 type="text"
                                                 className="text-sky-500 font-semibold"
                                              >

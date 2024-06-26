@@ -296,16 +296,7 @@ function Invoice() {
                height: 'calc(100vh - 200px)'
             }}
          >
-            <Card
-               bordered={false}
-               className="header-solid max-h-max rounded-md"
-               bodyStyle={{
-                  paddingTop: 10,
-                  paddingLeft: 10,
-                  paddingRight: 10,
-                  paddingBottom: 10
-               }}
-            >
+            <Card bordered={false} className="header-solid max-h-max rounded-md">
                <ConfigProvider locale={localMn()}>
                   <Table
                      rowKey={'id'}

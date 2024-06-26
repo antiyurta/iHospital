@@ -5,7 +5,6 @@ import '../src/style/page.css';
 import '../src/style/layout.scss';
 import { Route, Routes } from 'react-router-dom';
 import { AuthContextProvider } from './features/AuthContext';
-
 import Auth from './components/Auth';
 import Login from './components/Login';
 import ResetPassword from './components/ResetPassword';
@@ -22,6 +21,7 @@ import CreateStory from './components/pages/Bed/MainBed/CreateStory';
 import UserConfirm from '@Pages/UserConfirm';
 //
 import { PublicRoutes, ProtectedRoutes } from './Routes';
+import MainESB from './Layouts/ESB/MainESB';
 //
 
 const EMR = React.lazy(() => import('./components/pages/EMR/NewEmr'));
@@ -48,6 +48,7 @@ function App() {
                ))}
             </Route>
             <Route path="/user-confirm" element={<UserConfirm />} />
+            <Route path="/esb/:id/*" element={<MainESB />} />
             <Route element={<MainLayout />}>
                <Route path="/profile" element={<Profile />} />
                <Route element={<ProtectedRoute />}>

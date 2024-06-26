@@ -5,11 +5,11 @@ class XypApi {
       return await jwtInterceopter.post('xyp/citizen-card', data);
    }
    /** OTP үүсгэх хүсэлт бүртгэх сервис */
-   async registerOtp(regnum) {
+   async registerOtp(regnum, phoneNum) {
       return await jwtInterceopter.post('xyp/register-otp/', {
          regnum,
          jsonWSList: [{ ws: 'WS100101_getCitizenIDCardInfo' }],
-         phoneNum: 0,
+         phoneNum: phoneNum,
          isEmail: 0,
          isSms: 1,
          isKiosk: 0,
@@ -58,7 +58,7 @@ class XypApi {
    }
    /** Дархлаажуулалтын мэдээллийг регистрийн дугаараар шалгах сервис */
    async vaccineByRegno(regnum) {
-      return await jwtInterceopter.get('xyp/vaccine-by-regno' + regnum);
+      return await jwtInterceopter.get('xyp/vaccine-by-regno/' + regnum);
    }
    /** Иргэний мэдээлэл */
    async personInfo(regnum, lastName, firstName) {

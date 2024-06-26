@@ -1,22 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { selectCurrentToken } from '../../../features/authReducer';
-import { Get } from '../../common';
 import UTable from '../../UTable';
 //api
+import StructureApi from '@ApiServices/organization/structure';
 import healthInsuranceApi from '@ApiServices/healt-insurance/healtInsurance';
 
 function Structure() {
-   const token = useSelector(selectCurrentToken);
    const [testParam, setTestParam] = useState(true);
    const [hicsServices, setHicsServices] = useState([]);
-   const [financeDepartments, setFinanceDepartments] = useState([]);
-   const config = {
-      headers: {},
-      params: {
-         type: 2
-      }
-   };
+
    const [departments, setDepartments] = useState([]);
    const department = {
       params: {
@@ -159,8 +150,13 @@ function Structure() {
       }
    ];
    const getDepartments = async () => {
-      const response = await Get('organization/structure', token, config);
-      setDepartments(response.data);
+      await StructureApi.get({
+         params: {
+            type: 2
+         }
+      }).then(({ data: { response } }) => {
+         setDepartments(response.data);
+      });
    };
    const getHicsServices = async () => {
       await healthInsuranceApi.getHicsService().then(({ data }) => {

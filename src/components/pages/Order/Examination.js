@@ -10,7 +10,7 @@ import { CARE_TYPE } from './care-enum';
 import { ListSupport } from './list-support';
 import { isPayAmountCit } from '@Utils/config/insurance';
 
-export const Examination = ({ hicsExams, selectedPatient, hasInsurance, currentSeal, handleclick }) => {
+export const Examination = ({ isDoctor, hicsExams, selectedPatient, hasInsurance, currentSeal, handleclick }) => {
    const [isLoading, setLoading] = useState(false);
    const [isOpenModal, setIsOpenModal] = useState(false);
    const [selectedTypeId, setSelectedTypeId] = useState(null);
@@ -22,7 +22,7 @@ export const Examination = ({ hicsExams, selectedPatient, hasInsurance, currentS
          openNofi('warning', 'Анхааруулга', 'Шинжилгээ сонгогдсон байна');
       } else {
          const currentExam = hicsExams.find((exam) => exam.examCode === examination.examCode);
-         if (!isJump && examination.isInsurance && examination.examCode && hasInsurance && currentExam) {
+         if (!isJump && isDoctor && examination.isInsurance && examination.examCode && hasInsurance && currentExam) {
             setLoading(true);
             const sealData = currentExam.drgCode
                ? {
@@ -63,19 +63,19 @@ export const Examination = ({ hicsExams, selectedPatient, hasInsurance, currentS
          children: [
             {
                title: 'Даатгал',
-               width: 120,
+               width: 100,
                dataIndex: 'amountHi',
                render: (price) => numberToCurrency(price)
             },
             {
                title: 'Иргэн төлөх',
-               width: 120,
+               width: 100,
                dataIndex: 'amountCit',
                render: (price) => numberToCurrency(price)
             },
             {
                title: 'Нийт',
-               width: 120,
+               width: 100,
                dataIndex: 'price',
                render: (price) => numberToCurrency(price)
             }
@@ -114,10 +114,12 @@ export const Examination = ({ hicsExams, selectedPatient, hasInsurance, currentS
             title="Шинжилгээ сонгох"
             width={'80%'}
             open={isOpenModal}
-            bodyStyle={{
-               height: 552,
-               maxHeight: 600,
-               overflow: 'auto'
+            styles={{
+               body: {
+                  height: 552,
+                  maxHeight: 600,
+                  overflow: 'auto'
+               }
             }}
             onCancel={() => setIsOpenModal(false)}
             onOk={() => {

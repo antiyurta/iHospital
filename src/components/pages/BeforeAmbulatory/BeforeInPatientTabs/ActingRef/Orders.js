@@ -2,14 +2,11 @@ import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Card, Col, Empty, Form, Input, InputNumber, Modal, Row, Select, Space, Table } from 'antd';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { selectCurrentToken } from '../../../../../features/authReducer';
 import FullScreenLoader from '../../../../FullScreenLoader';
 import MiddleTable from './MiddleTable';
 const { Option } = Select;
 const { TextArea } = Input;
 function Orders() {
-   const token = useSelector(selectCurrentToken);
    const [form] = Form.useForm();
    const [calcedPlan, setCalcedPlan] = useState([]);
    const [calcedPlanLoading, setCalcedPlanLoading] = useState(false);

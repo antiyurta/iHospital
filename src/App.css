@@ -3,7 +3,7 @@
 @import './style/responsive.css';
 @import './style/Hospital.css';
 @import './style/hospital.scss';
-@import 'antd/dist/antd.css';
+/* @import 'antd/dist/antd.css'; */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -524,16 +524,6 @@ input[type='number'] {
 
 .page .ant-form-item-control-input-content {
    min-height: 22px !important;
-}
-
-.ant-btn {
-   line-height: 1.1 !important;
-   border-radius: 6px !important;
-   white-space: normal;
-}
-
-.ant-btn-primary {
-   background-color: #0095ff;
 }
 
 .btn-add {

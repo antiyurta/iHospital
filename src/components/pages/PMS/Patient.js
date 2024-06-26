@@ -315,12 +315,7 @@ function Patient() {
             title="Өвчтөн"
             extra={
                <div className="flex flex-row gap-3">
-                  <Button
-                     className="bg-red-500"
-                     type="danger"
-                     icon={<PlusCircleOutlined />}
-                     onClick={() => showModalUrgent()}
-                  >
+                  <Button type="primary" danger icon={<PlusCircleOutlined />} onClick={() => showModalUrgent()}>
                      Яаралтай нэмэх
                   </Button>
                   <Button type="primary" onClick={() => showModal()} icon={<PlusCircleOutlined />}>

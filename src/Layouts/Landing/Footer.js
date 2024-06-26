@@ -163,7 +163,7 @@ function Footer() {
             </section>
          </Container>
 
-         <section className="footer-bottom">GurenSoft LLC 2023 All rights reserved</section>
+         <section className="footer-bottom">GurenSoft LLC 2024 All rights reserved</section>
          {/* <section>
             <div className="block w-full relative">
                <div className="flex flex-col items-start mt-[120px] gap-[10px] bg-[#2D8CFF]">

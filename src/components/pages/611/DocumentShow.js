@@ -62,8 +62,10 @@ function DocumentShow({ props }) {
             open={isOpenAM}
             onCancel={() => setIsOpenAM(false)}
             width={'90%'}
-            bodyStyle={{
-               paddingLeft: 0
+            styles={{
+               body: {
+                  paddingLeft: 0
+               }
             }}
             footer={null}
          >

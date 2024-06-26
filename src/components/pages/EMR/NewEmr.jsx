@@ -18,6 +18,7 @@ import OneWindow from './OneWindow';
 import DoctorNotes from './DoctorNotes';
 import Schedule from '@Pages/OCS/Schedule';
 import NewEmrSupport from './NewEmrSupport';
+import MainHicsHistory from './MainHicsHistory';
 import MainInPatient from './InPatient/MainInPatient';
 import MainAmbulatory from './Ambulatory/MainAmbulatory';
 import PatientInformation from '@Pages/PatientInformation';
@@ -99,7 +100,6 @@ class NewEmr extends React.Component {
             temporarilyType: value
          });
       }
-
       // }
    };
    saveOrder = async (value) => {
@@ -147,7 +147,7 @@ class NewEmr extends React.Component {
       await this.getAddHics();
    }
    async componentWillUnmount() {
-      this.props.delEmrData();
+      // this.props.delEmrData();
       console.log('Үзлэг дуусав');
    }
    render() {
@@ -201,20 +201,6 @@ class NewEmr extends React.Component {
                         ) : null}
                      </div>
                   </div>
-                  {/* <div className="new-emr-body">
-                     <div className="bg-red-500 item-1">1</div>
-                     <div className="bg-blue-500 item-2">2</div>
-                     <OneWindow
-                        usageType={this.state.usageType}
-                        handleView={(state) => {
-                           this.setState({
-                              isExpandHistory: state ? !this.state.isExpandHistory : true,
-                              isExpandInspection: state ? !this.state.isExpandInspection : true,
-                              isExpandOneWindow: true
-                           });
-                        }}
-                     />
-                  </div> */}
                   {this.state.type === 'EMR' ? (
                      <div className="emr-body grid grid-cols-5 gap-2 p-2">
                         {this.state.isExpandHistory ? (
@@ -258,13 +244,18 @@ class NewEmr extends React.Component {
                                     >
                                        <Radio value={'OUT'}>Амбулатори</Radio>
                                        <Radio value={'IN'}>Хэвтэн</Radio>
+                                       <Radio value={'EMD'}>Даатгал</Radio>
                                     </Radio.Group>
                                  </div>
                                  {this.state.usageType === 'OUT' ? (
                                     <MainAmbulatory patientId={this.props.IncomeEMRData.patientId} />
-                                 ) : (
+                                 ) : null}
+                                 {this.state.usageType === 'IN' ? (
                                     <MainInPatient patientId={this.props.IncomeEMRData.patientId} />
-                                 )}
+                                 ) : null}
+                                 {this.state.usageType === 'EMD' ? (
+                                    <MainHicsHistory patient={this.state.selectedPatient} />
+                                 ) : null}
                               </div>
                            </div>
                         ) : null}
@@ -298,11 +289,12 @@ class NewEmr extends React.Component {
                                        }
                                     />
                                  </div>
-                                 {this.state.usageType === 'OUT' ? (
+                                 {this.props.IncomeEMRData.usageType === 'OUT' ? (
                                     <MainPatientHistory handleClick={this.handleTypeChange} />
-                                 ) : (
+                                 ) : null}
+                                 {this.props.IncomeEMRData.usageType === 'IN' ? (
                                     <MainInpatientHistory newUsageType={'IN'} />
-                                 )}
+                                 ) : null}
                               </div>
                            </div>
                         ) : null}
@@ -317,7 +309,7 @@ class NewEmr extends React.Component {
                               }
                            >
                               <OneWindow
-                                 usageType={this.state.usageType}
+                                 usageType={this.props.IncomeEMRData.usageType}
                                  handleView={(state) => {
                                     this.setState({
                                        isExpandHistory: state ? !this.state.isExpandHistory : true,

@@ -447,13 +447,7 @@ function Index({ type, isDoctor, isSurgeyBoss }) {
                   }}
                />
             ) : null}
-            <Card
-               bordered={false}
-               className="header-solid rounded-md"
-               bodyStyle={{
-                  padding: 8
-               }}
-            >
+            <Card bordered={false} className="header-solid rounded-md">
                <Table
                   className="emr-index-list"
                   rowKey={'id'}

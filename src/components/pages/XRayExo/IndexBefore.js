@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
    CheckOutlined,
    MinusOutlined,
@@ -10,27 +10,25 @@ import {
 import { Button, Card, Form, Modal, Upload, Select, InputNumber, Table } from 'antd';
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../features/authReducer';
-import { Get, getAge, getGenderInType, openNofi, Post } from '../../common';
+import { getAge, getGenderInType, openNofi } from '../../common';
 import jwtInterceopter from '../../jwtInterceopter';
 import { ListPatientInfo, TypeInfo } from '../../ListInjection';
 import dayjs from 'dayjs';
 import Barcode from 'react-barcode';
-const DEV_URL = process.env.REACT_APP_DEV_URL;
-const API_KEY = process.env.REACT_APP_API_KEY;
-
-import ServiceApi from '../../../services/service/service';
 import ListFilter from '../BeforeAmbulatory/Lists/Index/listFilter';
 import ScheduleTypeInfo from '../BeforeAmbulatory/Lists/Index/scheduleTypeInfo';
 import InspectionTypeInfo from '../BeforeAmbulatory/Lists/Index/inspectionTypeInfo';
+//api
+import ServiceApi from '@ApiServices/service/service';
 import InsuranceApi from '@ApiServices/healt-insurance/healtInsurance';
+//defaults
+const DEV_URL = process.env.REACT_APP_DEV_URL;
+const API_KEY = process.env.REACT_APP_API_KEY;
 
 function IndexBefore({ type }) {
    const today = new Date();
    const token = useSelector(selectCurrentToken);
-   const config = {
-      headers: {},
-      params: {}
-   };
+
    const { Option } = Select;
    const [xrayLists, setXrayLists] = useState([]);
    const [meta, setMeta] = useState({});
@@ -46,14 +44,7 @@ function IndexBefore({ type }) {
    const [start, setStart] = useState('');
    const [end, setEnd] = useState('');
    const [spinner, setSpinner] = useState(false);
-   const getXrayMaterials = async () => {
-      config.params.serviceType = 1;
-      const response = await Get('service/service-material', token, config);
-      console.log('RES getXrayMaterials==============>', response);
-      if (response.data.length > 0) {
-         setXRayMaterialList(response.data);
-      }
-   };
+
    const getXrayRequest = async (page, pageSize, start, end) => {
       setSpinner(true);
       await ServiceApi.getXrayRequest({
@@ -154,7 +145,6 @@ function IndexBefore({ type }) {
    };
    useEffect(() => {
       getXrayRequest(1, 10, today, today);
-      // getXrayMaterials();
    }, []);
 
    const showModal = () => {
@@ -181,11 +171,11 @@ function IndexBefore({ type }) {
       setUsedMaterials(rows);
    };
    const saveUsedMaterials = async () => {
-      const response = await Post(`finance/create-expenses`, token, config, usedMaterials);
-      if (response === 201) {
-         setIsModalOpen(false);
-         setUsedMaterials([{}]);
-      }
+      // const response = await Post(`finance/create-expenses`, token, config, usedMaterials);
+      // if (response === 201) {
+      //    setIsModalOpen(false);
+      //    setUsedMaterials([{}]);
+      // }
    };
    const handleAddRow = () => {
       const item = {
@@ -337,14 +327,7 @@ function IndexBefore({ type }) {
             <ScheduleTypeInfo />
             <InspectionTypeInfo />
             <ListFilter meta={meta} appointmentsLength={xrayLists?.length || 0} getList={getXrayRequest} />
-            <Card
-               title={type === 0 ? 'Оношилгооны өмнөх жагсаалт' : 'ЭКГ жагсаалт'}
-               bordered={false}
-               className="header-solid rounded-md"
-               bodyStyle={{
-                  padding: 8
-               }}
-            >
+            <Card title="" bordered={false} className="header-solid rounded-md">
                <Table
                   rowKey={'id'}
                   locale={{ emptyText: 'Мэдээлэл байхгүй' }}

@@ -13,7 +13,7 @@ import { numberToCurrency, openNofi } from '@Comman/common';
 //api
 import healtInsuranceApi from '@ApiServices/healt-insurance/healtInsurance';
 
-function Xray({ selectedPatient, hasInsurance, currentSeal, handleclick }) {
+function Xray({ isDoctor, selectedPatient, hasInsurance, currentSeal, handleclick }) {
    const [isOpenModal, setIsOpenModal] = useState(false);
    const [selectedTypeId, setSelectedTypeId] = useState(null);
    const [selectedXrays, setSelectedXrays] = useState([]);
@@ -29,19 +29,16 @@ function Xray({ selectedPatient, hasInsurance, currentSeal, handleclick }) {
          children: [
             {
                title: 'Даатгал',
-               width: 120,
                dataIndex: 'amountHi',
                render: (price) => numberToCurrency(price)
             },
             {
                title: 'Иргэн төлөх',
-               width: 120,
                dataIndex: 'amountCit',
                render: (price) => numberToCurrency(price)
             },
             {
                title: 'Нийт',
-               width: 120,
                dataIndex: 'price',
                render: (price) => numberToCurrency(price)
             }
@@ -70,7 +67,12 @@ function Xray({ selectedPatient, hasInsurance, currentSeal, handleclick }) {
       if (state) {
          openNofi('warning', 'Анхааруулга', 'Оношилгоо сонгогдсон байна');
       } else {
-         if (!isJump && xray.isInsurance && xray.drgCode && hasInsurance) {
+         console.log('isJump', isJump);
+         console.log('isDoctor', isDoctor);
+         console.log('xray.isInsurance', xray.isInsurance);
+         console.log('xray.drgCode', isJump);
+         console.log('hasInsurance', hasInsurance);
+         if (!isJump && isDoctor && xray.isInsurance && xray.drgCode && hasInsurance) {
             setLoading(true);
             await healtInsuranceApi
                .getHicsCostList({

@@ -263,33 +263,6 @@
    margin: 0;
 }
 
-.ant-btn-sm,
-.ant-radio-group-small .ant-radio-button-wrapper {
-   height: 34px;
-   font-size: 12px;
-   padding: 0 15px;
-}
-
-.ant-btn-sm {
-   border-radius: 4px;
-}
-
-.ant-btn-sm,
-.ant-radio-group-small .ant-radio-button-wrapper {
-   height: 34px;
-   font-size: 12px;
-   padding: 0 15px;
-}
-
-.ant-btn-sm {
-   border-radius: 4px;
-}
-
-.ant-btn,
-.ant-radio-group .ant-radio-button-wrapper {
-   font-weight: 600;
-}
-
 .layout-dashboard .ant-layout-sider.sider-primary .aside-footer {
    padding-top: 100px;
    padding-bottom: 33px;
@@ -779,29 +752,6 @@ ul.ant-menu.ant-menu-root.ant-menu-inline.ant-menu-light.left-nav
    background: transparent;
    border: 0px;
    box-shadow: none;
-}
-
-button.ant-btn.bell {
-   padding: 0px;
-   border: 0px;
-   background: transparent;
-   box-shadow: none;
-   position: relative;
-}
-
-button.ant-btn.bell strong {
-   position: absolute;
-   top: -1px;
-   right: -5px;
-   display: inline-block;
-   width: 20px;
-   height: 20px;
-   background: #f5222d;
-   border-radius: 100%;
-   text-align: center;
-   line-height: normal;
-   font-weight: normal;
-   color: #fff;
 }
 
 .ant-dropdown-menu.ant-dropdown-menu-split.list-notifaction {
@@ -1671,8 +1621,6 @@ ul.ant-menu.ant-menu-root.ant-menu-inline.ant-menu-light.left-nav li.ant-menu-it
    padding: 8px 10px;
 }
 
- 
-
 .tablespace {
    overflow: hidden;
 }
@@ -1963,15 +1911,6 @@ body {
    color: #8c8c8c;
 }
 
-.ant-input {
-   border-radius: 6px;
-}
-
-.ant-input {
-   font-weight: 600;
-   color: #8c8c8c;
-}
-
 .ant-form-item-control-input {
    min-height: 40px !important;
 }
@@ -1986,31 +1925,12 @@ body {
    align-self: center !important;
 }
 
-.ant-input {
-   height: 40px;
-   border: 1px solid #d9d9d9;
-}
-
 .font-bold {
    font-weight: 700;
 }
 
 .text-dark {
    color: #141414;
-}
-
-.ant-btn,
-.ant-radio-group .ant-radio-button-wrapper {
-   font-weight: 600;
-   font-size: 12px;
-   height: 40px;
-   padding: 0 15px;
-   line-height: 40px;
-}
-
-.ant-btn {
-   box-shadow: 0 2px 4px rgb(0 0 0 / 7%);
-   border-radius: 6px;
 }
 
 .layout-sign-up .ant-layout-footer {
@@ -2251,21 +2171,6 @@ body {
 
 .rightside-top .signin svg {
    margin-right: 5px;
-}
-
-button.ant-btn.bell strong {
-   position: absolute;
-   top: -1px;
-   right: -9px;
-   display: inline-block;
-   width: 18px;
-   height: 18px;
-   background: #f5222d;
-   border-radius: 100%;
-   text-align: center;
-   line-height: normal;
-   font-weight: normal;
-   color: #fff;
 }
 
 /* old css end */

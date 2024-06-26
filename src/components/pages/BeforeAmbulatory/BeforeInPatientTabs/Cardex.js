@@ -2,31 +2,23 @@ import {
    CheckCircleOutlined,
    CheckOutlined,
    CloseCircleOutlined,
-   CloseOutlined,
    EditOutlined,
-   LoadingOutlined,
    MinusOutlined,
    PauseCircleOutlined,
    PlusOutlined,
-   QuestionOutlined,
-   StarOutlined,
    WarningOutlined
 } from '@ant-design/icons';
 import { DatePicker, Empty, Table, Tag } from 'antd';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import { selectCurrentToken } from '../../../../features/authReducer';
-import { Get } from '../../../common';
 
 function Cardex() {
    const today = new Date();
    let location = useLocation();
    const [start, setStart] = useState('');
    const [end, setEnd] = useState('');
-   const token = useSelector(selectCurrentToken);
    const [requestDetailListLoading, setRequestDetailListLoading] = useState(false);
    const [xrayLoading, setXrayLoading] = useState(false);
    //
@@ -176,7 +168,8 @@ function Cardex() {
       };
       setStart(start);
       setEnd(end);
-      const response = await Get('treatment-plan', token, conf);
+      const response = {};
+      // const response = await Get('treatment-plan', token, conf);
       if (response.data) {
          setTreatmentList(response.data);
          setTreatmentListMeta(response.meta);
@@ -200,7 +193,8 @@ function Cardex() {
       };
       setStart(start);
       setEnd(end);
-      const response = await Get('service/erequest', token, conf);
+      const response = {};
+      // const response = await Get('service/erequest', token, conf);
       if (response.data.length > 0) {
          setSelectedRequestDtl([]);
          setSelectedRequestDtlMeta(response.meta);
@@ -231,7 +225,8 @@ function Cardex() {
       };
       setStart(start);
       setEnd(end);
-      const response = await Get('service/xrayRequest', token, conf);
+      const response = {};
+      // const response = await Get('service/xrayRequest', token, conf);
       if (response.data) {
          setXrayList(response.data);
          setXrayListMeta(response.meta);

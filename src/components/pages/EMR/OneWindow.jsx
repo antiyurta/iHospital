@@ -1,6 +1,4 @@
-import React, { useContext, useEffect } from 'react';
-import { useMemo } from 'react';
-import { useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import ListOfIssues from './ListOfIssues';
 import OrderHistory from './OrderHistory';
 import DocumentHistroy from '../EMR/NewEmrSupport/history/DocumentHistory';
@@ -10,11 +8,9 @@ import DocumentViewer from './DocumentViewer';
 
 import { Splide, SplideSlide } from '@splidejs/react-splide';
 import '@splidejs/react-splide/css';
-import { ExpandOutlined } from '@ant-design/icons';
 const OneWindow = (props) => {
    const { usageType, handleView } = props;
    const { isViewDocument } = useContext(EmrContext);
-   const [isMin, setMin] = useState(true);
    const [activeKey, setActiveKey] = useState(usageType === 'OUT' ? 0 : 2);
    const Render = useMemo(() => {
       if (activeKey === 0) {
@@ -36,15 +32,8 @@ const OneWindow = (props) => {
          {isViewDocument ? (
             <DocumentViewer />
          ) : (
-            // <div className={isMin ? 'one-window min' : 'one-window max'}>
             <div className="ambo-issuse-order">
-               {/* <ExpandOutlined
-                  onClick={() => {
-                     setMin(!isMin);
-                  }}
-               /> */}
                <div className="header">
-                  {/* {!isMin ? ( */}
                   <Splide
                      options={{
                         pagination: false,
@@ -54,7 +43,7 @@ const OneWindow = (props) => {
                         padding: 28
                      }}
                   >
-                     {usageType === 'OUT' ? (
+                     {usageType === 'OUT' || usageType === 'EMD' ? (
                         <>
                            <SplideSlide>
                               <div className={activeKey === 0 ? 'section active' : 'section'}>
@@ -92,13 +81,11 @@ const OneWindow = (props) => {
                         </>
                      )}
                   </Splide>
-                  {/* ) : null} */}
                </div>
                <div className="content overflow-auto">
                   <Render />
                </div>
             </div>
-            // </div>
          )}
       </>
    );

@@ -1,15 +1,15 @@
-import { DeleteOutlined, EditOutlined, PlusCircleOutlined, RightOutlined } from '@ant-design/icons';
-import { Button, Card, Empty, Form, Input, InputNumber, Modal, Select, Space, Table } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { selectCurrentToken } from '../../../features/authReducer';
-import { checkNumber, Delete } from '../../common';
+import { DeleteOutlined, EditOutlined, PlusCircleOutlined, RightOutlined } from '@ant-design/icons';
+import { Button, Card, Empty, Form, Input, InputNumber, Modal, Space, Table } from 'antd';
+//api
+import ServiceApi from '@ApiServices/service/service';
+import examinationApi from '@ApiServices/service/examination.api';
+//common
+import { checkNumber } from '@Comman/common';
+//defaults
 const { Search } = Input;
-//
-import ServiceApi from '../../../services/service/service';
-import examinationApi from '../../../services/service/examination.api';
+
 function ExaminationParams() {
-   const token = useSelector(selectCurrentToken);
    const [editMode, setEditMode] = useState(false);
    const [editId, setEditId] = useState(Number);
    const [paraForm] = Form.useForm();
@@ -65,18 +65,15 @@ function ExaminationParams() {
       }
    };
    const deleteModal = (id) => {
-      const conf = {
-         headers: {},
-         params: {}
-      };
       Modal.error({
          title: 'Устгах',
          okText: 'Устгах',
          closable: true,
          content: <div>Устгасан тохиолдолд дахин сэргээгдэхгүй болно</div>,
          async onOk() {
-            await Delete('service/parameter/' + id, token, conf);
-            getParams(selectedExaId);
+            await ServiceApi.deleteErequestParameter(id).then(() => {
+               getParams(selectedExaId);
+            });
          }
       });
    };

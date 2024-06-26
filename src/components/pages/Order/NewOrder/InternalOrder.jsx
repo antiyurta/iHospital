@@ -298,6 +298,7 @@ const InternalOrder = (props) => {
             {showSetOrder || showRecentRepice ? <div className="h-full w-[1px] bg-[#c9cdd4]" /> : null}
             {showExamination && (
                <Examination
+                  isDoctor={isDoctor}
                   hicsExams={hicsExams}
                   selectedPatient={selectedPatient}
                   hasInsurance={IncomeEMRData.isInsurance}
@@ -307,6 +308,7 @@ const InternalOrder = (props) => {
             )}
             {showXray && (
                <Xray
+                  isDoctor={isDoctor}
                   selectedPatient={selectedPatient}
                   hasInsurance={IncomeEMRData.isInsurance}
                   currentSeal={findInclueDiagnosis(hicsSeal, addHics)}

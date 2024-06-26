@@ -1,21 +1,21 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { Button, Form, Spin } from 'antd';
-import GeneralInspection from '../GeneralInspection';
 import { useSelector } from 'react-redux';
-import HistoryTab from './HistoryTab';
-import DynamicContent from './DynamicContent';
-import HealtInfo from './HealtInfo';
-import NewFormRender from '../../BeforeAmbulatory/Customized/NewFormRender';
 import dayjs from 'dayjs';
 import { Splide, SplideSlide } from '@splidejs/react-splide';
 import '@splidejs/react-splide/css';
 //comp
+import HealtInfo from './HealtInfo';
+import HistoryTab from './HistoryTab';
+import DynamicContent from './DynamicContent';
+import GeneralInspection from '../GeneralInspection';
 import UrgentDocument from './Urgent/UrgentDocument';
+import NewFormRender from '@Pages/BeforeAmbulatory/Customized/NewFormRender';
 //comman
 import { openNofi } from '@Comman/common';
 // redux
 import { selectCurrentUserId } from '@Features/authReducer';
-import { selectCurrentEmrData } from '@Features/emrReducer';
+import { selectCurrentEmrData, selectCurrentHicsSeal } from '@Features/emrReducer';
 // api
 import RegularApi from '@ApiServices/regular.api';
 import ServiceApi from '@ApiServices/service/service';
@@ -44,6 +44,7 @@ function MainPatientHistory({ handleClick }) {
       serialNumber
    } = useSelector(selectCurrentEmrData);
    const userId = useSelector(selectCurrentUserId);
+   const hicsSeal = useSelector(selectCurrentHicsSeal);
    const [xrayForm] = Form.useForm();
    const [activeKey, setActiveKey] = useState('item-history');
    const [loading, setLoading] = useState(false);
@@ -68,7 +69,7 @@ function MainPatientHistory({ handleClick }) {
       return <HealtInfo />;
    });
    const Tab4Content = useCallback(() => {
-      return <PregnancyInfo form={xrayForm} />;
+      return <PregnancyInfo />;
    });
 
    const DynamicTabContent = useCallback((props) => {
@@ -212,11 +213,6 @@ function MainPatientHistory({ handleClick }) {
                key: 'item-health-info',
                children: <Tab3Content />
             });
-            newItems.push({
-               label: 'Жирэмсний хяналт',
-               key: 'item-pregnancy-info',
-               children: <Tab4Content />
-            });
          }
          return newItems;
       });
@@ -270,11 +266,6 @@ function MainPatientHistory({ handleClick }) {
                label: 'Эрүүл мэндийн мэдээлэл',
                key: 'item-health-info',
                children: <Tab3Content />
-            });
-            newItems.push({
-               label: 'Жирэмсний хяналт',
-               key: 'item-pregnancy-info',
-               children: <Tab4Content />
             });
          }
          return newItems;
@@ -331,6 +322,16 @@ function MainPatientHistory({ handleClick }) {
                }
             }
          }
+      }
+      if (hicsSeal.hicsServiceId === 20160) {
+         setItems((prevValues) => [
+            ...prevValues,
+            {
+               label: 'Жирэмсний хяналт',
+               key: 'item-pregnancy-info',
+               children: <Tab4Content />
+            }
+         ]);
       }
    }, []);
    if (appointmentType === 3) {

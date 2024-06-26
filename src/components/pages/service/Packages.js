@@ -1,18 +1,14 @@
-import { DeleteOutlined, EditOutlined, MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Card, Col, Form, Input, InputNumber, Modal, Row } from 'antd';
 import React, { useEffect, useState } from 'react';
+import { DeleteOutlined, EditOutlined, MinusCircleOutlined } from '@ant-design/icons';
+import { Button, Card, Col, Form, Input, InputNumber, Modal, Row } from 'antd';
 import { Table } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
-import { selectCurrentToken } from '../../../features/authReducer';
-import { Delete, Get, Patch, Post } from '../../common';
 import Order from '../Order/Order';
+//api
+import ServiceApi from '@ApiServices/service/service';
+//common
+import { checkNumber } from '@Comman/common';
 
 function Packages() {
-   const token = useSelector(selectCurrentToken);
-   const config = {
-      headers: {},
-      params: {}
-   };
    const [isOpenModal, setIsOpenModal] = useState(false);
    const [isOpenSecondModal, setIsOpenSecondModal] = useState(false);
    const [data, setData] = useState([]);
@@ -52,14 +48,7 @@ function Packages() {
          label: 'Эмчийн үзлэг'
       }
    ];
-   const checkNumber = (event) => {
-      var charCode = event.charCode;
-      if (charCode > 31 && (charCode < 48 || charCode > 57) && charCode !== 46) {
-         event.preventDefault();
-      } else {
-         return true;
-      }
-   };
+
    const showModal = () => {
       setIsOpenModal(true);
       setEditMode(false);
@@ -67,11 +56,12 @@ function Packages() {
    };
 
    const editModal = async (id) => {
-      const response = await Get('service/package/' + id, token, config);
-      form.setFieldsValue(response);
-      setEditMode(true);
-      setId(response.id);
-      setIsOpenModal(true);
+      await ServiceApi.getPackageById(id).then(({ data: { response } }) => {
+         form.setFieldsValue(response);
+         setEditMode(true);
+         setId(response.id);
+         setIsOpenModal(true);
+      });
    };
 
    const deleteModal = async (id) => {
@@ -81,14 +71,13 @@ function Packages() {
          closable: true,
          content: <div>Устгасан тохиолдолд дахин сэргээгдэхгүй болно</div>,
          async onOk() {
-            await Delete('service/package/' + id, token, config);
+            await ServiceApi.deletePackage(id);
             getPackages();
          }
       });
    };
 
    const AddServices = async (value) => {
-      console.log('=======>', value);
       setIsOpenSecondModal(false);
       if (editMode) {
          var arr = await form.validateFields();
@@ -102,17 +91,15 @@ function Packages() {
          .validateFields()
          .then(async (value) => {
             if (editMode) {
-               const response = await Patch('service/package/' + id, token, config, value);
-               if (response === 200) {
+               await ServiceApi.patchPackage(id, value).then(() => {
                   getPackages();
                   setIsOpenModal(false);
-               }
+               });
             } else {
-               const response = await Post('service/package', token, config, value);
-               if (response === 201) {
+               await ServiceApi.postPackage(value).then(() => {
                   getPackages();
                   setIsOpenModal(false);
-               }
+               });
             }
          })
          .catch((error) => {
@@ -121,9 +108,10 @@ function Packages() {
    };
 
    const getPackages = async () => {
-      const response = await Get('service/package', token, config);
-      setData(response.data);
-      setMeta(response.meta);
+      await ServiceApi.getPackage().then(({ data: { response } }) => {
+         setData(response.data);
+         setMeta(response.meta);
+      });
    };
 
    useEffect(() => {

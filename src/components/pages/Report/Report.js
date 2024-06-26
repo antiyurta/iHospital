@@ -1,14 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { selectCurrentToken } from '../../../features/authReducer';
-import { Get, Patch, Post } from '../../common';
+import React, { useEffect, useState } from 'react';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
 import moment from 'moment';
 import { Col, Row, Table, Input, Empty, DatePicker } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 
 function Report() {
-   const token = useSelector(selectCurrentToken);
+   const token = '';
    const [examinationReportList, setExaminationReportList] = useState([]); //
    const [isLoading, setIsLoading] = useState(false);
    const [searchValue, setSearchValue] = useState('');
@@ -20,25 +17,25 @@ function Report() {
    const getExaminationReport = async () => {
       setExaminationReportList([]);
       // config.params.examinationRequestId = ;
-      const response = await Get(`service/erequest/report`, token, config);
-      console.log('response get ExaminationReport ====>', response);
-      if (response.length !== 0) {
-         response.map((el, index) => {
-            setExaminationReportList((examinationReportList) => [
-               ...examinationReportList,
-               {
-                  key: index,
-                  barCode: el.barCode,
-                  lastName: el.lastName,
-                  firstName: el.firstName,
-                  registerNumber: el.registerNumber,
-                  gender: el.genderType === 'MAN' ? 'Эрэгтэй' : 'Эмэгтэй',
-                  date: el.createdAt?.substr(0, 10),
-                  device: el.name
-               }
-            ]);
-         });
-      }
+      // const response = await Get(`service/erequest/report`, token, config);
+      // console.log('response get ExaminationReport ====>', response);
+      // if (response.length !== 0) {
+      //    response.map((el, index) => {
+      //       setExaminationReportList((examinationReportList) => [
+      //          ...examinationReportList,
+      //          {
+      //             key: index,
+      //             barCode: el.barCode,
+      //             lastName: el.lastName,
+      //             firstName: el.firstName,
+      //             registerNumber: el.registerNumber,
+      //             gender: el.genderType === 'MAN' ? 'Эрэгтэй' : 'Эмэгтэй',
+      //             date: el.createdAt?.substr(0, 10),
+      //             device: el.name
+      //          }
+      //       ]);
+      //    });
+      // }
       setIsLoading(false);
    };
 

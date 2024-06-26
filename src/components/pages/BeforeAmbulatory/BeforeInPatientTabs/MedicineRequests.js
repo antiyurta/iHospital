@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from 'react';
 import { Button, DatePicker, Dropdown, Menu, Table } from 'antd';
 import {
    PauseCircleOutlined,
@@ -7,15 +8,13 @@ import {
    ReloadOutlined,
    EditOutlined
 } from '@ant-design/icons';
-import React, { useEffect, useState } from 'react';
-import { Get, Patch } from '../../../common';
-import { useSelector } from 'react-redux';
-import { selectCurrentToken } from '../../../../features/authReducer';
 import moment from 'moment';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
+//api
+import MedicineApi from '@ApiServices/service/medicine.api';
+
 function MedicineRequests({ PatientId, ListId }) {
    const today = new Date();
-   const token = useSelector(selectCurrentToken);
    const [datas, setDatas] = useState([]);
    const [meta, setMeta] = useState({});
    const [spinner, setSpinner] = useState(false);
@@ -23,10 +22,6 @@ function MedicineRequests({ PatientId, ListId }) {
    const [end, setEnd] = useState('');
    const [requestId, setRequestId] = useState(Number);
    const handleMenuClick = async (key) => {
-      const conf = {
-         headers: {},
-         params: {}
-      };
       var data = {};
       if (Number(key) === 1) {
          data['state'] = 'implemented';
@@ -37,10 +32,9 @@ function MedicineRequests({ PatientId, ListId }) {
       } else {
          data['state'] = 'refused';
       }
-      const response = await Patch('medicine-plan/' + requestId, token, conf, data);
-      if (response === 200) {
+      await MedicineApi.patchMedicinePlan(requestId, data).then(() => {
          getMedicineRequests(1, 15, start, end);
-      }
+      });
    };
    const items = (
       <Menu
@@ -156,22 +150,19 @@ function MedicineRequests({ PatientId, ListId }) {
       console.log(start);
       start = moment(start).set({ hour: 0, minute: 0, second: 0 });
       end = moment(end).set({ hour: 23, minute: 59, second: 59 });
-      const conf = {
-         headers: {},
-         params: {
-            page: page,
-            limit: pageSize,
-            inpatientRequestId: ListId,
-            startDate: moment(start).format('YYYY-MM-DD HH:mm'),
-            endDate: moment(end).format('YYYY-MM-DD HH:mm')
-         }
-      };
       setStart(start);
       setEnd(end);
-      const response = await Get('medicine-plan', token, conf);
-      setDatas(response.data);
-      setMeta(response.meta);
-      setSpinner(false);
+      await MedicineApi.getMedicinePlan({
+         page: page,
+         limit: pageSize,
+         inpatientRequestId: ListId,
+         startDate: moment(start).format('YYYY-MM-DD HH:mm'),
+         endDate: moment(end).format('YYYY-MM-DD HH:mm')
+      }).then(({ data: { response } }) => {
+         setDatas(response.data);
+         setMeta(response.meta);
+         setSpinner(false);
+      });
    };
    useEffect(() => {
       getMedicineRequests(1, 15, today, today);
