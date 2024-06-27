@@ -400,6 +400,7 @@ function Surgery(props) {
                         />
                      </Form.Item>
                      <NewDiagnose
+                        hasInsurance={false}
                         patientId={patientId}
                         appointmentId={appointmentId}
                         hicsServiceId={null}

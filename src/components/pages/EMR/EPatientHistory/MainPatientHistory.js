@@ -77,6 +77,7 @@ function MainPatientHistory({ handleClick }) {
          <DynamicContent
             props={props}
             incomeData={{
+               isInsurance: isInsurance,
                inspectionNoteId: inspectionNoteId,
                appointmentType: appointmentType,
                appointmentId: appointmentId,

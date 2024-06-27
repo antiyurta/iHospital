@@ -280,6 +280,7 @@ function DynamicContent({ props, incomeData, handleClick, isViewDiagnose }) {
                      >
                         <div className="flex flex-col gap-2">
                            <NewDiagnose
+                              hasInsurance={incomeData.isInsurance}
                               patientId={incomeData.patientId}
                               appointmentId={incomeData.appointmentId}
                               inpatientRequestId={null}

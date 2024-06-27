@@ -1,22 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Input, Select } from 'antd';
-import moment from 'moment';
-import { useSelector } from 'react-redux';
-//comp
-// import XypFormPatient from '.';
-//redux
-import { selectHospitalIsXyp } from '@Features/hospitalReducer';
 //common
 import { UploadImage } from '@Comman/Input/UploadImage';
 //api
-import PatientApi from '@ApiServices/pms/patient.api';
 import CountryApi from '@ApiServices/reference/country';
 //extends
 const { Option } = Select;
 
 function GeneralInfo({ form, gbase }) {
    const [citizens, setCitizens] = useState([]);
-   const isXyp = useSelector(selectHospitalIsXyp);
 
    const getCitizens = async () => {
       await CountryApi.getByPageFilter({
@@ -42,7 +34,6 @@ function GeneralInfo({ form, gbase }) {
                </Form.Item>
                <UploadImage form={form} itemName={'imageId'} />
             </div>
-            <div className="flex flex-col gap-2">{isXyp ? null : null}</div>
          </div>
          <div className="rounded-md bg-[#F3F4F6] p-2">
             <Form.Item name="civilId" hidden>

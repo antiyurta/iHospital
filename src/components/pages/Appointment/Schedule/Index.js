@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Select, Button, Slider, Card, Collapse, DatePicker, Row, Col, TimePicker } from 'antd';
 import moment from 'moment';
-import mn from 'antd/es/calendar/locale/mn_MN';
 import { formatNameForDoc, openNofi } from '@Comman/common';
 import { Table } from 'react-bootstrap';
 import { EditOutlined } from '@ant-design/icons';
-
+import dayjs from 'dayjs';
 //
 import OrganizationEmployeeApi from '@ApiServices/organization/employee';
 import OrganizationStructureApi from '@ApiServices/organization/structure';
@@ -13,9 +12,7 @@ import OrganizationRoomApi from '@ApiServices/organization/room';
 import ReferenceSettingsApi from '@ApiServices/reference/settings';
 import ReferenceDevicesApi from '@ApiServices/reference/devices';
 import ScheduleApi from '@ApiServices/schedule';
-import dayjs from 'dayjs';
-//
-const { Panel } = Collapse;
+
 const TimeFormat = 'HH:mm';
 const Marks = {
    0: '0%',
@@ -152,57 +149,45 @@ function Index({ type }) {
       getCurrentMonth(firstDayOfMonth, lastDayOfMonth);
    };
 
-   const setSchedule = async (date) => {
-      form
-         .validateFields()
-         .then(async (value) => {
-            var arr = { ...value };
-            if (Object.keys(arr).length > 0) {
-               arr.workDate = dayjs(date).format('YYYY-MM-DD HH:mm');
-               arr.startTime = dayjs(value.startTime).format('HH:mm');
-               arr.endTime = dayjs(value.endTime).format('HH:mm');
-               arr.type = type;
-               console.log('ene utguud', arr);
-               console.log('ene', new Date(arr.workDate).getDate());
-               console.log('ene', new Date(newScheduleDay).getDate());
-               if (new Date(arr.workDate).getDate() < new Date(newScheduleDay).getDate()) {
-                  openNofi('error', 'Цаг оруулах', 'Өнгөрсөн цаг дээр хувиар оруулах боломжгүй');
-               } else if (
-                  dayjs().isAfter(
-                     dayjs(arr.workDate).set({
-                        hour: dayjs(arr.startTime, 'h:mma').get('hour'),
-                        minute: dayjs(arr.startTime, 'h:mma').get('minute')
-                     })
-                  )
-               ) {
-                  openNofi('error', 'Цаг оруулах', 'Өнгөрсөн цаг дээр хувиар оруулах боломжгүй');
-               } else {
-                  if (editMode) {
-                     await ScheduleApi.patchSchedule(id, arr).then(({ data: { success } }) => {
-                        if (success) {
-                           openNofi('success', 'Цаг оруулах', 'Цаг оруулах амжилттай');
-                           setEditMode(false);
-                           getCurrentMonth(firstDayOfMonth, lastDayOfMonth);
-                           form.resetFields();
-                        }
-                     });
-                  } else {
-                     await ScheduleApi.postSchedule(arr).then(({ data: { success } }) => {
-                        if (success) {
-                           openNofi('success', 'Цаг оруулах', 'Цаг оруулах амжилттай');
-                           getCurrentMonth(firstDayOfMonth, lastDayOfMonth);
-                        }
-                     });
+   const setSchedule = async (date, incomeValues) => {
+      const newValues = {
+         ...incomeValues,
+         workDate: dayjs(date).format('YYYY-MM-DD HH:mm'),
+         startTime: dayjs(incomeValues.startTime).format('HH:mm'),
+         endTime: dayjs(incomeValues.endTime).format('HH:mm'),
+         type: type
+      };
+      if (new Date(newValues.workDate).getDate() < new Date(newScheduleDay).getDate()) {
+         openNofi('error', 'Амжилтгүй', 'Өнгөрсөн цаг дээр хувиар оруулах боломжгүй');
+      } else {
+         if (
+            dayjs().isAfter(
+               dayjs(newValues.workDate)
+                  .set('hour', dayjs(newValues.startTime, 'hh:mm').get('hour'))
+                  .set('minute', dayjs(newValues.startTime, 'hh:mm').get('minute'))
+            )
+         ) {
+            openNofi('error', 'Амжилтгүй', 'Өнгөрсөн цаг дээр хувиар оруулах боломжгүй');
+         } else {
+            if (editMode) {
+               await ScheduleApi.patchSchedule(id, newValues).then(({ data: { success } }) => {
+                  if (success) {
+                     openNofi('success', 'Цаг оруулах', 'Цаг оруулах амжилттай');
+                     setEditMode(false);
+                     getCurrentMonth(firstDayOfMonth, lastDayOfMonth);
+                     form.resetFields();
                   }
-               }
+               });
             } else {
-               openNofi('error', 'TSAG', 'Tsag oruulah');
+               await ScheduleApi.postSchedule(newValues).then(({ data: { success } }) => {
+                  if (success) {
+                     openNofi('success', 'Цаг оруулах', 'Цаг оруулах амжилттай');
+                     getCurrentMonth(firstDayOfMonth, lastDayOfMonth);
+                  }
+               });
             }
-         })
-         .catch((err) => {
-            console.log(err);
-            openNofi('warning', 'Цаг оруулах', 'Цаг оруулах хэсгийг бүрэн бөглөх');
-         });
+         }
+      }
    };
 
    const editSchedule = (item) => {
@@ -399,7 +384,21 @@ function Index({ type }) {
                      </Col>
                      {editMode && (
                         <Col span={24} className="p-1">
-                           <Button type="primary" icon={<EditOutlined />} onClick={() => setSchedule(editWorkDate)}>
+                           <Button
+                              type="primary"
+                              icon={<EditOutlined />}
+                              onClick={() => {
+                                 form
+                                    .validateFields()
+                                    .then((values) => {
+                                       console.log(values);
+                                       setSchedule(editWorkDate, values);
+                                    })
+                                    .catch(() => {
+                                       openNofi('warning', 'Цаг оруулах', 'Цаг оруулах хэсгийг бүрэн бөглөх');
+                                    });
+                              }}
+                           >
                               Засах
                            </Button>
                         </Col>
@@ -417,7 +416,7 @@ function Index({ type }) {
             <Card bordered={false} className="criclebox tablespace mb-24">
                <div className="flex flex-wrap">
                   <div className="w-full m-2">
-                     <DatePicker locale={mn} onChange={changeMonth} picker="month" />
+                     <DatePicker onChange={changeMonth} picker="month" />
                   </div>
                   <div
                      className="w-full overflow-auto"
@@ -425,66 +424,73 @@ function Index({ type }) {
                         height: 'calc(100vh - 150px)'
                      }}
                   >
-                     <Collapse accordion collapsible="header" className="m-2">
-                        {days.map((day, index) => {
-                           return (
-                              <Panel
-                                 key={index}
-                                 header={moment(day.title).format('YYYY-MM-DD')}
-                                 extra={
-                                    <Button className="btn-add" onClick={() => setSchedule(day.title)}>
-                                       Нэмэх
-                                    </Button>
-                                 }
+                     <Collapse
+                        accordion
+                        collapsible="header"
+                        className="m-2"
+                        items={days?.map((day, index) => ({
+                           key: index,
+                           label: dayjs(day.title).format('YYYY-MM-DD'),
+                           extra: (
+                              <Button
+                                 className="btn-add"
+                                 onClick={() => {
+                                    form.validateFields().then((values) => {
+                                       setSchedule(day.title, values);
+                                    });
+                                 }}
                               >
-                                 <div className="table-responsive" id="style-8">
-                                    <Table className="ant-border-space" style={{ width: '100%' }}>
-                                       <thead className="ant-table-thead bg-slate-200">
-                                          <tr>
-                                             <th className="font-bold text-sm align-middle">Эхлэх цаг</th>
-                                             <th className="font-bold text-sm align-middle">Дуусах цаг</th>
-                                             <th className="font-bold text-sm align-middle">Тасаг</th>
-                                             <th className="font-bold text-sm align-middle">Эмч</th>
-                                             <th className="font-bold text-sm align-middle">Өрөө</th>
-                                             <th className="font-bold text-sm align-middle">Бүртгэсэн</th>
-                                             <th className="font-bold text-sm align-middle">Үйлдэл</th>
-                                          </tr>
-                                       </thead>
-                                       <tbody className="ant-table-tbody p-0">
-                                          {day.schedule?.map((item, index) => {
-                                             return (
-                                                <tr key={index} className="ant-table-row ant-table-row-level-0">
-                                                   <td className="ant-table-row-cell-break-word">{item?.startTime}</td>
-                                                   <td className="ant-table-row-cell-break-word">{item?.endTime}</td>
-                                                   <td className="ant-table-row-cell-break-word">
-                                                      {item?.structure?.name}
-                                                   </td>
-                                                   <td className="ant-table-row-cell-break-word">
-                                                      {item?.doctor?.firstName}
-                                                   </td>
-                                                   <td className="ant-table-row-cell-break-word">
-                                                      {item?.room?.roomNumber}
-                                                   </td>
-                                                   <td className="ant-table-row-cell-break-word">{item?.authorId}</td>
-                                                   <td>
-                                                      <EditOutlined
-                                                         style={{
-                                                            color: 'blue',
-                                                            fontSize: '18px'
-                                                         }}
-                                                         onClick={() => editSchedule(item)}
-                                                      />
-                                                   </td>
-                                                </tr>
-                                             );
-                                          })}
-                                       </tbody>
-                                    </Table>
-                                 </div>
-                              </Panel>
-                           );
-                        })}
-                     </Collapse>
+                                 Нэмэх
+                              </Button>
+                           ),
+                           children: (
+                              <div className="table-responsive" id="style-8">
+                                 <Table className="ant-border-space" style={{ width: '100%' }}>
+                                    <thead className="ant-table-thead bg-slate-200">
+                                       <tr>
+                                          <th className="font-bold text-sm align-middle">Эхлэх цаг</th>
+                                          <th className="font-bold text-sm align-middle">Дуусах цаг</th>
+                                          <th className="font-bold text-sm align-middle">Тасаг</th>
+                                          <th className="font-bold text-sm align-middle">Эмч</th>
+                                          <th className="font-bold text-sm align-middle">Өрөө</th>
+                                          <th className="font-bold text-sm align-middle">Бүртгэсэн</th>
+                                          <th className="font-bold text-sm align-middle">Үйлдэл</th>
+                                       </tr>
+                                    </thead>
+                                    <tbody className="ant-table-tbody p-0">
+                                       {day.schedule?.map((item, index) => {
+                                          return (
+                                             <tr key={index} className="ant-table-row ant-table-row-level-0">
+                                                <td className="ant-table-row-cell-break-word">{item?.startTime}</td>
+                                                <td className="ant-table-row-cell-break-word">{item?.endTime}</td>
+                                                <td className="ant-table-row-cell-break-word">
+                                                   {item?.structure?.name}
+                                                </td>
+                                                <td className="ant-table-row-cell-break-word">
+                                                   {item?.doctor?.firstName}
+                                                </td>
+                                                <td className="ant-table-row-cell-break-word">
+                                                   {item?.room?.roomNumber}
+                                                </td>
+                                                <td className="ant-table-row-cell-break-word">{item?.authorId}</td>
+                                                <td>
+                                                   <EditOutlined
+                                                      style={{
+                                                         color: 'blue',
+                                                         fontSize: '18px'
+                                                      }}
+                                                      onClick={() => editSchedule(item)}
+                                                   />
+                                                </td>
+                                             </tr>
+                                          );
+                                       })}
+                                    </tbody>
+                                 </Table>
+                              </div>
+                           )
+                        }))}
+                     />
                   </div>
                </div>
             </Card>

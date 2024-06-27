@@ -82,7 +82,7 @@ const getHicsSeal = async (id) => {
    };
 };
 
-export const setSealForHics = async (patient, hicsSealId, values, isInsurance, addHicsId) => {
+export const setSealForHics = async (patient, hicsSealId, values, isInsurance, addHicsId, medicalLink) => {
    try {
       const hicsSeal = await getHicsSeal(hicsSealId);
       const addHics = await getAddHics(addHicsId);
@@ -136,7 +136,8 @@ export const setSealForHics = async (patient, hicsSealId, values, isInsurance, a
                .requestHicsSeal(hicsSeal.id, {
                   ...hicsSeal,
                   hicsSealCode: data.result.serviceNumber,
-                  process: 1
+                  process: 1,
+                  medicalLink: medicalLink
                })
                .then(async ({ data: { response: ourHicsResponse } }) => {
                   return ourHicsResponse;

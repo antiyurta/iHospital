@@ -36,6 +36,18 @@ class LocalFileApi {
          }
       );
    }
+   async postFileUploadGlobal(file) {
+      console.log('file =========>', file);
+      return await jwtInterceopter.post(
+         'global-files/fileUpload',
+         { file },
+         {
+            headers: {
+               'Content-Type': 'multipart/form-data'
+            }
+         }
+      );
+   }
    async remove(id) {
       return await jwtInterceopter.delete(`local-files/${id}`);
    }

@@ -9,7 +9,7 @@ import { selectPatient } from '@Features/patientReducer';
 import { selectCurrentInsurance, selectCurrentUserId } from '@Features/authReducer';
 import { selectCurrentAddHics, selectCurrentEmrData, selectCurrentHicsSeal, setHicsSeal } from '@Features/emrReducer';
 //common
-import { openNofi } from '@Comman/common';
+import { inspectionTOJSON, openNofi } from '@Comman/common';
 //api
 import inspectionNoteApi from '@ApiServices/emr/inspectionNote';
 import insuranceApi from '@ApiServices/healt-insurance/insurance';
@@ -18,6 +18,7 @@ import appointmentApi from '@ApiServices/appointment/api-appointment-service';
 //comp
 import Clock from './Clock';
 import Finger from '@Comman/Finger/Finger';
+import { DoctorNoteToPDF } from './EmrTimer/ToPDF';
 //utils
 import { RequireTenMinIds, setSealForHics } from '@Utils/config/insurance';
 
@@ -36,12 +37,13 @@ const EmrTimer = ({ startDate, endDate, inspection }) => {
    const userId = useSelector(selectCurrentUserId);
    const isInsurance = useSelector(selectCurrentInsurance);
    const [isOpenModal, setIsOpenModal] = useState(false);
+   const [isLoading, setLoading] = useState(false);
 
    // uzlegin temdeglel tatah
    const getInspectionNote = async () => {
       if (inspectionNoteId) {
          return await inspectionNoteApi.getById(inspectionNoteId).then(({ data: { response } }) => {
-            if (response.inspection) return JSON.parse(response.inspection)?.['Бодит үзлэг'];
+            if (response.inspection) return inspectionTOJSON(response);
             return undefined;
          });
       }
@@ -50,7 +52,17 @@ const EmrTimer = ({ startDate, endDate, inspection }) => {
    // uzleg duusgah
    const endInspection = async (values) => {
       try {
+         setLoading(true);
+         const note = await getInspectionNote();
+         const DocumentId = await DoctorNoteToPDF(note);
          const isEndEMD = values.conclusion?.includes('confirmed');
+         const medicalLinks = [
+            {
+               medicalFileId: DocumentId,
+               inDate: new Date(),
+               medicalLinkType: 1
+            }
+         ];
          if (isInsurance) {
             if (hicsSeal.hicsServiceId === 20120 && addHics?.checkupId > 1 && !addHics.isSent) {
                await addHicsService(hicsSeal.hicsSealCode);
@@ -61,7 +73,8 @@ const EmrTimer = ({ startDate, endDate, inspection }) => {
                      hicsSeal.id,
                      values,
                      isInsurance,
-                     addHics.id
+                     addHics.id,
+                     medicalLinks
                   );
                   console.log('ourHicsResponse', ourHicsResponse);
                   if (ourHicsResponse) {
@@ -101,6 +114,7 @@ const EmrTimer = ({ startDate, endDate, inspection }) => {
             });
          }
       } catch (error) {
+         setLoading(false);
          console.log('error', error);
       }
    };
@@ -383,7 +397,7 @@ const EmrTimer = ({ startDate, endDate, inspection }) => {
                      </div>
                   </div>
                   <div className="flex flex-row justify-end">
-                     <Button type="primary" htmlType="submit">
+                     <Button loading={isLoading} type="primary" htmlType="submit">
                         Хадгалах
                      </Button>
                   </div>

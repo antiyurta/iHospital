@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Space, Form, Input, Modal, Card, Descriptions, Table, Empty, ConfigProvider } from 'antd';
+import { Button, Space, Form, Input, Modal, Card, Descriptions, Table, Empty } from 'antd';
 import { EyeOutlined, EditOutlined, SearchOutlined, PlusCircleOutlined } from '@ant-design/icons';
-import mnMN from 'antd/es/locale/mn_MN';
 import UPatient from './Urgent/UPatient';
 import PatientSupport from './patientSupport';
 import dayjs from 'dayjs';
@@ -15,7 +14,6 @@ import RegisterPatient from './Patient/index';
 const { Search } = Input;
 
 function Patient() {
-   const [mongoliaId, setMongoliaId] = useState(1);
    const [isGlobalDb, setIsGlobalDb] = useState(false);
    const [isModalVisible, setIsModalVisible] = useState(false);
    const [isViewModalVisible, setIsViewModalVisible] = useState(false);
@@ -138,7 +136,6 @@ function Patient() {
             type: 1
          }
       }).then(({ data: { response } }) => {
-         findMongolId(response.data);
          setCitizens(response.data);
       });
    };
@@ -295,12 +292,6 @@ function Patient() {
          }
       }
    ];
-   //
-   const findMongolId = (incomeCitizens) => {
-      const mongolia = incomeCitizens.find((citizen) => citizen.name === 'Монгол');
-      setMongoliaId(mongolia?.id);
-   };
-   //
    useEffect(() => {
       getData(1, 20);
       getCitizens();
@@ -324,35 +315,33 @@ function Patient() {
                </div>
             }
          >
-            <ConfigProvider locale={mnMN}>
-               <Table
-                  rowKey={'id'}
-                  bordered
-                  size="small"
-                  columns={colums}
-                  dataSource={data}
-                  scroll={{
-                     x: 1500
-                  }}
-                  locale={{ emptyText: <Empty description={'Хоосон'} /> }}
-                  loading={{
-                     spinning: spinner,
-                     tip: 'Уншиж байна...'
-                  }}
-                  pagination={{
-                     position: ['topCenter', 'bottomCenter'],
-                     size: 'small',
-                     current: meta.page,
-                     total: meta.itemCount,
-                     showTotal: (total, range) => `${range[0]}-ээс ${range[1]}, Нийт ${total}`,
-                     pageSize: meta.limit,
-                     showSizeChanger: true,
-                     pageSizeOptions: ['5', '10', '20', '50'],
-                     showQuickJumper: true,
-                     onChange: (page, pageSize) => getData(page, pageSize, pValue, pIndex)
-                  }}
-               />
-            </ConfigProvider>
+            <Table
+               rowKey={'id'}
+               bordered
+               size="small"
+               columns={colums}
+               dataSource={data}
+               scroll={{
+                  x: 1500
+               }}
+               locale={{ emptyText: <Empty description={'Хоосон'} /> }}
+               loading={{
+                  spinning: spinner,
+                  tip: 'Уншиж байна...'
+               }}
+               pagination={{
+                  position: ['topCenter', 'bottomCenter'],
+                  size: 'small',
+                  current: meta.page,
+                  total: meta.itemCount,
+                  showTotal: (total, range) => `${range[0]}-ээс ${range[1]}, Нийт ${total}`,
+                  pageSize: meta.limit,
+                  showSizeChanger: true,
+                  pageSizeOptions: ['5', '10', '20', '50'],
+                  showQuickJumper: true,
+                  onChange: (page, pageSize) => getData(page, pageSize, pValue, pIndex)
+               }}
+            />
          </Card>
          <Modal
             title="Өвчтөн"

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Form, Input, Radio, Select, Steps, message } from 'antd';
+import { Button, Form, Input, Radio, Select, Steps } from 'antd';
 //common
 import { openNofi } from '@Comman/common';
 import Finger from '@Comman/Finger/Finger';
@@ -16,12 +16,16 @@ import {
 } from '@ant-design/icons';
 import PatientInfo from './PatientInfo';
 import dayjs from 'dayjs';
+import { useSelector } from 'react-redux';
+import { selectHospitalIsXyp } from '@Features/hospitalReducer';
+import { message } from '@Features/AppGlobal';
 
 const RegisterPatient = ({ patientId, onFinish, editMode }) => {
    const [form] = Form.useForm();
+   const isXyp = useSelector(selectHospitalIsXyp);
    const registerType = Form.useWatch('registerType', form);
    const [isLoading, setIsLoading] = useState(false);
-   const [current, setCurrent] = useState(0);
+   const [current, setCurrent] = useState(isXyp ? 2 : 0);
    const [childrens, setChildrens] = useState([]);
 
    useEffect(() => {
@@ -392,7 +396,7 @@ const RegisterPatient = ({ patientId, onFinish, editMode }) => {
          <div className="steps-action">
             {current > 0 && (
                <Button
-                  disabled={editMode}
+                  disabled={editMode || isXyp}
                   style={{ margin: '0 8px' }}
                   onClick={() => prev()}
                   icon={<CaretLeftOutlined />}
@@ -408,7 +412,14 @@ const RegisterPatient = ({ patientId, onFinish, editMode }) => {
             {current === steps.length - 1 && (
                <Button
                   type="primary"
-                  onClick={() => form.validateFields().then((values) => onFinish(values))}
+                  onClick={() =>
+                     form
+                        .validateFields()
+                        .then(onFinish)
+                        .catch(({ errorFields }) => {
+                           errorFields?.map((error) => message.error(error.errors[0]));
+                        })
+                  }
                   loading={isLoading}
                   icon={<CheckOutlined />}
                >

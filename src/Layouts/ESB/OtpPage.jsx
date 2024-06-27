@@ -6,7 +6,7 @@ import { openNofi } from '@Comman/common';
 const OTPPage = ({ id, regNo, signature, setLoading, getFile }) => {
    const [form] = Form.useForm();
    const [otp, setOtp] = useState('');
-   const [current, setCurrent] = useState(1);
+   const [current, setCurrent] = useState(2);
    const FirstStep = () => {
       const getOTP = async ({ phoneNum }) => {
          setLoading(true);
@@ -112,7 +112,8 @@ const OTPPage = ({ id, regNo, signature, setLoading, getFile }) => {
                      type="primary"
                      disabled={otp.length >= 6 ? false : true}
                      onClick={() => {
-                        verifyOTP(otp);
+                        // verifyOTP(otp);
+                        verifyDS();
                      }}
                   >
                      Баталгаажуулах

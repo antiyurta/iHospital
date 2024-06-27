@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Button, ConfigProvider, Form, Input, InputNumber, Modal, Select, Space, Table } from 'antd';
+import { Button, Form, Input, InputNumber, Modal, Select, Space, Table } from 'antd';
 import { ArrowRightOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import locale from 'antd/es/locale/mn_MN';
 import { useDispatch, useSelector } from 'react-redux';
 //redux
 import { selectCurrentAddHics, selectCurrentHicsSeal, setAddHics, setHicsSeal } from '@Features/emrReducer';
 //common
 import { openNofi } from '@Comman/common';
+import { modal } from '@Features/AppGlobal';
 //service
 import PatientApi from '@ApiServices/pms/patient.api';
 import DiagnoseApi from '@ApiServices/reference/diagnose';
@@ -24,7 +24,7 @@ const DiagnoseTypeEnum = {
 const { Search } = Input;
 const { Column } = Table;
 
-const NewDiagnose = ({ patientId, appointmentId, inpatientRequestId, usageType, selectType }) => {
+const NewDiagnose = ({ hasInsurance, patientId, appointmentId, inpatientRequestId, usageType, selectType }) => {
    //selectType = 0 , onlyDiagnose
    //selectType = 1 , diagnoseAndType
    const dispatch = useDispatch();
@@ -245,6 +245,28 @@ const NewDiagnose = ({ patientId, appointmentId, inpatientRequestId, usageType, 
       return false;
    };
 
+   const EditModalContent = ({ row }) => (
+      <Form
+         form={newDiagnoseTypeForm}
+         layout="vertical"
+         initialValues={{
+            diagnoseType: row.diagnoseType
+         }}
+      >
+         <Form.Item label="Оношийн төрөл" name="diagnoseType">
+            <Select
+               onChange={(value) => {
+                  onChangeDiagnoseType(1, value, null);
+               }}
+               options={Object.entries(DiagnoseTypeEnum)?.map(([key, value]) => ({
+                  label: value,
+                  value: key
+               }))}
+            />
+         </Form.Item>
+      </Form>
+   );
+
    const PatientDiagnoseTable = () => (
       <Table rowKey="id" bordered loading={isLoading} dataSource={patientDiagnosis} pagination={false}>
          <Column title="№" width={40} render={(_, _row, index) => index + 1} />
@@ -269,30 +291,10 @@ const NewDiagnose = ({ patientId, appointmentId, inpatientRequestId, usageType, 
                         title="Засах"
                         icon={<EditOutlined />}
                         onClick={() => {
-                           Modal.confirm({
-                              content: (
-                                 <>
-                                    <Form
-                                       form={newDiagnoseTypeForm}
-                                       layout="vertical"
-                                       initialValues={{
-                                          diagnoseType: row.diagnoseType
-                                       }}
-                                    >
-                                       <Form.Item label="Оношийн төрөл" name="diagnoseType">
-                                          <Select
-                                             onChange={(value) => {
-                                                onChangeDiagnoseType(1, value, null);
-                                             }}
-                                             options={Object.entries(DiagnoseTypeEnum)?.map(([key, value]) => ({
-                                                label: value,
-                                                value: key
-                                             }))}
-                                          />
-                                       </Form.Item>
-                                    </Form>
-                                 </>
-                              ),
+                           modal.confirm({
+                              closable: true,
+                              maskClosable: true,
+                              content: <EditModalContent row={row} />,
                               onOk: () => patchDiagnose(id, newDiagnoseTypeForm.getFieldValue('diagnoseType')),
                               okText: 'Хадгалах',
                               cancelText: 'Болих'
@@ -305,7 +307,7 @@ const NewDiagnose = ({ patientId, appointmentId, inpatientRequestId, usageType, 
                      title="Устгах"
                      icon={<DeleteOutlined />}
                      onClick={() => {
-                        Modal.error({
+                        modal.error({
                            content: 'Онош устгахдаа итгэлтэй байна уу',
                            onOk: () => deleteDiagnose(id)
                         });
@@ -349,6 +351,7 @@ const NewDiagnose = ({ patientId, appointmentId, inpatientRequestId, usageType, 
    const openModal = () => {
       const data = addHics?.checkupId >= 1 ? addHics : hicsSeal;
       if (data?.diagnosis) {
+         console.log('========>', data);
          getIcdFormField(data.diagnosis.icdCode);
          hicsDiagnosisForm.setFieldsValue({
             diagnosis: data.diagnosis,
@@ -388,13 +391,17 @@ const NewDiagnose = ({ patientId, appointmentId, inpatientRequestId, usageType, 
                setIsOpenModal(false);
             }}
             onOk={() => {
-               hicsDiagnosisForm?.validateFields().then((values) => {
-                  if (addHics?.checkupId >= 1) {
-                     updateHics('addHics', values);
-                  } else {
-                     updateHics('hicsSeal', values);
-                  }
-               });
+               if (hasInsurance) {
+                  hicsDiagnosisForm?.validateFields().then((values) => {
+                     if (addHics?.checkupId >= 1) {
+                        updateHics('addHics', values);
+                     } else {
+                        updateHics('hicsSeal', values);
+                     }
+                  });
+               } else {
+                  setIsOpenModal(false);
+               }
             }}
             width={'90%'}
             okText="Хадгалах"
@@ -415,70 +422,61 @@ const NewDiagnose = ({ patientId, appointmentId, inpatientRequestId, usageType, 
                   <div className="xl:col-span-2">
                      <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
                         <div className="p-3">
-                           <p
-                              className="pb-3"
-                              style={{
-                                 fontWeight: '600'
+                           <p className="pb-3 font-semibold">Онош сонгох хэсэг:</p>
+                           <Table
+                              rowKey={'id'}
+                              loading={isLoadingDiagnosis}
+                              bordered
+                              columns={[
+                                 {
+                                    title: 'Код',
+                                    dataIndex: 'code'
+                                 },
+                                 {
+                                    title: 'Монгол нэр',
+                                    dataIndex: 'nameMn'
+                                 },
+                                 {
+                                    title: 'Англи нэр',
+                                    dataIndex: 'nameEn'
+                                 },
+                                 {
+                                    title: 'Орос нэр',
+                                    dataIndex: 'nameRu'
+                                 },
+                                 {
+                                    title: '',
+                                    render: (_, row) => (
+                                       <Button
+                                          icon={
+                                             <ArrowRightOutlined
+                                                style={{
+                                                   font: 24,
+                                                   color: '#4a7fc1'
+                                                }}
+                                             />
+                                          }
+                                          onClick={() => {
+                                             add(row);
+                                          }}
+                                       />
+                                    )
+                                 }
+                              ]}
+                              dataSource={diagnosis}
+                              pagination={{
+                                 position: ['bottomCenter'],
+                                 size: 'small',
+                                 current: diagnoseMeta.page,
+                                 total: diagnoseMeta.itemCount,
+                                 showTotal: (total, range) => `${range[0]}-ээс ${range[1]}, Нийт ${total}`,
+                                 pageSize: diagnoseMeta.limit,
+                                 showSizeChanger: true,
+                                 pageSizeOptions: ['5', '10', '20', '50'],
+                                 showQuickJumper: true,
+                                 onChange: (page, pageSize) => getDiagnosis(page, pageSize, searchValue)
                               }}
-                           >
-                              Онош сонгох хэсэг
-                           </p>
-                           <ConfigProvider locale={locale}>
-                              <Table
-                                 rowKey={'id'}
-                                 loading={isLoadingDiagnosis}
-                                 bordered
-                                 columns={[
-                                    {
-                                       title: 'Код',
-                                       dataIndex: 'code'
-                                    },
-                                    {
-                                       title: 'Монгол нэр',
-                                       dataIndex: 'nameMn'
-                                    },
-                                    {
-                                       title: 'Англи нэр',
-                                       dataIndex: 'nameEn'
-                                    },
-                                    {
-                                       title: 'Орос нэр',
-                                       dataIndex: 'nameRu'
-                                    },
-                                    {
-                                       title: '',
-                                       render: (_, row) => (
-                                          <Button
-                                             icon={
-                                                <ArrowRightOutlined
-                                                   style={{
-                                                      font: 24,
-                                                      color: '#4a7fc1'
-                                                   }}
-                                                />
-                                             }
-                                             onClick={() => {
-                                                add(row);
-                                             }}
-                                          />
-                                       )
-                                    }
-                                 ]}
-                                 dataSource={diagnosis}
-                                 pagination={{
-                                    position: ['bottomCenter'],
-                                    size: 'small',
-                                    current: diagnoseMeta.page,
-                                    total: diagnoseMeta.itemCount,
-                                    showTotal: (total, range) => `${range[0]}-ээс ${range[1]}, Нийт ${total}`,
-                                    pageSize: diagnoseMeta.limit,
-                                    showSizeChanger: true,
-                                    pageSizeOptions: ['5', '10', '20', '50'],
-                                    showQuickJumper: true,
-                                    onChange: (page, pageSize) => getDiagnosis(page, pageSize, searchValue)
-                                 }}
-                              />
-                           </ConfigProvider>
+                           />
                         </div>
                      </div>
                   </div>
@@ -486,232 +484,220 @@ const NewDiagnose = ({ patientId, appointmentId, inpatientRequestId, usageType, 
                      <div className="flex flex-col gap-2">
                         <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
                            <div className="p-3">
-                              <p
-                                 className="pb-3"
-                                 style={{
-                                    fontWeight: '600'
-                                 }}
-                              >
-                                 Сонгогдсон онош
-                              </p>
+                              <p className="pb-3 font-semibold">Сонгогдсон онош:</p>
                               <PatientDiagnoseTable />
                            </div>
                         </div>
-                        <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
-                           <div className="p-3">
-                              <p
-                                 className="pb-3"
-                                 style={{
-                                    fontWeight: '600'
-                                 }}
-                              >
-                                 Өртгийн жин
-                              </p>
-                              <Form
-                                 form={hicsDiagnosisForm}
-                                 layout="vertical"
-                                 initialValues={{
-                                    icdGroup: 1
-                                 }}
-                              >
-                                 <div className="grid grid-cols-3 gap-2">
-                                    <Form.Item
-                                       label="Оношийн код"
-                                       name={['diagnosis', 'icdCode']}
-                                       className="mb-0"
-                                       rules={[
-                                          {
-                                             required: true,
-                                             message: 'Онош заавал'
-                                          }
-                                       ]}
-                                    >
-                                       <Select
-                                          allowClear
-                                          onClear={() => {
-                                             hicsDiagnosisForm.resetFields([
-                                                ['diagnosis', 'drgCode'],
-                                                ['diagnosis', 'icdCode'],
-                                                ['diagnosis', 'icdCode1']
-                                             ]);
-                                          }}
-                                          showSearch
-                                          filterOption={(input, option) =>
-                                             option.label.toLowerCase().includes(input.toLowerCase())
-                                          }
-                                          options={patientDiagnosis.map(({ diagnose }) => ({
-                                             value: diagnose.code,
-                                             label: diagnose.code
-                                          }))}
-                                          onSelect={getIcdFormField}
-                                       />
-                                    </Form.Item>
-                                    <Form.Item
-                                       label="Хавсарсан оношийн код"
-                                       name={['diagnosis', 'icdAddCode']}
-                                       className="mb-0"
-                                    >
-                                       <Select
-                                          allowClear
-                                          showSearch
-                                          onClear={() => {
-                                             hicsDiagnosisForm.resetFields([['diagnosis', 'icdAddName']]);
-                                          }}
-                                          filterOption={(input, option) =>
-                                             option.label.toLowerCase().includes(input.toLowerCase())
-                                          }
-                                          onChange={(code) => {
-                                             const { diagnose } = patientDiagnosis?.find(
-                                                ({ diagnose }) => diagnose.code === code
-                                             );
-                                             hicsDiagnosisForm.setFieldValue(
-                                                ['diagnosis', 'icdAddName'],
-                                                diagnose?.nameMn
-                                             );
-                                          }}
-                                          options={patientDiagnosis.map(({ diagnose }) => ({
-                                             value: diagnose.code,
-                                             label: diagnose.code
-                                          }))}
-                                       />
-                                    </Form.Item>
-                                    <DualDiagnose />
-                                 </div>
-                                 <div className="flex flex-col gap-2">
-                                    <Form.Item
-                                       label="Оношийн хамааралтай бүлэг"
-                                       name={['diagnosis', 'drgCode']}
-                                       rules={[
-                                          {
-                                             required: true,
-                                             message: 'Оношийн хамааралтай бүлэг'
-                                          }
-                                       ]}
-                                    >
-                                       <Select
-                                          allowClear
-                                          onClear={() => {
-                                             hicsDiagnosisForm.resetFields([
-                                                ['diagnosis', 'drgTypeCode'],
-                                                ['amount', 'amountCit'],
-                                                ['amount', 'amountHi'],
-                                                ['amount', 'amountTotal']
-                                             ]);
-                                          }}
-                                          popupClassName="whitespace-normal"
-                                          onSelect={getHicsCostList}
-                                          options={drgCodes.map((drgCode) => ({
-                                             value: drgCode.drgCode,
-                                             label: drgCode.drgName
-                                          }))}
-                                       />
-                                    </Form.Item>
-                                    <div className="rounded-md bg-[#f0e4e4] col-span-2">
-                                       <div className="flex flex-row gap-1 p-2">
-                                          <Form.Item label="Нийт дүн" name={['amount', 'amountHi']}>
-                                             <InputNumber disabled />
-                                          </Form.Item>
-                                          <Form.Item label="Даатгалаас" name={['amount', 'amountHi']}>
-                                             <InputNumber disabled />
-                                          </Form.Item>
-                                          <Form.Item label="Иргэн" name={['amount', 'amountCit']}>
-                                             <InputNumber disabled />
-                                          </Form.Item>
-                                       </div>
-                                    </div>
-                                 </div>
-                                 <Form.Item label="" name={['diagnosis', 'icdCodeName']} hidden>
-                                    <Input />
-                                 </Form.Item>
-                                 <Form.Item label="" name={['diagnosis', 'drgTypeCode']} hidden>
-                                    <InputNumber />
-                                 </Form.Item>
-                                 <Form.Item label="" name={['diagnosis', 'icdGroup']} hidden>
-                                    <InputNumber />
-                                 </Form.Item>
-                                 <Form.Item label="" name={['diagnosis', 'icdGroupName']} hidden>
-                                    <InputNumber />
-                                 </Form.Item>
-                                 <Form.Item label="" name={['diagnosis', 'icdAddName']} hidden>
-                                    <Input />
-                                 </Form.Item>
-                                 <Form.Item label="" name={['diagnosis', 'icd9Name']} hidden>
-                                    <Input />
-                                 </Form.Item>
-                                 {/* amount */}
-                                 <Form.Item label="" name={['amount', 'amountCit']} hidden>
-                                    <InputNumber />
-                                 </Form.Item>
-                                 <Form.Item label="" name={['amount', 'amountHi']} hidden>
-                                    <InputNumber />
-                                 </Form.Item>
-                                 <Form.Item label="" name={['amount', 'amountTotal']} hidden>
-                                    <InputNumber />
-                                 </Form.Item>
-                                 {/* amount */}
-                                 <div className="grid grid-cols-2 gap-2">
-                                    <Form.Item label="ICD-9 код" name={['diagnosis', 'icd9Code']}>
-                                       <Select
-                                          allowClear
-                                          showSearch
-                                          onClear={() => {
-                                             hicsDiagnosisForm.resetFields([
-                                                ['diagnosis', 'icd9Code'],
-                                                ['diagnosis', 'icd9Name']
-                                             ]);
-                                          }}
-                                          onSelect={(value) => {
-                                             const current = patientDiagnosis?.find(
-                                                (diagnose) => diagnose.type === 1 && diagnose.diagnose.code === value
-                                             );
-                                             hicsDiagnosisForm.setFieldValue(
-                                                ['diagnosis', 'icd9Name'],
-                                                current?.diagnose?.nameMn
-                                             );
-                                          }}
-                                          filterOption={(input, option) =>
-                                             option.label.toLowerCase().includes(input.toLowerCase())
-                                          }
-                                          options={patientDiagnosis
-                                             ?.filter((diagnose) => diagnose.type === 1)
-                                             ?.map(({ diagnose }) => ({
+                        {hasInsurance ? (
+                           <div className="rounded-md bg-[#F3F4F6] w-full inline-block">
+                              <div className="p-3">
+                                 <p className="pb-3 font-semibold">Өртгийн жин:</p>
+                                 <Form
+                                    form={hicsDiagnosisForm}
+                                    layout="vertical"
+                                    initialValues={{
+                                       icdGroup: 1
+                                    }}
+                                 >
+                                    <div className="grid grid-cols-3 gap-2">
+                                       <Form.Item
+                                          label="Оношийн код"
+                                          name={['diagnosis', 'icdCode']}
+                                          className="mb-0"
+                                          rules={[
+                                             {
+                                                required: true,
+                                                message: 'Онош заавал'
+                                             }
+                                          ]}
+                                       >
+                                          <Select
+                                             allowClear
+                                             onClear={() => {
+                                                hicsDiagnosisForm.resetFields([
+                                                   ['diagnosis', 'drgCode'],
+                                                   ['diagnosis', 'icdCode'],
+                                                   ['diagnosis', 'icdCode1']
+                                                ]);
+                                             }}
+                                             showSearch
+                                             filterOption={(input, option) =>
+                                                option.label.toLowerCase().includes(input.toLowerCase())
+                                             }
+                                             options={patientDiagnosis.map(({ diagnose }) => ({
                                                 value: diagnose.code,
                                                 label: diagnose.code
                                              }))}
-                                       />
-                                    </Form.Item>
-                                    <Form.Item
-                                       label="Хүндрэлийн зэрэг"
-                                       name={['diagnosis', 'abcType']}
-                                       className="mb-0"
-                                       rules={[
-                                          {
-                                             required: true,
-                                             message: 'Хүндрэлийн зэрэг заавал'
-                                          }
-                                       ]}
-                                    >
-                                       <Select
-                                          options={[
+                                             onSelect={getIcdFormField}
+                                          />
+                                       </Form.Item>
+                                       <Form.Item
+                                          label="Хавсарсан оношийн код"
+                                          name={['diagnosis', 'icdAddCode']}
+                                          className="mb-0"
+                                       >
+                                          <Select
+                                             allowClear
+                                             showSearch
+                                             onClear={() => {
+                                                hicsDiagnosisForm.resetFields([['diagnosis', 'icdAddName']]);
+                                             }}
+                                             filterOption={(input, option) =>
+                                                option.label.toLowerCase().includes(input.toLowerCase())
+                                             }
+                                             onChange={(code) => {
+                                                const { diagnose } = patientDiagnosis?.find(
+                                                   ({ diagnose }) => diagnose.code === code
+                                                );
+                                                hicsDiagnosisForm.setFieldValue(
+                                                   ['diagnosis', 'icdAddName'],
+                                                   diagnose?.nameMn
+                                                );
+                                             }}
+                                             options={patientDiagnosis.map(({ diagnose }) => ({
+                                                value: diagnose.code,
+                                                label: diagnose.code
+                                             }))}
+                                          />
+                                       </Form.Item>
+                                       <DualDiagnose />
+                                    </div>
+                                    <div className="flex flex-col gap-2">
+                                       <Form.Item
+                                          label="Оношийн хамааралтай бүлэг"
+                                          name={['diagnosis', 'drgCode']}
+                                          rules={[
                                              {
-                                                label: 'A',
-                                                value: 'A'
-                                             },
-                                             {
-                                                label: 'B',
-                                                value: 'B'
-                                             },
-                                             {
-                                                label: 'C',
-                                                value: 'C'
+                                                required: true,
+                                                message: 'Оношийн хамааралтай бүлэг'
                                              }
                                           ]}
-                                       />
+                                       >
+                                          <Select
+                                             allowClear
+                                             onClear={() => {
+                                                hicsDiagnosisForm.resetFields([
+                                                   ['diagnosis', 'drgTypeCode'],
+                                                   ['amount', 'amountCit'],
+                                                   ['amount', 'amountHi'],
+                                                   ['amount', 'amountTotal']
+                                                ]);
+                                             }}
+                                             popupClassName="whitespace-normal"
+                                             onSelect={getHicsCostList}
+                                             options={drgCodes.map((drgCode) => ({
+                                                value: drgCode.drgCode,
+                                                label: drgCode.drgName
+                                             }))}
+                                          />
+                                       </Form.Item>
+                                       <div className="rounded-md bg-[#f0e4e4] col-span-2">
+                                          <div className="flex flex-row gap-1 p-2">
+                                             <Form.Item label="Нийт дүн" name={['amount', 'amountHi']}>
+                                                <InputNumber disabled />
+                                             </Form.Item>
+                                             <Form.Item label="Даатгалаас" name={['amount', 'amountHi']}>
+                                                <InputNumber disabled />
+                                             </Form.Item>
+                                             <Form.Item label="Иргэн" name={['amount', 'amountCit']}>
+                                                <InputNumber disabled />
+                                             </Form.Item>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <Form.Item label="" name={['diagnosis', 'icdCodeName']} hidden>
+                                       <Input />
                                     </Form.Item>
-                                 </div>
-                              </Form>
+                                    <Form.Item label="" name={['diagnosis', 'drgTypeCode']} hidden>
+                                       <InputNumber />
+                                    </Form.Item>
+                                    <Form.Item label="" name={['diagnosis', 'icdGroup']} hidden>
+                                       <InputNumber />
+                                    </Form.Item>
+                                    <Form.Item label="" name={['diagnosis', 'icdGroupName']} hidden>
+                                       <InputNumber />
+                                    </Form.Item>
+                                    <Form.Item label="" name={['diagnosis', 'icdAddName']} hidden>
+                                       <Input />
+                                    </Form.Item>
+                                    <Form.Item label="" name={['diagnosis', 'icd9Name']} hidden>
+                                       <Input />
+                                    </Form.Item>
+                                    {/* amount */}
+                                    <Form.Item label="" name={['amount', 'amountCit']} hidden>
+                                       <InputNumber />
+                                    </Form.Item>
+                                    <Form.Item label="" name={['amount', 'amountHi']} hidden>
+                                       <InputNumber />
+                                    </Form.Item>
+                                    <Form.Item label="" name={['amount', 'amountTotal']} hidden>
+                                       <InputNumber />
+                                    </Form.Item>
+                                    {/* amount */}
+                                    <div className="grid grid-cols-2 gap-2">
+                                       <Form.Item label="ICD-9 код" name={['diagnosis', 'icd9Code']}>
+                                          <Select
+                                             allowClear
+                                             showSearch
+                                             onClear={() => {
+                                                hicsDiagnosisForm.resetFields([
+                                                   ['diagnosis', 'icd9Code'],
+                                                   ['diagnosis', 'icd9Name']
+                                                ]);
+                                             }}
+                                             onSelect={(value) => {
+                                                const current = patientDiagnosis?.find(
+                                                   (diagnose) => diagnose.type === 1 && diagnose.diagnose.code === value
+                                                );
+                                                hicsDiagnosisForm.setFieldValue(
+                                                   ['diagnosis', 'icd9Name'],
+                                                   current?.diagnose?.nameMn
+                                                );
+                                             }}
+                                             filterOption={(input, option) =>
+                                                option.label.toLowerCase().includes(input.toLowerCase())
+                                             }
+                                             options={patientDiagnosis
+                                                ?.filter((diagnose) => diagnose.type === 1)
+                                                ?.map(({ diagnose }) => ({
+                                                   value: diagnose.code,
+                                                   label: diagnose.code
+                                                }))}
+                                          />
+                                       </Form.Item>
+                                       <Form.Item
+                                          label="Хүндрэлийн зэрэг"
+                                          name={['diagnosis', 'abcType']}
+                                          className="mb-0"
+                                          rules={[
+                                             {
+                                                required: true,
+                                                message: 'Хүндрэлийн зэрэг заавал'
+                                             }
+                                          ]}
+                                       >
+                                          <Select
+                                             options={[
+                                                {
+                                                   label: 'A',
+                                                   value: 'A'
+                                                },
+                                                {
+                                                   label: 'B',
+                                                   value: 'B'
+                                                },
+                                                {
+                                                   label: 'C',
+                                                   value: 'C'
+                                                }
+                                             ]}
+                                          />
+                                       </Form.Item>
+                                    </div>
+                                 </Form>
+                              </div>
                            </div>
-                        </div>
+                        ) : null}
                      </div>
                   </div>
                </div>

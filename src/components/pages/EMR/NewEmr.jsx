@@ -85,21 +85,15 @@ class NewEmr extends React.Component {
          }));
    }
    handleTypeChange = ({ target: { value } }) => {
-      // if (this.props.IncomeEMRData.endDate) {
-      //    Modal.error({
-      //       content: 'Дууссан үзлэгт OTS ашиглах боломжгүй',
-      //       okText: 'За'
-      //    });
+      // const currentDiagnosis = this.props.hicsSeal.diagnosis || this.props.addHics.diagnosis;
+      // if (currentDiagnosis?.icdCode === undefined || currentDiagnosis?.icdCode === null) {
+      //    openNofi('error', 'Амжилтгүй', 'Та ямар нэг онош тавина уу');
       // } else {
-      const currentDiagnosis = this.props.hicsSeal.diagnosis || this.props.addHics.diagnosis;
-      if (currentDiagnosis?.icdCode === undefined || currentDiagnosis?.icdCode === null) {
-         openNofi('error', 'Амжилтгүй', 'Та ямар нэг онош тавина уу');
-      } else {
-         this.setState({
-            isOpenWarningModal: true,
-            temporarilyType: value
-         });
-      }
+      this.setState({
+         isOpenWarningModal: true,
+         temporarilyType: value
+      });
+      // }
       // }
    };
    saveOrder = async (value) => {
@@ -141,13 +135,20 @@ class NewEmr extends React.Component {
          openNofi('warning', 'Анхааруулга', 'OTS Захиалах');
       }
    };
+
+   async getOurHics() {
+      if (this.props.IncomeEMRData.isInsurance) {
+         await this.getHicsSeal();
+         await this.getAddHics();
+      }
+   }
+
    async componentDidMount() {
       await this.getByIdPatient();
-      await this.getHicsSeal();
-      await this.getAddHics();
+      await this.getOurHics();
    }
    async componentWillUnmount() {
-      // this.props.delEmrData();
+      this.props.delEmrData();
       console.log('Үзлэг дуусав');
    }
    render() {

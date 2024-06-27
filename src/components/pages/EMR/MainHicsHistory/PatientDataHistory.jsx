@@ -76,6 +76,16 @@ const PatientDataHistory = ({ registerNumber }) => {
                               </ol>
                            </>
                         ) : null}
+
+                        {data.medicalLinks?.map((link) => (
+                           <>
+                              <p>Links</p>
+                              <p>Огноо: {link.indate}</p>
+                              <a href={link.link} target="_blank">
+                                 Харах
+                              </a>
+                           </>
+                        ))}
                      </Card>
                   </Badge.Ribbon>
                ))}

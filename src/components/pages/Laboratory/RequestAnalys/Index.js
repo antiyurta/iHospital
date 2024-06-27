@@ -363,7 +363,7 @@ function Index() {
       for await (const item of selectedRequestDtl) {
          console.log('item =========>', item);
          const process = processUpper(item.process);
-         if (process == 'TESTED') {
+         if (process == 'TESTED' && item.isInsurance) {
             await InsuranceApi.saveHics({
                patientRegno: item?.hicsSeal?.patient?.registerNumber,
                patientFingerprint: 'finger',
@@ -392,7 +392,7 @@ function Index() {
                   }
                })
                .catch((err) => openNofi('error', err));
-         } else if (process == 'CONFIRMED') {
+         } else if (process == 'CONFIRMED' && item.isInsurance) {
             await SealApi.requestHicsSealSent(item?.hicsSeal?.id, {
                patientFingerprint: 'test'
             })
@@ -649,8 +649,10 @@ function Index() {
             onOk={() => {
                handlePrint();
             }}
-            bodyStyle={{
-               width: '19cm'
+            styles={{
+               body: {
+                  width: '19cm'
+               }
             }}
             width={'max-content'}
          >

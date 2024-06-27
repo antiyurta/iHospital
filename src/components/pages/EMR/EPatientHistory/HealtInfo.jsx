@@ -24,7 +24,14 @@ const HealtInfo = () => {
       await InsuranceApi.requestHicsSeal(hicsSeal.id, {
          employment: values.employment,
          healthInfo: values.healthInfo,
-         pregnantInfo: values.pregnantInfo
+         pregnantInfo: values.pregnantInfo,
+         medicalLinks: [
+            {
+               medicalFileId: 131231,
+               inDate: new Date(),
+               medicalLinkType: 1
+            }
+         ]
       }).then(({ data: { response } }) => {
          dispatch(setHicsSeal(response));
          setLoading(false);

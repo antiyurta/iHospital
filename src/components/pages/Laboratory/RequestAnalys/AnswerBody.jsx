@@ -61,6 +61,17 @@ const AnswerBody = (props) => {
                setIsLoading(false);
             });
       } else {
+         const incomeResults = parameters?.map((parameter) => ({
+            parameterName: parameter.parameterName,
+            low: parameter.low,
+            high: parameter.high,
+            measurement: parameter.measurement,
+            value: null,
+            HL: null,
+            PN: null
+         }));
+         console.log(parameters);
+         form.setFieldValue(nameIndex, incomeResults);
          openNofi('warning', 'Алдаа', 'Parameters not Found');
       }
    };

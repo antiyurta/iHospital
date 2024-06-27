@@ -463,6 +463,7 @@ const CreateStory = () => {
                               <div className="flex flex-row gap-2 items-end">
                                  {/* TODO */}
                                  <NewDiagnose
+                                    hasInsurance={isInsurance}
                                     patientId={patient.id}
                                     appointmentId={null}
                                     inpatientRequestId={inpatientRequestId}
