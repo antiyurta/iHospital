@@ -25,7 +25,7 @@ const RegisterPatient = ({ patientId, onFinish, editMode }) => {
    const isXyp = useSelector(selectHospitalIsXyp);
    const registerType = Form.useWatch('registerType', form);
    const [isLoading, setIsLoading] = useState(false);
-   const [current, setCurrent] = useState(isXyp ? 2 : 0);
+   const [current, setCurrent] = useState(isXyp ? 0 : 2);
    const [childrens, setChildrens] = useState([]);
 
    useEffect(() => {
