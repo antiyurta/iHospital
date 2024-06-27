@@ -187,7 +187,7 @@ function MoreInfo({ form }) {
             name="freeTypeId"
             rules={[
                {
-                  required: true,
+                  required: false,
                   message: 'Төр хариуцах иргэн заавал'
                }
             ]}

@@ -396,7 +396,7 @@ const RegisterPatient = ({ patientId, onFinish, editMode }) => {
          <div className="steps-action">
             {current > 0 && (
                <Button
-                  disabled={editMode || isXyp}
+                  disabled={editMode || !isXyp}
                   style={{ margin: '0 8px' }}
                   onClick={() => prev()}
                   icon={<CaretLeftOutlined />}
