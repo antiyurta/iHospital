@@ -13,25 +13,27 @@ function MonitorCriteria({ props }) {
    const [isOpenModal, setIsOpenModal] = useState(false);
    const [isLoading, setIsLoading] = useState(false);
    const getData = async () => {
-      setIsLoading(true);
-      const conf = {
-         params: {
-            serviceId: serviceId,
-            serviceType: serviceType
-         }
-      };
-      await InsuranceSealService.getGPA(conf)
-         .then((response) => {
-            setIsOpenModal(true);
-            setData(response.data.response);
-         })
-         .catch((error) => {
-            console.log(error);
-            if (error.response.data.status === 404) {
-               openNofi('error', 'Алдаа', 'Хяналтын шалгуур тавьж эхлээгүй байна');
-            }
-         })
-         .finally(() => setIsLoading(false));
+      setIsOpenModal(true);
+      // setIsLoading(true);
+
+      // const conf = {
+      //    params: {
+      //       serviceId: serviceId,
+      //       serviceType: serviceType
+      //    }
+      // };
+      // await InsuranceSealService.getGPA(conf)
+      //    .then((response) => {
+      //       setIsOpenModal(true);
+      //       setData(response.data.response);
+      //    })
+      //    .catch((error) => {
+      //       console.log(error);
+      //       if (error.response.data.status === 404) {
+      //          openNofi('error', 'Алдаа', 'Хяналтын шалгуур тавьж эхлээгүй байна');
+      //       }
+      //    })
+      //    .finally(() => setIsLoading(false));
    };
    return (
       <>

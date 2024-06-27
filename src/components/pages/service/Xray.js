@@ -114,6 +114,14 @@ function Xray() {
          col: 12
       },
       {
+         index: 'examCode',
+         label: 'examCode',
+         isView: true,
+         isSearch: false,
+         input: 'input',
+         col: 12
+      },
+      {
          index: 'drgCode',
          label: 'DRGCODE',
          isView: true,

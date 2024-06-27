@@ -85,16 +85,22 @@ class NewEmr extends React.Component {
          }));
    }
    handleTypeChange = ({ target: { value } }) => {
-      // const currentDiagnosis = this.props.hicsSeal.diagnosis || this.props.addHics.diagnosis;
-      // if (currentDiagnosis?.icdCode === undefined || currentDiagnosis?.icdCode === null) {
-      //    openNofi('error', 'Амжилтгүй', 'Та ямар нэг онош тавина уу');
-      // } else {
-      this.setState({
-         isOpenWarningModal: true,
-         temporarilyType: value
-      });
-      // }
-      // }
+      if (this.props.IncomeEMRData.isInsurance) {
+         const currentDiagnosis = this.props.hicsSeal.diagnosis || this.props.addHics.diagnosis;
+         if (currentDiagnosis?.icdCode === undefined || currentDiagnosis?.icdCode === null) {
+            openNofi('error', 'Амжилтгүй', 'Та ямар нэг онош тавина уу');
+         } else {
+            this.setState({
+               isOpenWarningModal: true,
+               temporarilyType: value
+            });
+         }
+      } else {
+         this.setState({
+            isOpenWarningModal: true,
+            temporarilyType: value
+         });
+      }
    };
    saveOrder = async (value) => {
       if (value?.length > 0 || value) {
@@ -138,6 +144,7 @@ class NewEmr extends React.Component {
 
    async getOurHics() {
       if (this.props.IncomeEMRData.isInsurance) {
+         console.log('=============>', this.props.IncomeEMRData);
          await this.getHicsSeal();
          await this.getAddHics();
       }

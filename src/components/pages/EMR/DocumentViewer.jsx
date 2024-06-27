@@ -91,7 +91,7 @@ const DocumentViewer = () => {
             if (!response.data.success) {
                throw new Error(`HTTP error! Status: ${response.status}`);
             }
-            const uint8Array = new Uint8Array(response.data.response.data);
+            const uint8Array = new Uint8Array(response.data.response.data.data);
             const blob = new Blob([uint8Array], { type: 'application/pdf' });
             const url = window.URL.createObjectURL(blob);
             setPdfUrl(url);
@@ -149,7 +149,61 @@ const DocumentViewer = () => {
       return <div>...loading</div>;
    }
 
-   return;
+   return (
+      <>
+         <div className="flex flex-col gap-2">
+            <Button
+               danger
+               onClick={() => {
+                  setDocumentView(false, {}, 'one');
+               }}
+               style={{
+                  width: 120
+               }}
+            >
+               Буцах
+            </Button>
+            <div className="w-full grid grid-cols-5 gap-2">
+               <div
+                  className="col-span-4 overflow-auto"
+                  style={{
+                     maxHeight: 800,
+                     background: 'gainsboro',
+                     padding: 10
+                  }}
+               >
+                  <iframe src={pdfUrl} width="100%" height="600px" title="PDF Viewer"></iframe>
+                  <div ref={currentRef} className="print-remove-p">
+                     {documentType === 'one' ? <Body document={selectedDocument} /> : null}
+                     {documentType === 'many' ? (
+                        <Each of={selectedDocument} render={(document) => <Body document={document} />} />
+                     ) : null}
+                  </div>
+               </div>
+               <div className="col-span-1 bg-white rounded-xl flex flex-col gap-2 p-2">
+                  <Button loading={printLoading} icon={<PrinterOutlined />} onClick={() => handlePrint()}>
+                     Хэвлэх
+                  </Button>
+                  <Button
+                     onClick={() => {
+                        htmlToPDF();
+                     }}
+                     loading={printLoading}
+                     icon={
+                        <FilePdfOutlined
+                           style={{
+                              color: 'red'
+                           }}
+                        />
+                     }
+                  >
+                     PDF Татах
+                  </Button>
+               </div>
+            </div>
+         </div>
+      </>
+   );
 
    // return (
    // <PageHeader
@@ -159,44 +213,7 @@ const DocumentViewer = () => {
    //    }}
    //    title="Маягт дэлгэрэнгүй"
    // >
-   //    <div className="grid grid-cols-5 gap-2">
-   //       <div
-   //          className="col-span-4 overflow-auto"
-   //          style={{
-   //             maxHeight: 800,
-   //             background: 'gainsboro',
-   //             padding: 10
-   //          }}
-   //       >
-   //          <iframe src={pdfUrl} width="100%" height="600px" title="PDF Viewer"></iframe>
-   //          <div ref={currentRef} className="print-remove-p">
-   //             {documentType === 'one' ? <Body document={selectedDocument} /> : null}
-   //             {documentType === 'many' ? (
-   //                <Each of={selectedDocument} render={(document) => <Body document={document} />} />
-   //             ) : null}
-   //          </div>
-   //       </div>
-   //       <div className="col-span-1 bg-white rounded-xl flex flex-col gap-2 p-2">
-   //          <Button loading={printLoading} icon={<PrinterOutlined />} onClick={() => handlePrint()}>
-   //             Хэвлэх
-   //          </Button>
-   //          <Button
-   //             onClick={() => {
-   //                htmlToPDF();
-   //             }}
-   //             loading={printLoading}
-   //             icon={
-   //                <FilePdfOutlined
-   //                   style={{
-   //                      color: 'red'
-   //                   }}
-   //                />
-   //             }
-   //          >
-   //             PDF Татах
-   //          </Button>
-   //       </div>
-   //    </div>
+
    // </PageHeader>
    // );
 };

@@ -167,7 +167,7 @@ const InternalOrder = (props) => {
                         service.total = 0;
                         break;
                   }
-                  console.log('end', service);
+                  console.log('=============>', service);
                   services.push(service);
                })
             );
@@ -311,9 +311,11 @@ const InternalOrder = (props) => {
             {showXray && (
                <Xray
                   isDoctor={isDoctor}
+                  hicsExams={hicsExams}
+                  hicsSeal={hicsSeal}
+                  addHics={addHics}
                   selectedPatient={selectedPatient}
                   hasInsurance={IncomeEMRData.isInsurance}
-                  currentSeal={findInclueDiagnosis(hicsSeal, addHics)}
                   handleclick={handleclick}
                />
             )}

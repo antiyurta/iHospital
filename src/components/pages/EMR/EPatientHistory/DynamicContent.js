@@ -63,7 +63,9 @@ function DynamicContent({ props, incomeData, handleClick, isViewDiagnose }) {
             pain: JSON.stringify(values['pain']),
             question: JSON.stringify(values['question']),
             inspection: JSON.stringify(values['inspection']),
-            plan: JSON.stringify(values['plan'])
+            plan: JSON.stringify(values['plan']),
+            conclusion: JSON.stringify(values['conclusion']),
+            advice: JSON.stringify(values['advice'])
          })
             .then(async ({ data: { response, success } }) => {
                if (success) {

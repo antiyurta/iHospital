@@ -336,7 +336,11 @@ function List(props) {
                                                 {
                                                    title: 'Цаг захиалах',
                                                    render: (_, row) => {
-                                                      if (isExtraGrud.isCreate && !row?.[columnName[type]]) {
+                                                      if (
+                                                         isExtraGrud.isCreate &&
+                                                         !row?.[columnName[type]] &&
+                                                         row.isActive
+                                                      ) {
                                                          return (
                                                             <Button
                                                                onClick={() => {

@@ -174,23 +174,23 @@ export const isObjectEmpty = (object) => {
 };
 export const inspectionTOJSON = (inspectionNote) => {
    var data = {};
-   if (inspectionNote.inspection) {
-      data['inspection'] = JSON.parse(inspectionNote.inspection);
+   if (inspectionNote?.inspection) {
+      data['inspection'] = JSON.parse(inspectionNote.inspection || null);
    }
-   if (inspectionNote.pain) {
-      data['pain'] = JSON.parse(inspectionNote.pain);
+   if (inspectionNote?.pain) {
+      data['pain'] = JSON.parse(inspectionNote.pain || null);
    }
-   if (inspectionNote.plan) {
-      data['plan'] = JSON.parse(inspectionNote.plan);
+   if (inspectionNote?.plan) {
+      data['plan'] = JSON.parse(inspectionNote.plan || null);
    }
-   if (inspectionNote.question) {
-      data['question'] = JSON.parse(inspectionNote.question);
+   if (inspectionNote?.question) {
+      data['question'] = JSON.parse(inspectionNote.question || null);
    }
-   if (inspectionNote.advice) {
-      data['advice'] = JSON.parse(inspectionNote.advice);
+   if (inspectionNote?.advice) {
+      data['advice'] = JSON.parse(inspectionNote.advice || null);
    }
-   if (inspectionNote.conclusion) {
-      data['conclusion'] = JSON.parse(inspectionNote.conclusion);
+   if (inspectionNote?.conclusion) {
+      data['conclusion'] = JSON.parse(inspectionNote.conclusion || null);
    }
    return data;
 };

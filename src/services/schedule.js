@@ -12,6 +12,9 @@ class Schedule {
    async getDeviceSlot(conf) {
       return await jwtInterceopter.get('device/slot', conf);
    }
+   async patchDeviceSlot(id, body) {
+      return await jwtInterceopter.patch('device/slot/' + id, body);
+   }
    async getTreatmentSlot(conf) {
       return await jwtInterceopter.get('treatment/slot', conf);
    }

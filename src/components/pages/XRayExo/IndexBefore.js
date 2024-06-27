@@ -253,7 +253,7 @@ function IndexBefore({ type }) {
       },
       {
          title: 'Орох цаг',
-         width: 90,
+         width: 120,
          render: (_, row) => getTypeInfo(row.deviceSlot?.startTime, row.deviceSlot?.endTime, row.usageType)
       },
       {

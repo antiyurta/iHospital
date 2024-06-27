@@ -115,7 +115,8 @@ function IndexAfter({ type, params }) {
             inspection: type === 3 ? 13 : row.deviceType === 0 ? 11 : 12,
             xrayId: row.xrayId,
             startDate: row.startAt || new Date(),
-            hicsSeal: row.hicsSeal
+            hicsSealId: row.hicsSealId,
+            isInsurance: row.isInsurance
          };
          dispatch(setEmrData(data));
          if (row.isInsurance && !row.hicsSeal && type === 3) {

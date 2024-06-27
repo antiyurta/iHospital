@@ -11,6 +11,18 @@ const GridColTwo = ({ children }) => (
    </div>
 );
 
+const GridColThree = ({ gap, children }) => (
+   <div
+      style={{
+         display: 'grid',
+         gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
+         gap: gap || 0
+      }}
+   >
+      {children}
+   </div>
+);
+
 const FlexRow = ({ gap, justify, children }) => (
    <div
       style={{
@@ -135,7 +147,7 @@ const TextUnderline = ({ value, title, groupValue }) => {
 
    return (
       <div>
-         <Paragraph style={{ textDecoration: isChecked ? 'underline' : 'none', }}>{title}</Paragraph>
+         <Paragraph style={{ textDecoration: isChecked ? 'underline' : 'none' }}>{title}</Paragraph>
       </div>
    );
 };
@@ -156,10 +168,21 @@ const TextUnderlineGroup = ({ value, children, style }) => {
          {React.Children.map(children, (child) => entireChild(child))}
       </div>
    );
-}; const TextWithUnderline = ({ children }) => {
-   return (
-      <span className="px-2 border-b border-black h-fit"> {children}</span>
-   );
-}
+};
+const TextWithUnderline = ({ children }) => {
+   return <span className="px-2 border-b border-black h-fit"> {children}</span>;
+};
 
-export { FlexRow, FlexCol, GridColTwo, Paragraph, DocumentCheckbox, DocumentCheckboxGroup, Box, TextUnderline, TextUnderlineGroup, TextWithUnderline };
+export {
+   FlexRow,
+   FlexCol,
+   GridColTwo,
+   GridColThree,
+   Paragraph,
+   DocumentCheckbox,
+   DocumentCheckboxGroup,
+   Box,
+   TextUnderline,
+   TextUnderlineGroup,
+   TextWithUnderline
+};

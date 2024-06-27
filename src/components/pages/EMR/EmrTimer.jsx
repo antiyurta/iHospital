@@ -6,7 +6,7 @@ import { ClockCircleOutlined } from '@ant-design/icons';
 import { Button, Checkbox, DatePicker, Form, Input, Modal, Radio, message } from 'antd';
 //redux
 import { selectPatient } from '@Features/patientReducer';
-import { selectCurrentInsurance, selectCurrentUserId } from '@Features/authReducer';
+import { selectCurrentHospitalName, selectCurrentInsurance, selectCurrentUserId } from '@Features/authReducer';
 import { selectCurrentAddHics, selectCurrentEmrData, selectCurrentHicsSeal, setHicsSeal } from '@Features/emrReducer';
 //common
 import { inspectionTOJSON, openNofi } from '@Comman/common';
@@ -18,15 +18,16 @@ import appointmentApi from '@ApiServices/appointment/api-appointment-service';
 //comp
 import Clock from './Clock';
 import Finger from '@Comman/Finger/Finger';
-import { DoctorNoteToPDF } from './EmrTimer/ToPDF';
+import { DoctorNoteToPDF, XrayNoteToPDF } from './EmrTimer/ToPDF';
 //utils
-import { RequireTenMinIds, setSealForHics } from '@Utils/config/insurance';
+import { RequireTenMinIds, noteToString, setSealForHics } from '@Utils/config/insurance';
 
 const EmrTimer = ({ startDate, endDate, inspection }) => {
    const navigate = useNavigate();
    const dispatch = useDispatch();
    const location = useLocation();
    const [form] = Form.useForm();
+   const currentHospitalName = useSelector(selectCurrentHospitalName);
    const watchedConclusion = Form.useWatch('conclusion', form);
    const [isDisable, setDisable] = useState(true);
    const hicsSeal = useSelector(selectCurrentHicsSeal);
@@ -43,8 +44,7 @@ const EmrTimer = ({ startDate, endDate, inspection }) => {
    const getInspectionNote = async () => {
       if (inspectionNoteId) {
          return await inspectionNoteApi.getById(inspectionNoteId).then(({ data: { response } }) => {
-            if (response.inspection) return inspectionTOJSON(response);
-            return undefined;
+            return response;
          });
       }
       return 'TEST';
@@ -53,19 +53,35 @@ const EmrTimer = ({ startDate, endDate, inspection }) => {
    const endInspection = async (values) => {
       try {
          setLoading(true);
-         const note = await getInspectionNote();
-         const DocumentId = await DoctorNoteToPDF(note);
          const isEndEMD = values.conclusion?.includes('confirmed');
+         let note = null;
+         let DocumentId = null;
+         let medicalLinkType = null;
+         if (appointmentType === 0) {
+            const inspectionNote = await getInspectionNote();
+            note = await inspectionTOJSON(inspectionNote);
+            const structure = inspectionNote?.structures;
+            DocumentId = await DoctorNoteToPDF(currentPatient, currentHospitalName, structure, note);
+            medicalLinkType = 3;
+         } else if (!appointmentType && inspection === 11) {
+            const inspectionNote = await getInspectionNote();
+            note = await inspectionTOJSON(inspectionNote);
+            const structure = inspectionNote?.structures;
+            DocumentId = await XrayNoteToPDF(currentPatient, currentHospitalName, structure, note);
+            medicalLinkType = 1;
+         }
          const medicalLinks = [
             {
                medicalFileId: DocumentId,
                inDate: new Date(),
-               medicalLinkType: 1
+               medicalLinkType: medicalLinkType
             }
          ];
          if (isInsurance) {
-            if (hicsSeal.hicsServiceId === 20120 && addHics?.checkupId > 1 && !addHics.isSent) {
-               await addHicsService(hicsSeal.hicsSealCode);
+            console.log('hicsSeal', hicsSeal);
+            console.log('hicsSeal', hicsSeal);
+            if (hicsSeal.hicsServiceId === 20120 && !addHics.isSent) {
+               await addHicsService(hicsSeal.hicsSealCode, note);
             } else {
                if (hicsSeal.process === 0) {
                   const ourHicsResponse = await setSealForHics(
@@ -74,31 +90,40 @@ const EmrTimer = ({ startDate, endDate, inspection }) => {
                      values,
                      isInsurance,
                      addHics.id,
-                     medicalLinks
+                     medicalLinks,
+                     note
                   );
-                  console.log('ourHicsResponse', ourHicsResponse);
                   if (ourHicsResponse) {
                      dispatch(setHicsSeal(ourHicsResponse));
                   }
                   if (ourHicsResponse?.hicsServiceId === 20120) {
-                     await addHicsService(ourHicsResponse.hicsSealCode);
+                     await addHicsService(ourHicsResponse.hicsSealCode, note);
                   }
                }
             }
             if (isEndEMD) {
                const { isConfirm, obsDuration, obsDate } = values;
-               const sentHicsSealResponse = await insuranceApi.requestHicsSealSent(hicsSeal.id, {
-                  patientFingerprint: values?.finger,
-                  addHicsId: addHics?.id,
-                  isConfirm: isConfirm,
-                  obsDuration: obsDuration,
-                  obsDate: obsDate
-               });
-               if (sentHicsSealResponse.data.code === 200) {
-                  openNofi('success', 'Амжиллтай', 'Үзлэг амжиллтай хадгалагдлаа ');
+               if (appointmentType === 0) {
+                  const sentHicsSealResponse = await insuranceApi.requestHicsSealSent(hicsSeal.id, {
+                     patientFingerprint: values?.finger,
+                     addHicsId: addHics?.id,
+                     isConfirm: isConfirm,
+                     obsDuration: obsDuration,
+                     obsDate: obsDate
+                  });
+                  if (sentHicsSealResponse.data.code === 200) {
+                     openNofi('success', 'Амжиллтай', 'Үзлэг амжиллтай хадгалагдлаа ');
+                  }
+               } else if (!appointmentType && inspection === 11) {
+                  await insuranceApi.requestHicsSeal(hicsSeal.id, {
+                     medicalLinks: [...hicsSeal.medicalLinks, ...medicalLinks]
+                  });
+                  navigate(-1);
                }
+            } else {
+               console.log('hicsSeal.medicalLinks', hicsSeal.medicalLinks);
+               console.log('medicalLinks', medicalLinks);
             }
-            // navigate(-1);
          } else {
             await patchAppointment({
                slotId: appointmentType === 0 ? location?.state?.slotId : null,
@@ -119,7 +144,7 @@ const EmrTimer = ({ startDate, endDate, inspection }) => {
       }
    };
 
-   const addHicsService = async (hicsSealCode) => {
+   const addHicsService = async (hicsSealCode, note) => {
       await healtInsurance
          .postAddHicsService({
             regNo: currentPatient.registerNumber,
@@ -137,7 +162,7 @@ const EmrTimer = ({ startDate, endDate, inspection }) => {
                   hasExams: addHics.hasExam ? 1 : 0,
                   diagnosis: {
                      ...addHics.diagnosis,
-                     description: await getInspectionNote()
+                     description: noteToString(note)
                   }
                }
             ]
@@ -334,7 +359,7 @@ const EmrTimer = ({ startDate, endDate, inspection }) => {
                               name="finger"
                               rules={[
                                  {
-                                    required: true,
+                                    required: false,
                                     message: 'Хурууний хээ заавал'
                                  }
                               ]}

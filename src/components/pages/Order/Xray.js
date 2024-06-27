@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
 import { CloseCircleOutlined } from '@ant-design/icons';
 import { Button, Empty, Modal, Table } from 'antd';
-
 //img
 import xrayIcon from './NewOrder/xrayIcon.svg';
 //comp
 import { CARE_TYPE } from './care-enum';
 import { ListCareType } from './list-type';
 import { ListSupport } from './list-support';
-import { isPayAmountCit } from '@Utils/config/insurance';
+import { findInclueDiagnosis, isPayAmountCit } from '@Utils/config/insurance';
 import { numberToCurrency, openNofi } from '@Comman/common';
 //api
 import healtInsuranceApi from '@ApiServices/healt-insurance/healtInsurance';
 
-function Xray({ isDoctor, selectedPatient, hasInsurance, currentSeal, handleclick }) {
+function Xray({ isDoctor, hicsExams, hicsSeal, addHics, selectedPatient, hasInsurance, handleclick }) {
+   const currentDiagnosis = findInclueDiagnosis(hicsSeal, addHics);
    const [isOpenModal, setIsOpenModal] = useState(false);
    const [selectedTypeId, setSelectedTypeId] = useState(null);
    const [selectedXrays, setSelectedXrays] = useState([]);
@@ -67,23 +67,19 @@ function Xray({ isDoctor, selectedPatient, hasInsurance, currentSeal, handleclic
       if (state) {
          openNofi('warning', 'Анхааруулга', 'Оношилгоо сонгогдсон байна');
       } else {
-         console.log('isJump', isJump);
-         console.log('isDoctor', isDoctor);
-         console.log('xray.isInsurance', xray.isInsurance);
-         console.log('xray.drgCode', isJump);
-         console.log('hasInsurance', hasInsurance);
+         const currentExam = hicsExams.find((exam) => exam.examCode === xray.examCode);
          if (!isJump && isDoctor && xray.isInsurance && xray.drgCode && hasInsurance) {
             setLoading(true);
             await healtInsuranceApi
                .getHicsCostList({
                   serviceId: 20200,
                   drgCode: xray.drgCode,
-                  icdCode: currentSeal.diagnosis.icdCode,
+                  icdCode: currentDiagnosis.diagnosis.icdCode,
                   drgTypeCode: xray.drgTypeCode
                })
                .then(({ data }) => {
                   if (data.code === 200) {
-                     const amounts = isPayAmountCit(selectedPatient.freeTypeId, currentSeal, data.result[0]);
+                     const amounts = isPayAmountCit(selectedPatient.freeTypeId, currentDiagnosis, data.result[0]);
                      add(
                         {
                            ...xray,
@@ -91,7 +87,7 @@ function Xray({ isDoctor, selectedPatient, hasInsurance, currentSeal, handleclic
                            sealData: {
                               serviceId: data.result[0].serviceId,
                               drgCode: data.result[0].drgCode,
-                              oldServiceId: currentSeal.hicsServiceId
+                              oldServiceId: hicsSeal.hicsServiceId
                            }
                         },
                         true
@@ -103,6 +99,25 @@ function Xray({ isDoctor, selectedPatient, hasInsurance, currentSeal, handleclic
                .finally(() => {
                   setLoading(false);
                });
+         } else if (!isJump && isDoctor && xray.isInsurance && xray.examCode && hasInsurance && currentExam) {
+            setLoading(true);
+            console.log('-->', currentExam);
+            const sealData = currentExam.drgCode
+               ? {
+                    serviceId: currentExam.serviceId,
+                    drgCode: currentExam.drgCode,
+                    oldServiceId: hicsSeal.hicsServiceId
+                 }
+               : null;
+            add(
+               {
+                  ...xray,
+                  ...isPayAmountCit(selectedPatient.freeTypeId, currentDiagnosis, currentExam),
+                  sealData: sealData
+               },
+               true
+            );
+            setLoading(false);
          } else {
             setSelectedXrays((prevXrays) => [
                ...prevXrays,

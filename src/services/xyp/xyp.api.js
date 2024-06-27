@@ -7,7 +7,7 @@ class XypApi {
    }
    /** OTP үүсгэх хүсэлт бүртгэх сервис */
    async registerOtp(regnum, phoneNum) {
-      return await jwtInterceopter.post('xyp/register-otp/', {
+      return await axios.post(`${process.env.REACT_APP_DEV_URL}xyp/register-otp/`, {
          regnum,
          jsonWSList: [{ ws: 'WS100101_getCitizenIDCardInfo' }],
          phoneNum: phoneNum,
@@ -19,7 +19,7 @@ class XypApi {
    }
    /** Иргэнийг баталгаажуулах OTP шалгах сервис */
    async checkOtp(regnum, otp) {
-      return await jwtInterceopter.post('xyp/check-otp', { regnum, otp });
+      return await axios.post(`${process.env.REACT_APP_DEV_URL}xyp/check-otp/`, { regnum, otp });
    }
    /** Эцэг эсвэл эхийн регистрээр  хүүхдүүдийн мэдээлэл харуулах */
    async childrenInfo(regnum, searchType) {

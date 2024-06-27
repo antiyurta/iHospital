@@ -33,17 +33,6 @@ const appointmentMap = {
    2: 2
 };
 
-const requestTypeMap = (id, typeId) => ({
-   1: {
-      xrayId: id,
-      xrayTypeId: typeId
-   },
-   2: {
-      treatmentId: id,
-      treatmentTypeId: typeId
-   }
-});
-
 function OrderTable(props) {
    const { selectedPatient, setLoading, isLoading, usageType, services, form, remove } = props;
    const dispatch = useDispatch();
@@ -112,69 +101,19 @@ function OrderTable(props) {
       return false;
    };
    const createOtsRequest = async (service, formIndex) => {
-      if (!service.invoiceId && !service.requestId) {
-         setLoading(true);
-         return await invoiceApi
-            .post({
-               patientId: selectedPatient.id,
-               amount: service.oPrice,
-               type: service.type,
-               typeId: service.typeId
-            })
-            .then(async ({ data: { response } }) => {
-               try {
-                  form.setFieldValue(['services', formIndex, 'invoiceId'], response.id);
-                  setInvoiceData({
-                     invoiceId: response.id,
-                     type: service.type,
-                     appointmentId: incomeEmrData.appointmentId,
-                     deviceId: service.deviceId,
-                     isCheckInsurance: false
-                  });
-                  setAppointmentTypeId(appointmentMap[service.type]);
-                  return await regularApi
-                     .post(urlMapPost[service.type], {
-                        ...requestTypeMap(service.id, service.typeId)[service.type],
-                        patientId: selectedPatient.id,
-                        name: response.name,
-                        invoiceId: response.id,
-                        isActive: false,
-                        price: response.amount,
-                        inpatientPrice: response.amount,
-                        requestDate: new Date(),
-                        usageType: usageType,
-                        xrayProcess: 0,
-                        scheduleId: null,
-                        isPayment: false,
-                        deviceType: service.deviceType,
-                        startAt: null,
-                        isInsurance: incomeEmrData.isInsurance
-                     })
-                     .then(({ data: { response } }) => response)
-                     .catch(() => false);
-               } catch (error) {
-                  message.error(error.message || 'An error occurred');
-               }
-            })
-            .then((lastResponse) => {
-               if (lastResponse) {
-                  form.setFieldValue(['services', formIndex, 'requestId'], lastResponse.id);
-                  setLastResponse({
-                     responseId: lastResponse.id,
-                     formIndex: formIndex
-                  });
-                  setOpenAppointment(true);
-               }
-            })
-            .catch((error) => {
-               console.log('error', error);
-            })
-            .finally(() => {
-               setLoading(false);
-            });
-      } else {
-         setOpenAppointment(true);
-      }
+      setAppointmentTypeId(appointmentMap[service.type]);
+      setInvoiceData({
+         invoiceId: null,
+         type: service.type,
+         appointmentId: incomeEmrData.appointmentId,
+         deviceId: service.deviceId,
+         isCheckInsurance: false,
+         hicsSealId: incomeEmrData.hicsSealId
+      });
+      setLastResponse({
+         formIndex: formIndex
+      });
+      setOpenAppointment(true);
    };
 
    const replaceOtsData = () => {
@@ -243,9 +182,9 @@ function OrderTable(props) {
                                  );
                               } else {
                                  const name = getFieldValue(['services', index, 'name']);
-                                 const invoiceId = getFieldValue(['services', index, 'invoiceId']);
-                                 const responseId = getFieldValue(['services', index, 'responseId']);
-                                 const isDanger = invoiceId && responseId ? false : true;
+                                 const slotId = getFieldValue(['services', index, 'slotId']);
+                                 console.log(slotId);
+                                 const isDanger = slotId ? false : true;
                                  return (
                                     <Space>
                                        <Button
@@ -256,7 +195,7 @@ function OrderTable(props) {
                                              createOtsRequest(getFieldValue(['services', index]), index);
                                           }}
                                        />
-                                       <Form.Item hidden name={[index, 'invoiceId']}>
+                                       <Form.Item hidden name={[index, 'cabinetId']}>
                                           <InputNumber />
                                        </Form.Item>
                                        <Form.Item
@@ -267,7 +206,7 @@ function OrderTable(props) {
                                                 message: `${name} цаг оруулах заавал`
                                              }
                                           ]}
-                                          name={[index, 'requestId']}
+                                          name={[index, 'slotId']}
                                        >
                                           <InputNumber />
                                        </Form.Item>
@@ -482,6 +421,8 @@ function OrderTable(props) {
                         form.setFieldsValue({
                            services: {
                               [`${lastResponse.formIndex}`]: {
+                                 cabinetId: info.cabinetId,
+                                 slotId: info.slotId,
                                  orderTime: `${info?.time?.start?.substr(0, 5)}->${info?.time?.end?.substr(0, 5)}`
                               }
                            }

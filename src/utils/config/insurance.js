@@ -10,7 +10,6 @@ const InpatientGroupIds = [208, 212];
 export { RequireTenMinIds, RequireCreateSealIds, InpatientGroupIds, isRequireHicsServiceIds };
 import { openNofi } from '@Comman/common';
 //api
-import inspectionNoteApi from '@ApiServices/emr/inspectionNote';
 import insuranceApi from '@ApiServices/healt-insurance/insurance';
 import healtInsurance from '@ApiServices/healt-insurance/healtInsurance';
 
@@ -44,16 +43,6 @@ export const isPayAmountCit = (freeTypeId, hicsSeal, amounts) => {
    };
 };
 
-const getInspectionNote = async (id) => {
-   if (id) {
-      return await inspectionNoteApi.getById(id).then(({ data: { response } }) => {
-         if (response.inspection) return JSON.parse(response.inspection)?.['Бодит үзлэг'];
-         return undefined;
-      });
-   }
-   return 'TEST';
-};
-
 const getAddHics = async (id) => {
    if (id) {
       return await insuranceApi
@@ -82,12 +71,23 @@ const getHicsSeal = async (id) => {
    };
 };
 
-export const setSealForHics = async (patient, hicsSealId, values, isInsurance, addHicsId, medicalLink) => {
+export const noteToString = (note) => {
+   return Object.entries(note)
+      ?.map(([_key, value]) => {
+         console.log('value', value);
+         let jsonString = JSON.stringify(value);
+         let formattedString = jsonString.replace(/[{}"']/g, '');
+         return formattedString;
+      })
+      ?.join('\n');
+};
+
+export const setSealForHics = async (patient, hicsSealId, values, isInsurance, addHicsId, medicalLinks, note) => {
    try {
       const hicsSeal = await getHicsSeal(hicsSealId);
       const addHics = await getAddHics(addHicsId);
       const currentHics = hicsSeal.diagnosis || addHics.diagnosis;
-      console.log('currentHics=========>', currentHics);
+      const newNote = noteToString(note);
       const data = {
          patientRegno: patient.registerNumber,
          patientFingerprint: values.finger,
@@ -109,7 +109,7 @@ export const setSealForHics = async (patient, hicsSealId, values, isInsurance, a
          bloodType: hicsSeal.bloodType,
          diagnosis: {
             ...currentHics,
-            description: hicsSeal.description || (await getInspectionNote())
+            description: hicsSeal.description || newNote
          },
          isLiver: patient.isLiver ? 1 : 2,
          startCode: hicsSeal.hicsStartCode,
@@ -137,7 +137,7 @@ export const setSealForHics = async (patient, hicsSealId, values, isInsurance, a
                   ...hicsSeal,
                   hicsSealCode: data.result.serviceNumber,
                   process: 1,
-                  medicalLink: medicalLink
+                  medicalLinks: medicalLinks
                })
                .then(async ({ data: { response: ourHicsResponse } }) => {
                   return ourHicsResponse;

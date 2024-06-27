@@ -33,8 +33,8 @@ import StructureApi from '@ApiServices/organization/structure';
 import InsuranceApi from '@ApiServices/healt-insurance/insurance';
 import HealtInsuranceApi from '@ApiServices/healt-insurance/healtInsurance';
 import AppointmentApi from '@ApiServices/appointment/api-appointment-service';
-import { isRequireHicsServiceIds } from '@Utils/config/insurance';
 //defualt
+import { isRequireHicsServiceIds } from '@Utils/config/insurance';
 const { TextArea } = Input;
 function Index({ selectedPatient, type, invoiceData, handleClick, prevAppointmentId, isExtraGrud }) {
    const [isOpenModalInspectionType, setIsOpenModalInspectionType] = useState(false);
@@ -253,19 +253,24 @@ function Index({ selectedPatient, type, invoiceData, handleClick, prevAppointmen
          setGetIsSlot({ state: false, slotType: 0 });
          if (type === 2 || type === 3) {
             /** type 3 bol xray 2 bol treatment */
-            await ServiceApi.patch(invoiceData.invoiceId, {
-               ...selectedInfo,
-               appointmentId: invoiceData.appointmentId || null,
-               doctorId: selectedDoctor.id,
-               patientId: selectedPatient.id,
-               type: invoiceData.type
-            }).then((response) => {
-               if (response.status === 200) {
-                  setAppointmentModal(false);
-                  handleClick(true, invoiceData.invoiceId, selectedInfo);
-                  setGetIsSlot({ state: true, slotType: 0 });
-               }
-            });
+            await ScheduleApi.patchDeviceSlot(selectedInfo.slotId, {
+               isActive: false
+            })
+               // await ServiceApi.patch(invoiceData.invoiceId, {
+               //    ...selectedInfo,
+               //    appointmentId: invoiceData.appointmentId || null,
+               //    doctorId: selectedDoctor.id,
+               //    patientId: selectedPatient.id,
+               //    type: invoiceData.type,
+               //    hicsSealId: selectedInfo.hicsSealId || invoiceData?.hicsSealId
+               // })
+               .then((response) => {
+                  if (response.status === 200) {
+                     setAppointmentModal(false);
+                     handleClick(true, invoiceData.invoiceId, selectedInfo);
+                     setGetIsSlot({ state: true, slotType: 0 });
+                  }
+               });
          } else {
             if (incomeEmrData.usageType === 'IN') {
                setIsOpenModalInspectionType(true);

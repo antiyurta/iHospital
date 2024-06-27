@@ -20,6 +20,9 @@ const OTPPage = ({ id, regNo, signature, setLoading, getFile }) => {
                   openNofi('success', response.return.resultMessage);
                }
             })
+            .catch((error) => {
+               console.log(error);
+            })
             .finally(() => {
                setLoading(false);
             });

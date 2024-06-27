@@ -1,15 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import { Badge, Card, Spin } from 'antd';
+import { Badge, Button, Card, Spin, Table } from 'antd';
 import dayjs from 'dayjs';
 //api
 import HealtInsuranceApi from '@ApiServices/healt-insurance/healtInsurance';
 //common
 import { openNofi } from '@Comman/common';
+import { EyeOutlined } from '@ant-design/icons';
 
 const labelstyle = {
    fontSize: 14,
    color: 'black',
    fontWeight: 700
+};
+
+const labelMap = {
+   1: 'asd',
+   2: 'sad',
+   3: 'Үзлэгийн бүртгэл'
 };
 
 const PatientDataHistory = ({ registerNumber }) => {
@@ -76,16 +83,37 @@ const PatientDataHistory = ({ registerNumber }) => {
                               </ol>
                            </>
                         ) : null}
-
-                        {data.medicalLinks?.map((link) => (
+                        {data.medicalLinks?.length > 0 ? (
                            <>
-                              <p>Links</p>
-                              <p>Огноо: {link.indate}</p>
-                              <a href={link.link} target="_blank">
-                                 Харах
-                              </a>
+                              <div className="w-full h-[1px] bg-black" />
+                              <p style={labelstyle}>Үйлчилгээнийн линк:</p>
+                              <Table
+                                 rowKey="docuid"
+                                 bordered
+                                 columns={[
+                                    {
+                                       title: 'Төрөл',
+                                       dataIndex: 'type',
+                                       render: (type) => labelMap[type]
+                                    },
+                                    {
+                                       title: 'Огноо',
+                                       dataIndex: 'indate',
+                                       render: (indate) => dayjs(indate).format('YYYY/MM/DD')
+                                    },
+                                    {
+                                       title: '',
+                                       dataIndex: 'link',
+                                       render: (link) => (
+                                          <Button type="link" href={link} target="_blank" icon={<EyeOutlined />} />
+                                       )
+                                    }
+                                 ]}
+                                 pagination={false}
+                                 dataSource={data.medicalLinks}
+                              />
                            </>
-                        ))}
+                        ) : null}
                      </Card>
                   </Badge.Ribbon>
                ))}
