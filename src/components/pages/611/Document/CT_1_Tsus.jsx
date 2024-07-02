@@ -1,728 +1,510 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Checkbox, Image, Input } from 'antd';
 import { Table } from 'react-bootstrap';
 import HematopImg from '../../../../assets/images/hematop.png';
 import BodyImg from '../../../../assets/images/body.png';
 import Body2Img from '../../../../assets/images/body2.png';
 import ChestImg from '../../../../assets/images/chest.png';
+import { Box, Paragraph, DocumentCheckbox, DocumentCheckboxGroup, FlexRow, TextUnderline, TextUnderlineGroup, TextWithUnderline, FlexCol } from '../Components';
+
 const CT_1_Tsus = (props) => {
-   const {
-      data: { formData }
-   } = props;
-   console.log('Form', formData);
+   const [formData, setFormData] = useState({});
+   useEffect(() => {
+      if (props?.data?.formData) {
+         setFormData(props?.data?.formData);
+      }
+   }, [props]);
    return (
       <div className="print-remove-p">
          <div className="page">
             <div className="subpage">
-               <th className="flex justify-center">ЦУСНЫ ЭМЧИЙН ҮЗЛЭГ</th>
-               <Table bordered className="story mb-0">
-                  <thead>
-                     <tr className="text-center">
-                        <th>Биеийн ерөнхий байдал</th>
-                        <th>Ухаан санаа</th>
-                        <th colSpan={4}>Арьс салст</th>
-                     </tr>
-                  </thead>
-                  <thead>
-                     <tr>
-                        <th>
-                           <Checkbox.Group value={formData?.q1}>
-                              <Checkbox className="ml-2" value={'q1-1'}>
-                                 Дунд
-                              </Checkbox>
-                              <Checkbox value={'q1-2'}>Хүндэвтэр</Checkbox>
-                              <Checkbox value={'q1-3'}>Хүнд</Checkbox>
-                              <Checkbox value={'q1-4'}>Маш хүнд</Checkbox>
-                           </Checkbox.Group>
-                        </th>
-                        <th>
-                           <Checkbox.Group value={formData?.q2}>
-                              <Checkbox className="ml-2" value={'q2-1'}>
-                                 Саруул
-                              </Checkbox>
-                              <Checkbox value={'q2-1'}>Бүдгэрсэн</Checkbox>
-                              <Checkbox value={'q2-2'}>Ухаангүй</Checkbox>
-                           </Checkbox.Group>
-                        </th>
-                        <th colSpan={4}>
-                           <Checkbox.Group value={formData?.q3}>
-                              <Checkbox className="ml-2" value={'q3-1'}>
-                                 Хэвийн
-                              </Checkbox>
-                              <Checkbox value={'q3-2'}>
-                                 Хэвийн бус
-                                 <Input className=" w-10" value={'q3-2-1'} style={{ textAlign: 'center' }} />
-                              </Checkbox>
-                           </Checkbox.Group>
-                        </th>
-                     </tr>
-                  </thead>
-               </Table>
-               <Table bordered className="story mb-0">
-                  <thead>
-                     <tr className="border-t-0">
-                        <th colSpan={4}>Амьсгалын эрхтэн тогтолцоо</th>
-                     </tr>
-                     <tr>
-                        <th className="w-[220px]" id="cls">
-                           Амьсгал 1 минутанд
-                           <Input className=" w-10" value={formData?.q4} style={{ textAlign: 'center' }} />
-                           удаа
-                        </th>
-                        <th colSpan={3}>
-                           Чагналтаар:
-                           <Checkbox.Group value={formData?.q5} id="child">
-                              <Checkbox value={'q5-1'} className="ml-2">
-                                 Хэржигнүүртэй
-                              </Checkbox>
-                              <Checkbox value={'q5-2'}>Уушги цулцангийн</Checkbox>
-                              <Checkbox value={'q5-3'}>Гуурсан хоолойн</Checkbox>
-                              <Checkbox value={'q5-4'}>
-                                 <div className="flex items-center">
-                                    <span> Амьсгал сулавтар</span>
-                                    <p>
-                                       <span className="text-[11px]">
-                                          (
-                                          <Checkbox.Group value={formData?.['q5-4-1']} className="inline">
-                                             <Checkbox className="test" value={'q5-4-1-1'}>
-                                                <span className="text-[11px]">Баруун,</span>
-                                             </Checkbox>
-                                             &nbsp;
-                                             <Checkbox className="ml-0 test" value={'q5-4-1-2'}>
-                                                <span className="text-[11px]">зүүн,</span>
-                                             </Checkbox>
-                                             &nbsp;
-                                             <Checkbox className="ml-0 test" value={'q5-4-1-3'}>
-                                                <span className="text-[11px]">2 талдаа</span>
-                                             </Checkbox>
-                                             &nbsp;
-                                          </Checkbox.Group>
-                                          )
-                                       </span>
-                                    </p>
-                                 </div>
-                              </Checkbox>
-                           </Checkbox.Group>
-                        </th>
-                     </tr>
-                     <tr>
-                        <th colSpan={4}>Цусны эргэлтийн тогтолцоо</th>
-                     </tr>
-                  </thead>
-               </Table>
-               <Table bordered className="story mb-0">
-                  <thead>
-                     <tr className="border-t-0">
-                        <th id="cls">
-                           <p>
-                              Судасны цохилт 1 минутанд
-                              <Input className=" w-10" value={formData?.q6} style={{ textAlign: 'center' }} />
-                              удаа
-                           </p>
-                           <p>
-                              Хүчдэл дүүрэлт
-                              <Input className=" w-10" value={formData?.q7} style={{ textAlign: 'center' }} />
-                           </p>
-                        </th>
-                        <th>
-                           <p>Тогшилтоор:</p>
-                           <p id="cls">Зүрхний хил</p>
-                           <Checkbox.Group value={formData?.q8}>
-                              <Checkbox className="ml-2" value={'q8-1'}>
-                                 Хэвийн
-                              </Checkbox>
-                              <Checkbox value={'q8-2'}>
-                                 Томорсон
-                                 <p>
-                                    <span className="text-[11px]">
-                                       (
-                                       <Checkbox.Group value={formData?.['q8-2-1']} className="inline">
-                                          <Checkbox className="test" value={'q8-2-1-1'}>
-                                             <span className="text-[11px]">Баруун,</span>
-                                          </Checkbox>
-                                          &nbsp;
-                                          <Checkbox className="ml-0 test" value={'q8-2-1-2'}>
-                                             <span className="text-[11px]">зүүн,</span>
-                                          </Checkbox>
-                                          &nbsp;
-                                       </Checkbox.Group>
-                                       )
-                                    </span>
-                                 </p>
-                              </Checkbox>
-                           </Checkbox.Group>
-                        </th>
-                        <th>
-                           <p>Чагналтаар:</p>
-                           <p id="cls">Зүрхний авиа</p>
-                           <Checkbox.Group value={formData?.q9}>
-                              <Checkbox className="ml-2" value={'q9-1'}>
-                                 Тод
-                              </Checkbox>
-                              <Checkbox value={'q9-2'}>Бүдэг</Checkbox>
-                              <Checkbox value={'q9-3'}>Бүдгэвтэр</Checkbox>
-                              <Checkbox value={'q9-4'}>Хэм жигд</Checkbox>
-                              <Checkbox value={'q9-5'}>Жигд бус </Checkbox>
-                              <Checkbox value={'q9-6'}>Хэм алдалттай</Checkbox>
-                           </Checkbox.Group>
-                           <th id="cls">
-                              АД баруун талд
-                              <Input className=" w-8" value={formData?.q10} style={{ textAlign: 'center' }} />
-                           </th>
-                           <th id="cls">
-                              Зүүн талд
-                              <Input className=" w-8" value={formData?.q11} style={{ textAlign: 'center' }} />
-                           </th>
-                        </th>
-                     </tr>
-                  </thead>
-               </Table>
-               <Table bordered className="story mb-0">
-                  <thead>
-                     <tr className="border-t-0">
-                        <th colSpan={4}>Хоол шингээх эрхтэн тогтолцоо</th>
-                     </tr>
-                     <tr>
-                        <th className="w-[150px]" id="cls">
-                           Хэл
-                           <Checkbox.Group value={formData?.q12}>
-                              <Checkbox className="ml-2" value={'q12-1'}>
-                                 Ердийн
-                              </Checkbox>
-                              <Checkbox value={'q12-2'}>Хуурай</Checkbox>
-                              <Checkbox value={'q12-3'}>Өнгөргүй</Checkbox>
-                              <Checkbox value={'q12-4'}>Өнгөртэй</Checkbox>
-                           </Checkbox.Group>
-                        </th>
-                        <th colSpan={3}>
-                           <p id="cls"> Хэвлийн үзлэг:</p>
-                           <Checkbox.Group value={formData?.q13}>
-                              <Checkbox value={'q13-1'} className="ml-2">
-                                 Өнгөц тэмтрэлтээр
-                              </Checkbox>
-                              <Checkbox value={'q13-2'}>Гүн тэмтрэлтээр</Checkbox>
-                              <Checkbox value={'q13-5'} className="">
-                                 Эмзэглэлтэй (байрлал
-                                 <Input
-                                    className=" w-8"
-                                    value={formData?.['q13-5-1']}
-                                    style={{ textAlign: 'center' }}
-                                 />
-                                 )
-                              </Checkbox>
-                              <Checkbox value={'q13-3'}>Ердийн</Checkbox>
-                              <Checkbox value={'q13-4'}>Зөөлөн гялтан цочрол үгүй</Checkbox>
-                              <Checkbox value={'q13-6'}> Гялтан цочролын шинж илэрсэн</Checkbox>
-                           </Checkbox.Group>
-                        </th>
-                     </tr>
-                     <tr>
-                        <th colSpan={4}>Мэдрэлийн тогтолцоо</th>
-                     </tr>
-                  </thead>
-               </Table>
-               <Table bordered className="story mb-0">
-                  <thead>
-                     <tr className="border-t-0">
-                        <th>
-                           <p id="cls"> Сонсох чадвахи:</p>
-                           <Checkbox.Group value={formData?.q14}>
-                              <Checkbox value={'q14-1'}>Хэвийн</Checkbox>
-                              <Checkbox value={'q14-2'}>Буурсан (баруун, зүүн)</Checkbox>
-                           </Checkbox.Group>
-                        </th>
-                        <th>
-                           <p id="cls">Рефлексүүд</p>
-                           <Checkbox.Group value={formData?.q15}>
-                              <Checkbox value={'q15-1'}>Хадгалагдана</Checkbox>
-                              <Checkbox value={'q15-2'}>Хадгалагдахгүй</Checkbox>
-                           </Checkbox.Group>
-                        </th>
-                     </tr>
-                  </thead>
-               </Table>
-               <Table bordered className="story mb-0">
-                  <thead>
-                     <tr className="border-t-0">
-                        <th id="cls">
-                           <p className="w-full">
-                              Бусад
-                              <Input className=" w-[670px]" value={formData?.q16} style={{ textAlign: 'center' }} />
-                           </p>
-                           <p>
-                              Сэтгэцийн байдал:
-                              <Input
-                                 className=" w-[600px] mb-1"
-                                 value={formData?.q17}
-                                 style={{ textAlign: 'center' }}
-                              />
-                           </p>
-                        </th>
-                     </tr>
-                     <tr>
-                        <th colSpan={4}>Мэдрэлийн тогтолцоо</th>
-                     </tr>
-                  </thead>
-               </Table>
-               <Table bordered className="story mb-0">
-                  <thead>
-                     <tr className="border-t-0">
-                        <th rowSpan={2}>
-                           <Image src={HematopImg} alt="" width={250} height={160} className="p-8" />
-                        </th>
-                        <th id="cls">
-                           Зовиур:
-                           <Input className=" w-[400px] mb-1" style={{ textAlign: 'center' }} />
-                           <Input className=" w-full mb" style={{ textAlign: 'center' }} />
-                           <Input className=" w-full mb-1" style={{ textAlign: 'center' }} />
-                        </th>
-                     </tr>
-                     <tr>
-                        <th id="cls">
-                           <p>
-                              Биеийн жин /Кг/ :
-                              <Input value={formData?.q18} />
-                           </p>
-                           <p>
-                              Биеийн өндөр /См/:
-                              <Input value={formData?.q19} />
-                           </p>
-                           <p>
-                              Биеийн гадаргуу / м2
-                              <Input value={formData?.q20} />
-                           </p>
-                        </th>
-                     </tr>
-                  </thead>
-               </Table>
-               <Table bordered className="story mb-0">
-                  <thead>
-                     <tr className="border-t-0">
-                        <th>
-                           <p>Арьсан дээрх тууралтын хэлбэр:</p>
-                           <Checkbox.Group value={formData?.q21}>
-                              <Checkbox className="ml-2 w-full" value={'q21-1'}>
-                                 Цэгчилсэн гүвдрүүт тууралт
-                              </Checkbox>
-                              <Checkbox className="w-full" value={'q21-2'}>
-                                 Цэврүүт тууралт
-                              </Checkbox>
-                              <Checkbox className="w-full" value={'q21-3'}>
-                                 Толбон тууралт
-                              </Checkbox>
-                              <Checkbox className="w-full" value={'q21-4'}>
-                                 Шалбархайт болон тав тогтсон
-                              </Checkbox>
-                              <Checkbox className="w-full" value={'q21-5'}>
-                                 Сорви
-                              </Checkbox>
-                              <Checkbox className="w-full" value={'q21-6'}>
-                                 Хөхрөлт
-                              </Checkbox>
-                              <Checkbox className="w-full" value={'q21-7'}>
-                                 Цус хуралт
-                              </Checkbox>
-                              <Checkbox className="w-full" value={'q21-8'}>
-                                 Цус харвалт
-                              </Checkbox>
-                              <Checkbox className="w-full" value={'q21-9'}>
-                                 Холимог туурал
-                              </Checkbox>
-                              <Checkbox className="w-full" value={'q21-10'}>
-                                 Тууралтгүй
-                              </Checkbox>
-                           </Checkbox.Group>
-                        </th>
-                        <th>
-                           <p>Үсний байдал:</p>
-                           <Checkbox.Group value={formData?.q22}>
-                              <Checkbox className="ml-2" value={'q22-1'}>
-                                 Хэвийн
-                              </Checkbox>
-                              <Checkbox value={'q22-2'}>Хугарамтгай</Checkbox>
-                           </Checkbox.Group>
-                           <p>Хумсны байдал:</p>
-                           <Checkbox.Group value={formData?.q23}>
-                              <Checkbox className="ml-2" value={'q23-1'}>
-                                 Хэвийн
-                              </Checkbox>
-                              <Checkbox value={'q23-2'}>Хугарамтгай</Checkbox>
-                           </Checkbox.Group>
-                        </th>
-                        <th>
-                           <p id="cls">(Тууралтын байрлалыг зурагт тэмдэглэх)</p>
-                           <Image src={BodyImg} alt="" width={280} height={220} />
-                        </th>
-                     </tr>
-                  </thead>
-               </Table>
-               <Table bordered className="story mb-0">
-                  <thead>
-                     <tr className="border-t-0 ">
-                        <th id="cls">
-                           <p>Хумсны байдал:</p>
-                           <Checkbox.Group value={formData?.q24}>
-                              <Checkbox className="ml-2 w-full" value={'q24-1'}>
-                                 Хэвийн
-                              </Checkbox>
-                              <Checkbox className="w-full" value={'q24-2'}>
-                                 Хугарамтгай
-                              </Checkbox>
-                           </Checkbox.Group>
-                        </th>
-                        <th id="cls">
-                           <p>Амны хөндий: Хэл/ </p>
-                           <p>Өнгө:</p>
-                           <Checkbox.Group value={formData?.q25}>
-                              <Checkbox className="ml-2" value={'q25-1'}>
-                                 Ердийн
-                              </Checkbox>
-                              <Checkbox value={'q25-2'}>Цайвар</Checkbox>
-                              <Checkbox value={'q25-3'}>Улаан</Checkbox>
-                              <Checkbox value={formData?.['q25-4']}>Ягаан</Checkbox>
-                           </Checkbox.Group>
-                        </th>
-                        <th id="cls">
-                           <p>Хөхлөг:</p>
-                           <Checkbox.Group value={formData?.q26}>
-                              <Checkbox className="ml-2 w-full" value={'q26-1'}>
-                                 Ердийн
-                              </Checkbox>
-                              <Checkbox className="w-full" value={'q26-2'}>
-                                 Хатингаршсан
-                              </Checkbox>
-                              <Checkbox className="w-full" value={'q26-3'}>
-                                 Томорсон
-                              </Checkbox>
-                           </Checkbox.Group>
-                        </th>
-                        <th id="cls">
-                           <p>Тууралт:</p>
-                           <Checkbox.Group value={formData?.q27}>
-                              <Checkbox className="ml-2 w-full" value={'q27-1'}>
-                                 Тууралттай
-                              </Checkbox>
-                              <Checkbox className="ml-2 w-full" value={'q27-2'}>
-                                 Шарх
-                              </Checkbox>
-                              <Checkbox className="ml-2 w-full" value={'q27-3'}>
-                                 Улайлт
-                              </Checkbox>
-                              <Checkbox className="w-full" value={'q27-4'}>
-                                 Яр
-                              </Checkbox>
-                              <Checkbox value={formData?.['q27-5']}>Газрын зураг</Checkbox>
-                           </Checkbox.Group>
-                        </th>
-                     </tr>
-                  </thead>
-               </Table>
+               <Box>
+                  <Paragraph style={{ textAlign: "center" }}>ЗҮРХНИЙ ЭМЧИЙН ҮЗЛЭГ</Paragraph>
+               </Box>
+               <FlexRow>
+                  <Box width={"34%"} left top >Биеийн ерөнхий байдал</Box>
+                  <Box width={"33%"} left top>Ухаан санаа</Box>
+                  <Box width={"33%"} left top right>Арьс салст</Box>
+               </FlexRow>
+               <FlexRow >
+                  <Box left top width={"34%"} >
+                     <DocumentCheckboxGroup value={formData?.q1}>
+                        <DocumentCheckbox value={'q1-1'} title={"Дунд"} />
+                        <DocumentCheckbox value={'q1-2'} title={"Хүндэвтэр"} />
+                        <DocumentCheckbox value={'q1-3'} title={"Хүнд"} />
+                        <DocumentCheckbox value={'q1-4'} title={"Маш хүнд"} />
+                     </DocumentCheckboxGroup>
+                  </Box>
+                  <Box left top width={"33%"}>
+                     <DocumentCheckboxGroup value={formData?.q2}>
+                        <DocumentCheckbox value={"q2-1"} title={"Саруул"} />
+                        <DocumentCheckbox value={"q2-2"} title={"Бүдгэрсэн"} />
+                        <DocumentCheckbox value={"q2-3"} title={"Ухаангүй"} />
+                     </DocumentCheckboxGroup>
+                  </Box>
+                  <Box left top right width={"33%"} style={{ display: "flex", }}>
+                     <DocumentCheckboxGroup value={formData?.q3}>
+                        <DocumentCheckbox value={"q3-1"} title={"Хэвийн"} />
+                        <DocumentCheckbox value={"q3-2"} title={"Хэвийн бус"} />
+                     </DocumentCheckboxGroup>
+                     <TextWithUnderline>
+                        <Paragraph style={{ marginTop: "15px" }}>({formData?.['q3-2-1']})</Paragraph>
+                     </TextWithUnderline>
+
+                  </Box>
+               </FlexRow>
+               <Box left top right>Амьсгалын эрхтэн тогтолцоо</Box>
+               <FlexRow>
+                  <Box left top width={'40%'}>
+                     <Paragraph> Амьсгал 1 минутанд <TextWithUnderline>{formData?.q4}</TextWithUnderline> удаа</Paragraph>
+                  </Box>
+                  <Box left top right width={'60%'}>
+                     <Paragraph>Чагналтаар:</Paragraph>
+                     <DocumentCheckboxGroup value={formData?.q5}>
+                        <DocumentCheckbox value={"q5-1"} title={"Уушги цулцангийн"} />
+                        <DocumentCheckbox value={"q5-2"} title={" Гуурсан хоолойн"} />
+                        <DocumentCheckbox value={"q5-3"} title={" Хэржигнүүртэй"} />
+                        <DocumentCheckbox value={"q5-4"} title={" Амьсгал сулавтар"} />
+                     </DocumentCheckboxGroup>
+                     <TextUnderlineGroup style={{ display: "flex" }} value={formData?.['q5-4-1']}  >
+                        <TextUnderline value={'q5-4-1-1'} title={'(баруун'} />
+                        <TextUnderline value={'q5-4-1-2'} title={'зүүн'} />
+                        <TextUnderline value={'q5-4-1-3'} title={'2 талдаа)'} />
+                     </TextUnderlineGroup>
+                  </Box>
+               </FlexRow>
+               <Box left top right> Цусны эргэлтийн тогтолцоо</Box>
+               <FlexRow>
+                  <Box left top width={"23%"}>
+                     <Paragraph>Судасны цохилт 1 минутанд <TextWithUnderline>{formData?.q6}</TextWithUnderline> удаа</Paragraph>
+                     <Paragraph>Хүчдэл дүүрэлт <TextWithUnderline>{formData?.q7}</TextWithUnderline>  </Paragraph>
+                  </Box>
+                  <Box width={"23%"} left top>
+                     <Paragraph>Тогшилтоор:</Paragraph>
+                     <Paragraph>Зүрхний хил:</Paragraph>
+                     <DocumentCheckboxGroup value={formData?.q8}>
+                        <DocumentCheckbox value={"q8-1"} title={"Хэвийн"} />
+                        <DocumentCheckbox value={"q8-2"} title={"Томорсон "} />
+                     </DocumentCheckboxGroup>
+                     <TextUnderlineGroup style={{ display: "flex" }} value={formData?.['q8-2-1']}  >
+                        <TextUnderline value={'q8-2-1-1'} title={'баруун'} />
+                        <TextUnderline value={'q8-2-1-2'} title={'зүүн'} />
+                     </TextUnderlineGroup>
+                  </Box>
+                  <Box width={'54%'} left top right >
+                     <Paragraph>Чагналтаар:</Paragraph>
+                     <Paragraph>Зүрхний авиа:</Paragraph>
+                     <DocumentCheckboxGroup value={formData?.q9}>
+                        <DocumentCheckbox value={"q9-1"} title={"Тод"} />
+                        <DocumentCheckbox value={"q9-2"} title={"Бүдэг"} />
+                        <DocumentCheckbox value={"q9-3"} title={"Бүдгэвтэр "} />
+                        <DocumentCheckbox value={"q9-4"} title={"Хэм жигд "} />
+                        <DocumentCheckbox value={"q9-5"} title={"Жигд бус "} />
+                        <DocumentCheckbox value={"q9-6"} title={"Хэм алдалттай "} />
+                     </DocumentCheckboxGroup>
+                     <Paragraph style={{ display: "flex", gap: "4px" }}>
+                        <Paragraph> АД баруун талд  <TextWithUnderline>{formData?.q10}</TextWithUnderline> </Paragraph>
+                        <Paragraph> Зүүн талд       <TextWithUnderline>{formData?.q11}</TextWithUnderline> </Paragraph>
+                     </Paragraph>
+                  </Box>
+               </FlexRow>
+               <Box left top right>Хоол шингээх эрхтэн тогтолцоо</Box>
+               <FlexRow>
+                  <Box width={'40%'} left top>
+                     <Paragraph>Хэл</Paragraph>
+                     <DocumentCheckboxGroup value={formData?.q12}>
+                        <DocumentCheckbox value={"q12-1"} title={"Ердийн"} />
+                        <DocumentCheckbox value={"q12-2"} title={"Хуурай"} />
+                        <DocumentCheckbox value={"q12-3"} title={"Өнгөргүй"} />
+                        <DocumentCheckbox value={"q12-4"} title={"Өнгөртэй"} />
+                     </DocumentCheckboxGroup>
+                  </Box>
+                  <Box width={'60%'} left top right>
+                     <Paragraph>Хэвлийн үзлэг:</Paragraph>
+                     <DocumentCheckboxGroup value={formData?.q13}>
+                        <DocumentCheckbox value={"q13-1"} title={"Өнгөц тэмтрэлтээр"} />
+                        <DocumentCheckbox value={"q13-2"} title={"Гүн тэмтрэлтээр"} />
+                        <DocumentCheckbox value={"q13-3"} title={"Эмзэглэлтэй"} />
+                        <DocumentCheckbox value={"q13-4"} title={"Ердийн"} />
+                        <DocumentCheckbox value={"q13-5"} title={"Зөөлөн гялтан цочрол үгүй"} />
+                        <DocumentCheckbox value={"q13-6"} title={"Гялтан цочролын шинж илэрсэн"} />
+                     </DocumentCheckboxGroup>
+                  </Box>
+               </FlexRow>
+               <Box left right top>Мэдрэлийн тогтолцоо</Box>
+               <FlexRow>
+                  <Box width={'50%'} left top >
+                     <Paragraph>Сонсох чадвахи:</Paragraph>
+                     <DocumentCheckboxGroup value={formData?.q14}>
+                        <DocumentCheckbox value={'q14-1'} title={'Хэвийн'} />
+                        <DocumentCheckbox value={'q14-2'} title={'Буурсан'} />
+                     </DocumentCheckboxGroup>
+                     <TextUnderlineGroup value={formData?.['q14-2-1']} style={{ display: "flex" }} >
+                        <TextUnderline value={'q14-2-1-1'} title={'баруун'} />
+                        <TextUnderline value={'q14-2-1-2'} title={'зүүн'} />
+                     </TextUnderlineGroup>
+                  </Box>
+                  <Box width={'50%'} left top right>
+                     <Paragraph>Рефлексүүд:</Paragraph>
+                     <DocumentCheckboxGroup value={formData?.q15}>
+                        <DocumentCheckbox value={'q15-1 '} title={'Хадгалагдана'} />
+                        <DocumentCheckbox value={'q15-2 '} title={'Хадгалагдахгүй'} />
+                     </DocumentCheckboxGroup>
+                  </Box>
+               </FlexRow>
+               <Box left top right>
+                  <Paragraph>Бусад:<TextWithUnderline>{formData?.q16}</TextWithUnderline></Paragraph>
+                  <Paragraph>Сэтгэцийн байдал:<TextWithUnderline> {formData?.q17}</TextWithUnderline></Paragraph>
+               </Box>
+               <Box left top right>
+                  <Paragraph style={{ textAlign: 'center' }}>Цус судлалын эмчийн үзлэг</Paragraph>
+               </Box>
+               <FlexRow>
+                  <Box width={'50%'} left top >
+                     <img src={HematopImg} alt="" width={200} height={100} className="p-8" />
+                  </Box>
+                  <Box width={'50%'} left top right>
+                     <Paragraph>Зовиур:
+                        <TextWithUnderline>{formData?.q}</TextWithUnderline>
+                     </Paragraph>
+                     <Paragraph>Биеийн жин /Кг/:       <TextWithUnderline>{formData?.q18}</TextWithUnderline></Paragraph>
+                     <Paragraph>Биеийн өндөр /См/:     <TextWithUnderline>{formData?.q19}</TextWithUnderline></Paragraph>
+                     <Paragraph>Биеийн гадаргуу / м2/: <TextWithUnderline>{formData?.q20}</TextWithUnderline></Paragraph>
+                  </Box>
+               </FlexRow>
+               <FlexRow>
+                  <Box left top bottom width={'40%'}>
+                     <Paragraph>Арьсан дээрх тууралтын хэлбэр:</Paragraph>
+                     <DocumentCheckboxGroup value={formData?.q14}>
+                        <DocumentCheckbox value={'q14-1'} title={'Цэгчилсэн гүвдрүүт тууралт'} />
+                        <DocumentCheckbox value={'q14-2'} title={'Цэврүүт тууралт'} />
+                        <DocumentCheckbox value={'q14-2'} title={'Толбон тууралт'} />
+                        <DocumentCheckbox value={'q14-2'} title={'Шалбархайт болон тав тогтсон'} />
+                        <DocumentCheckbox value={'q14-2'} title={'Сорви'} />
+                        <DocumentCheckbox value={'q14-2'} title={'Хөхрөлт'} />
+                        <DocumentCheckbox value={'q14-2'} title={'Цус хуралт'} />
+                        <DocumentCheckbox value={'q14-2'} title={'Цус харвалт '} />
+                        <DocumentCheckbox value={'q14-2'} title={'Холимог тууралт'} />
+                        <DocumentCheckbox value={'q14-2'} title={'Тууралтгүй'} />
+                     </DocumentCheckboxGroup>
+                  </Box>
+                  <Box left top bottom width={'20%'}>
+                     <Paragraph>Үсний байдал:</Paragraph>
+                     <DocumentCheckboxGroup value={formData?.q14}>
+                        <DocumentCheckbox value={'q14-1'} title={'Хэвийн'} />
+                        <DocumentCheckbox value={'q14-2'} title={'Хугарамтгай'} />
+                     </DocumentCheckboxGroup>
+                     <Paragraph>Хумсны байдал:</Paragraph>
+                     <DocumentCheckboxGroup value={formData?.q14}>
+                        <DocumentCheckbox value={'q14-1'} title={'Хэвийн'} />
+                        <DocumentCheckbox value={'q14-2'} title={'Хугарамтгай'} />
+                     </DocumentCheckboxGroup>
+
+                  </Box>
+                  <Box left top right bottom width={'40%'}>
+                     <Paragraph> (Тууралтын байрлалыг зурагт тэмдэглэх)</Paragraph>
+                     <img src={BodyImg} alt="" width={240} height={220} />
+                  </Box>
+               </FlexRow>
             </div>
          </div>
          <div className="page">
             <div className="subpage">
-               <Table bordered className="story mb-0">
-                  <thead>
-                     <tr>
-                        <th className="w-[27%]">
-                           <p id="cls">Бөөрөлзгөнө хэл Өнгө:</p>
-                           <Checkbox.Group value={formData?.q28}>
-                              <Checkbox className="ml-2 " value={'q28-1'}>
-                                 Ердийн
-                              </Checkbox>
-                              <Checkbox value={'q28-2'}>Улайсан</Checkbox>
-                              <Checkbox value={'q28-3'}>Цайсан</Checkbox>
-                              <Checkbox value={'q28-4'}>Хөхөлбий</Checkbox>
-                           </Checkbox.Group>
-                        </th>
-                        <th className="w-[23%]">
-                           <p id="cls">Шарх:</p>
-                           <Checkbox.Group value={formData?.q29}>
-                              <Checkbox className="ml-2 " value={'q29-1'}>
-                                 Шархтай
-                              </Checkbox>
-                              <Checkbox value={'q29-2'}>Шархгүй</Checkbox>
-                           </Checkbox.Group>
-                        </th>
-                        <th className="w-[25%]">
-                           <p id="cls">Буйл: Эмзэглэл</p>
-                           <Checkbox.Group value={formData?.q30}>
-                              <Checkbox className="ml-2" value={'q30-1'}>
-                                 Эмзэглэлгүй
-                              </Checkbox>
-                              <Checkbox value={'q30-2'}>Эмзэглэлтэй</Checkbox>
-                           </Checkbox.Group>
-                        </th>
-                        <th className="w-[25%]">
-                           <p id="cls">Тууралт:</p>
-                           <Checkbox.Group value={formData?.q31}>
-                              <Checkbox className="ml-2" value={'q31-1'}>
-                                 Тууралттай
-                              </Checkbox>
-                              <Checkbox value={'q31-2'}>Тууралтгүй</Checkbox>
-                           </Checkbox.Group>
-                        </th>
-                     </tr>
-                  </thead>
-               </Table>
-               <Table bordered className="story mb-0">
-                  <thead>
-                     <tr className="border-t-0">
-                        <th>Тунгалагийн булчирхайн байдал:</th>
-                     </tr>
-                  </thead>
-               </Table>
-               <Table bordered className="story mb-0">
-                  <thead>
-                     <tr className="border-t-0">
-                        <th className=" border-r-0">
-                           <p id="cls">Нягт :</p>
-                           <Checkbox.Group value={formData?.q32}>
-                              <Checkbox value={'q32-1'} className="ml-2 ">
-                                 Хатуу
-                              </Checkbox>
-                              <Checkbox value={'q32-2'} className="w-full">
-                                 Зөөлөн
-                              </Checkbox>
-                           </Checkbox.Group>
-                           <p id="cls">Гадаргуу :</p>
-                           <Checkbox.Group value={formData?.q33}>
-                              <Checkbox value={'q33-1'} className="ml-2 ">
-                                 Барзгар
-                              </Checkbox>
-                              <Checkbox value={'q33-2'} className="w-full">
-                                 Гөлгөр
-                              </Checkbox>
-                           </Checkbox.Group>
-                        </th>
-                        <th className="border-l-0 ">
-                           <Image src={Body2Img} alt="" width={100} height={100} className="mr-4" />
-                        </th>
-                        <th className="w-[23%]">
-                           <p id="cls">Хөдөлгөөн:</p>
-                           <Checkbox.Group value={formData?.q34}>
-                              <Checkbox className="ml-2" value={'q34-1'}>
-                                 Хөдөлгөөнтэй
-                              </Checkbox>
-                              <Checkbox value={'q34-2'}>Хөдөлгөөнгүй</Checkbox>
-                           </Checkbox.Group>
-                           <p id="cls">Эмзэглэл:</p>
-                           <Checkbox.Group value={formData?.q35}>
-                              <Checkbox className="ml-2" value={'q35-1'}>
-                                 Эмзэглэлгүй
-                              </Checkbox>
-                              <Checkbox value={'q35-2'}>Эмзэглэлтэй</Checkbox>
-                           </Checkbox.Group>
-                        </th>
-                        <th className="w-[50%] border-r-0">
-                           <p id="cls">Дэлүүний хэмжээ</p>
-                           <Checkbox.Group value={formData?.q36}>
-                              <Checkbox value={'q36-1'} className="ml-2">
-                                 Хэвийн
-                              </Checkbox>
-                              <Checkbox value={'q36-2'}>1зэргээр томорсон.</Checkbox>
-                              <Checkbox value={'q36-3'} className="ml-2">
-                                 2 зэргээр томорсон
-                              </Checkbox>
-                              <Checkbox value={'q36-4'} className="ml-2">
-                                 3 зэргээр томорсон.
-                              </Checkbox>
-                              <Checkbox value={'q36-5'} className="ml-2">
-                                 4 зэргээр томорсон.
-                              </Checkbox>
-                              <Checkbox value={'q36-6'} className="ml-2">
-                                 Дэлүү мэс заслаар авагдсан.
-                              </Checkbox>
-                           </Checkbox.Group>
-                        </th>
-                        <th className="border-l-0">
-                           <Image src={ChestImg} alt="" width={120} height={100} />
-                        </th>
-                     </tr>
-                  </thead>
-               </Table>
-               <Table bordered className="story mb-0">
-                  <thead>
-                     <tr className="border-t-0">
-                        <th>Шинжилгээ:</th>
-                     </tr>
-                  </thead>
-               </Table>
-               <Table bordered className="story mb-0">
-                  <thead>
-                     <tr className="border-t-0">
-                        <th id="cls" className="w-[50%]">
-                           Цусны дэлгэрэнгүй шинжилгээ:
-                        </th>
-                        <th id="cls" className="w-[50%]">
-                           Лейкограмм
-                        </th>
-                     </tr>
-                  </thead>
-               </Table>
 
-               <Table bordered className="story mb-0">
-                  <thead>
-                     <tr className="border-t-0">
-                        <th id="cls" className="w-[25%]">
-                           Огноо
-                        </th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                        <th id="cls" className="w-[25%]">
-                           Огноо
-                        </th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                     </tr>
-                     <tr>
-                        <th id="cls" className="w-[25%]">
-                           WBC
-                        </th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                        <th id="cls" className="w-[25%]">
-                           Blasts
-                        </th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                     </tr>
-                     <tr>
-                        <th id="cls" className="w-[25%]">
-                           PLT
-                        </th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                        <th id="cls" className="w-[25%]">
-                           Basophil
-                        </th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                     </tr>
-                     <tr>
-                        <th id="cls" className="w-[25%]">
-                           RBC
-                        </th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                        <th id="cls" className="w-[25%]">
-                           Eosinophil
-                        </th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                     </tr>
-                     <tr>
-                        <th id="cls" className="w-[25%]">
-                           HGB
-                        </th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                        <th id="cls" className="w-[25%]">
-                           Promyelocyte
-                        </th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                     </tr>
-                     <tr>
-                        <th id="cls" className="w-[25%]">
-                           HCT
-                        </th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                        <th id="cls" className="w-[25%]">
-                           Myelocyte
-                        </th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                     </tr>
-                     <tr>
-                        <th id="cls" className="w-[25%]">
-                           MCV
-                        </th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                        <th id="cls" className="w-[25%]">
-                           Bands
-                        </th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                     </tr>
-                     <tr>
-                        <th id="cls" className="w-[25%]">
-                           RET
-                        </th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                        <th id="cls" className="w-[25%]">
-                           Neutrophil
-                        </th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                     </tr>
-                     <tr>
-                        <th id="cls" className="w-[25%]">
-                           RET-He
-                        </th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                        <th id="cls" className="w-[25%]">
-                           Lymphocyte
-                        </th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                     </tr>
-                     <tr>
-                        <th id="cls" className="w-[25%]"></th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                        <th id="cls" className="w-[25%]">
-                           Monocyte
-                        </th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                     </tr>
-                  </thead>
-               </Table>
-               <Table bordered className="story mb-0">
-                  <thead>
-                     <tr className="border-t-0">
-                        <th id="cls" className="w-[50%]">
-                           Дүгнэлт:
-                           <Input className=" w-[660px]" style={{ textAlign: 'center' }} />
-                        </th>
-                     </tr>
-                  </thead>
-               </Table>
-               <Table bordered className="story mb-0">
-                  <thead>
-                     <tr className="border-t-0">
-                        <th id="cls" className="w-[50%]">
-                           Миелограмм:
-                        </th>
-                     </tr>
-                  </thead>
-               </Table>
-
+               <FlexRow>
+                  <Box width={"25%"} left top >
+                     <Paragraph>Хумсны байдал:</Paragraph>
+                     <DocumentCheckboxGroup value={formData?.q14}>
+                        <DocumentCheckbox value={'q14-1'} title={'Хэвийн'} />
+                        <DocumentCheckbox value={'q14-2'} title={'Хугарамтгай'} />
+                     </DocumentCheckboxGroup>
+                  </Box>
+                  <Box width={"25%"} left top >
+                     <Paragraph>Амны хөндий: Хэл/</Paragraph>
+                     <Paragraph>Өнгө:</Paragraph>
+                     <DocumentCheckboxGroup value={formData?.q14}>
+                        <DocumentCheckbox value={'q14-1'} title={'Ердийн'} />
+                        <DocumentCheckbox value={'q14-2'} title={'Цайвар'} />
+                        <DocumentCheckbox value={'q14-2'} title={'Улаан'} />
+                        <DocumentCheckbox value={'q14-2'} title={'Ягаан'} />
+                     </DocumentCheckboxGroup>
+                  </Box>
+                  <Box width={"25%"} left top >
+                     <Paragraph>Хөхлөг</Paragraph>
+                     <DocumentCheckboxGroup value={formData?.q14}>
+                        <DocumentCheckbox value={'q14-1'} title={'Ердийн'} />
+                        <DocumentCheckbox value={'q14-2'} title={'Хатингаршсан'} />
+                        <DocumentCheckbox value={'q14-2'} title={'Томорсон'} />
+                     </DocumentCheckboxGroup>
+                  </Box>
+                  <Box width={"25%"} left top right  >
+                     <Paragraph>Тууралт</Paragraph>
+                     <DocumentCheckboxGroup value={formData?.q14}>
+                        <DocumentCheckbox value={'q14-1'} title={'Тууралттай'} />
+                        <DocumentCheckbox value={'q14-2'} title={'Шарх'} />
+                        <DocumentCheckbox value={'q14-2'} title={'Улайлт'} />
+                        <DocumentCheckbox value={'q14-2'} title={'Яр'} />
+                        <DocumentCheckbox value={'q14-2'} title={'Газрын зураг'} />
+                     </DocumentCheckboxGroup>
+                  </Box>
+               </FlexRow>
+               <FlexRow>
+                  <Box width={"25%"} left top >
+                     <Paragraph>Бөөрөлзгөнө хэл Өнгө:</Paragraph>
+                     <DocumentCheckboxGroup value={formData?.q14}>
+                        <DocumentCheckbox value={'q14-1'} title={'Ердийн'} />
+                        <DocumentCheckbox value={'q14-2'} title={'Улайсан'} />
+                        <DocumentCheckbox value={'q14-2'} title={'Цайсан'} />
+                        <DocumentCheckbox value={'q14-2'} title={'Хөхөлбий'} />
+                     </DocumentCheckboxGroup>
+                  </Box>
+                  <Box width={"25%"} left top >
+                     <Paragraph>Шарх:</Paragraph>
+                     <DocumentCheckboxGroup value={formData?.q14}>
+                        <DocumentCheckbox value={'q14-1'} title={'Шархтай'} />
+                        <DocumentCheckbox value={'q14-2'} title={'Шархгүй'} />
+                     </DocumentCheckboxGroup>
+                  </Box>
+                  <Box width={"25%"} left top >
+                     <Paragraph>Буйл: Эмзэглэл</Paragraph>
+                     <DocumentCheckboxGroup value={formData?.q14}>
+                        <DocumentCheckbox value={'q14-1'} title={'Эмзэглэлгүй'} />
+                        <DocumentCheckbox value={'q14-2'} title={'Эмзэглэлтэй'} />
+                     </DocumentCheckboxGroup>
+                  </Box>
+                  <Box width={"25%"} left top right  >
+                     <Paragraph>Тууралт</Paragraph>
+                     <DocumentCheckboxGroup value={formData?.q14}>
+                        <DocumentCheckbox value={'q14-1'} title={'Тууралттай'} />
+                        <DocumentCheckbox value={'q14-2'} title={'Тууралтгүй'} />
+                     </DocumentCheckboxGroup>
+                  </Box>
+               </FlexRow>
+               <Box left top right>
+                  <Paragraph>Тунгалагийн булчирхайн байдал:</Paragraph>
+               </Box>
+               <FlexRow>
+                  <Box width={"15%"} left top >
+                     <Paragraph>Нягт :</Paragraph>
+                     <DocumentCheckboxGroup value={formData?.q14}>
+                        <DocumentCheckbox value={'q14-1'} title={'Хатуу'} />
+                        <DocumentCheckbox value={'q14-2'} title={'Зөөлөн'} />
+                     </DocumentCheckboxGroup>
+                     <Paragraph>Гадаргуу:</Paragraph>
+                     <DocumentCheckboxGroup value={formData?.q14}>
+                        <DocumentCheckbox value={'q14-1'} title={'Барзгар'} />
+                        <DocumentCheckbox value={'q14-2'} title={'Гөлгөр'} />
+                     </DocumentCheckboxGroup>
+                  </Box>
+                  <Box width={"15%"} top >
+                     <img src={Body2Img} alt="" width={100} height={100} className="mr-4" />
+                  </Box>
+                  <Box width={"20%"} left top >
+                     <Paragraph>Хөдөлгөөн:</Paragraph>
+                     <DocumentCheckboxGroup value={formData?.q14}>
+                        <DocumentCheckbox value={'q14-1'} title={'Хөдөлгөөнтэй'} />
+                        <DocumentCheckbox value={'q14-2'} title={'Хөдөлгөөнгүй'} />
+                     </DocumentCheckboxGroup>
+                     <Paragraph>Эмзэглэл:</Paragraph>
+                     <DocumentCheckboxGroup value={formData?.q14}>
+                        <DocumentCheckbox value={'q14-1'} title={'Эмзэглэлгүй'} />
+                        <DocumentCheckbox value={'q14-2'} title={'Эмзэглэлтэй'} />
+                     </DocumentCheckboxGroup>
+                  </Box>
+                  <Box width={"30%"} left top   >
+                     <Paragraph>Дэлүүний хэмжээ:</Paragraph>
+                     <DocumentCheckboxGroup value={formData?.q14}>
+                        <DocumentCheckbox value={'q14-1'} title={'Хэвийн'} />
+                        <DocumentCheckbox value={'q14-2'} title={'1зэргээр томорсон'} />
+                        <DocumentCheckbox value={'q14-2'} title={'2 зэргээр томорсон.'} />
+                        <DocumentCheckbox value={'q14-2'} title={'3 зэргээр томорсон.'} />
+                        <DocumentCheckbox value={'q14-2'} title={'4 зэргээр томорсон.'} />
+                        <DocumentCheckbox value={'q14-2'} title={'Дэлүү мэс заслаар авагдсан.'} />
+                     </DocumentCheckboxGroup>
+                  </Box>
+                  <Box width={"20%"} top right  >
+                     <img src={ChestImg} alt="" width={120} height={100} />
+                  </Box>
+               </FlexRow>
+               <Box left top right>
+                  <Paragraph>Шинжилгээ:</Paragraph>
+               </Box>
+               <FlexRow>
+                  <Box left top width={'50%'}>Цусны дэлгэрэнгүй шинжилгээ:</Box>
+                  <Box left top right width={"50%"}> Лейкограмм</Box>
+               </FlexRow>
+               <FlexCol>
+                  <FlexRow>
+                     <Box left top width={"14%"}>Огноо </Box>
+                     <Box left top width={"12%"}></Box>
+                     <Box left top width={"12%"}></Box>
+                     <Box left top width={"12%"}></Box>
+                     <Box left top width={"20%"}>огноо</Box>
+                     <Box left top width={"10%"}></Box>
+                     <Box left top width={"10%"}></Box>
+                     <Box left top right width={"10%"}></Box>
+                  </FlexRow>
+                  <FlexRow>
+                     <Box left top width={"14%"}>WBC</Box>
+                     <Box left top width={"12%"}></Box>
+                     <Box left top width={"12%"}></Box>
+                     <Box left top width={"12%"}></Box>
+                     <Box left top width={"20%"}>Balsts</Box>
+                     <Box left top width={"10%"}></Box>
+                     <Box left top width={"10%"}></Box>
+                     <Box left top right width={"10%"}></Box>
+                  </FlexRow>
+                  <FlexRow>
+                     <Box left top width={"14%"}>PLT</Box>
+                     <Box left top width={"12%"}></Box>
+                     <Box left top width={"12%"}></Box>
+                     <Box left top width={"12%"}></Box>
+                     <Box left top width={"20%"}>Basophil</Box>
+                     <Box left top width={"10%"}></Box>
+                     <Box left top width={"10%"}></Box>
+                     <Box left top right width={"10%"}></Box>
+                  </FlexRow>
+                  <FlexRow>
+                     <Box left top width={"14%"}>RBC</Box>
+                     <Box left top width={"12%"}></Box>
+                     <Box left top width={"12%"}></Box>
+                     <Box left top width={"12%"}></Box>
+                     <Box left top width={"20%"}>Eosinophil</Box>
+                     <Box left top width={"10%"}></Box>
+                     <Box left top width={"10%"}></Box>
+                     <Box left top right width={"10%"}></Box>
+                  </FlexRow>
+                  <FlexRow>
+                     <Box left top width={"14%"}>HGB</Box>
+                     <Box left top width={"12%"}></Box>
+                     <Box left top width={"12%"}></Box>
+                     <Box left top width={"12%"}></Box>
+                     <Box left top width={"20%"}>Promyelocyte</Box>
+                     <Box left top width={"10%"}></Box>
+                     <Box left top width={"10%"}></Box>
+                     <Box left top right width={"10%"}></Box>
+                  </FlexRow>
+                  <FlexRow>
+                     <Box left top width={"14%"}>HCT</Box>
+                     <Box left top width={"12%"}></Box>
+                     <Box left top width={"12%"}></Box>
+                     <Box left top width={"12%"}></Box>
+                     <Box left top width={"20%"}>Myelocyte</Box>
+                     <Box left top width={"10%"}></Box>
+                     <Box left top width={"10%"}></Box>
+                     <Box left top right width={"10%"}></Box>
+                  </FlexRow>
+                  <FlexRow>
+                     <Box left top width={"14%"}>MCV</Box>
+                     <Box left top width={"12%"}></Box>
+                     <Box left top width={"12%"}></Box>
+                     <Box left top width={"12%"}></Box>
+                     <Box left top width={"20%"}>Metmyelocyte</Box>
+                     <Box left top width={"10%"}></Box>
+                     <Box left top width={"10%"}></Box>
+                     <Box left top right width={"10%"}></Box>
+                  </FlexRow>
+                  <FlexRow>
+                     <Box left top width={"14%"}>MCH</Box>
+                     <Box left top width={"12%"}></Box>
+                     <Box left top width={"12%"}></Box>
+                     <Box left top width={"12%"}></Box>
+                     <Box left top width={"20%"}>Bands</Box>
+                     <Box left top width={"10%"}></Box>
+                     <Box left top width={"10%"}></Box>
+                     <Box left top right width={"10%"}></Box>
+                  </FlexRow>
+                  <FlexRow>
+                     <Box left top width={"14%"}>RET</Box>
+                     <Box left top width={"12%"}></Box>
+                     <Box left top width={"12%"}></Box>
+                     <Box left top width={"12%"}></Box>
+                     <Box left top width={"20%"}>Neutrophil</Box>
+                     <Box left top width={"10%"}></Box>
+                     <Box left top width={"10%"}></Box>
+                     <Box left top right width={"10%"}></Box>
+                  </FlexRow>
+                  <FlexRow>
+                     <Box left top width={"14%"}>RET-He</Box>
+                     <Box left top width={"12%"}></Box>
+                     <Box left top width={"12%"}></Box>
+                     <Box left top width={"12%"}></Box>
+                     <Box left top width={"20%"}>Lymphocyte</Box>
+                     <Box left top width={"10%"}></Box>
+                     <Box left top width={"10%"}></Box>
+                     <Box left top right width={"10%"}></Box>
+                  </FlexRow>
+                  <FlexRow>
+                     <Box left top width={"14%"}></Box>
+                     <Box left top width={"12%"}></Box>
+                     <Box left top width={"12%"}></Box>
+                     <Box left top width={"12%"}></Box>
+                     <Box left top width={"20%"}>Monocyte</Box>
+                     <Box left top width={"10%"}></Box>
+                     <Box left top width={"10%"}></Box>
+                     <Box left top right width={"10%"}></Box>
+                  </FlexRow>
+               </FlexCol>
+               <Box left top right style={{ display: "flex", alignItems: 'center' }}>
+                  <Paragraph>Дүгнэлт:</Paragraph>
+                  <TextWithUnderline>{formData?.q}</TextWithUnderline>
+               </Box>
+               <Box left top right>
+                  <Paragraph>Миелограмм:</Paragraph>
+               </Box>
+               {/* <FlexCol>
+                  <FlexRow>
+                     <Box width={"20%"} left top >Огноо</Box>
+                     <Box width={"10%"} left top ></Box>
+                     <Box width={"10%"} left top ></Box>
+                     <Box width={"60%"} left top right >{formData?.q1111}</Box>
+                  </FlexRow>
+                  <FlexRow>
+                     <Box width={"20%"} left top >Огноо</Box>
+                     <Box width={"10%"} left top ></Box>
+                     <Box width={"10%"} left top ></Box>
+                     <Box width={"60%"} left right ></Box>
+                  </FlexRow>
+                  <FlexRow>
+                     <Box width={"20%"} left top >Бласт</Box>
+                     <Box width={"10%"} left top ></Box>
+                     <Box width={"10%"} left top ></Box>
+                     <Box width={"60%"} left right ></Box>
+                  </FlexRow>
+                  <FlexRow>
+                     <Box width={"20%"} left top >Бүх нейтрофиль</Box>
+                     <Box width={"10%"} left top ></Box>
+                     <Box width={"10%"} left top ></Box>
+                     <Box width={"60%"} left right ></Box>
+                  </FlexRow>
+                  <FlexRow>
+                     <Box width={"20%"} left top >Бүх эритриод эс</Box>
+                     <Box width={"10%"} left top ></Box>
+                     <Box width={"10%"} left top ></Box>
+                     <Box width={"60%"} left right ></Box>
+                  </FlexRow>
+                  <FlexRow>
+                     <Box width={"20%"} left top >Лимфоцит</Box>
+                     <Box width={"10%"} left top ></Box>
+                     <Box width={"10%"} left top ></Box>
+                     <Box width={"60%"} left right ></Box>
+                  </FlexRow>
+                  <FlexRow>
+                     <Box width={"20%"} left top >Плазмоцит</Box>
+                     <Box width={"10%"} left top ></Box>
+                     <Box width={"10%"} left top ></Box>
+                     <Box width={"60%"} left right ></Box>
+                  </FlexRow>
+                  <FlexRow>
+                     <Box width={"20%"} left top >Мегакариоцит</Box>
+                     <Box width={"10%"} left top ></Box>
+                     <Box width={"10%"} left top ></Box>
+                     <Box width={"60%"} left right ></Box>
+                  </FlexRow>
+               </FlexCol> */}
+               <Box left top right>
+                  Цито химийн урвал
+               </Box>
                <Table bordered className="story mb-0">
                   <thead>
                      <tr className="border-t-0">
