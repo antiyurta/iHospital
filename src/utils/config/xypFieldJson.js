@@ -38,8 +38,22 @@ module.exports = [
       status: 1,
       fieldId: 35,
       fieldName: 'workplace',
+      valueId: 0,
+      valueName: 'Тодорхойгүй'
+   },
+   {
+      status: 1,
+      fieldId: 35,
+      fieldName: 'workplace',
       valueId: 1,
       valueName: 'Хөдөө аж ахуйн, ан агнуур, ойн аж ахуй, загас барилт'
+   },
+   {
+      status: 1,
+      fieldId: 36,
+      fieldName: 'occupation',
+      valueId: 0,
+      valueName: 'Мэргэжилгүй'
    },
    {
       status: 1,
