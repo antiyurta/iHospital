@@ -454,7 +454,6 @@ const RegisterPatient = ({ patientId, onFinish, editMode }) => {
    useEffect(() => {
       patientId && getPatientById();
    }, [patientId]);
-
    return (
       <Form form={form} onFinish={onFinish} layout="vertical" className="flex flex-col gap-2">
          <Steps

@@ -1,14 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import { Form, Input, Select } from 'antd';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Button, Form, Input, Select } from 'antd';
 //common
 import { UploadImage } from '@Comman/Input/UploadImage';
 //api
 import CountryApi from '@ApiServices/reference/country';
+import xypApi from '@ApiServices/xyp/xyp.api';
+import { openNofi } from '@Comman/common';
+import { message } from '@Features/AppGlobal';
 //extends
 const { Option } = Select;
 
 function GeneralInfo({ form, gbase }) {
+   const firstName = Form.useWatch('firstName', form);
+   const lastName = Form.useWatch('lastName', form);
+   const registerNumber = Form.useWatch('registerNumber', form);
    const [citizens, setCitizens] = useState([]);
+   const [isLoadingPersonInfo, setIsLoadingPersonInfo] = useState(false);
 
    const getCitizens = async () => {
       await CountryApi.getByPageFilter({
@@ -22,6 +29,32 @@ function GeneralInfo({ form, gbase }) {
    useEffect(() => {
       getCitizens();
    }, []);
+
+   const personInfo = useCallback(() => {
+      form.validateFields(['firstName', 'lastName', 'registerNumber']).catch(({ errorFields }) => {
+         errorFields?.map((error) => message.error(error.errors[0]));
+      });
+      if (firstName && lastName && registerNumber) {
+         setIsLoadingPersonInfo(true);
+         xypApi
+            .personInfo(registerNumber, lastName, firstName)
+            .then(({ data: { response } }) => {
+               if (response.return.resultCode != 0) {
+                  openNofi('warning', 'ХУР-сервис', response.return.resultMessage);
+               } else {
+                  form.setFieldsValue({
+                     educationId: String(response?.return?.response?.educationCode ?? 1),
+                     employmentId: String(response?.return?.response?.employmentCode ?? 1),
+                     occupationId: String(response?.return?.response?.occupationCode ?? 0),
+                     isEmployment: response?.return?.response?.isEmploymentCode ?? 1,
+                     emplessDescriptionId: String(response?.return?.response?.unEmploymentReasonCode ?? 1),
+                     workplace: String(response?.return?.response?.isicCode ?? 0)
+                  });
+               }
+            })
+            .finally(() => setIsLoadingPersonInfo(false));
+      }
+   }, [firstName, lastName, registerNumber]);
    return (
       <div className="flex flex-col gap-2">
          <div className="flex flex-row gap-2 justify-between">
@@ -35,6 +68,9 @@ function GeneralInfo({ form, gbase }) {
                <UploadImage form={form} itemName={'imageId'} />
             </div>
          </div>
+         <Button loading={isLoadingPersonInfo} onClick={() => personInfo()}>
+            Нэмэлт мэдээлэл татах
+         </Button>
          <div className="rounded-md bg-[#F3F4F6] p-2">
             <Form.Item name="civilId" hidden>
                <Input />
