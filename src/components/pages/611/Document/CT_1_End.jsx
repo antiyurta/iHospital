@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { getAge, numberToCurrency } from '../../../common';
 import dayjs from 'dayjs';
 import EmrContext from '../../../../features/EmrContext';
-import { Box, FlexRow, Paragraph, TextUnderline, TextUnderlineGroup, TextWithUnderline } from '../Components';
+import { Box, FlexCol, FlexRow, Paragraph, TextUnderline, TextUnderlineGroup, TextWithUnderline } from '../Components';
 const CT1End = (props) => {
    const { documentTrigger } = useContext(EmrContext);
    const [formData, setFormData] = useState({});
@@ -82,15 +82,192 @@ const CT1End = (props) => {
             <Box>
                <Paragraph><span className='p-10 underline'>{numberToCurrency(formData?.q2)}</span> хагалгаанд <span className='p-10 underline'>{numberToCurrency(formData?.q3)}</span> мэдээ алдуулалтанд <span className='p-10 underline'>{numberToCurrency(formData?.q4)}</span></Paragraph>
             </Box>
-
-
-
-
-
-
-
-
-
+            <FlexCol >
+               <FlexRow>
+                  <Box left top width={"110px"} >
+                     <Paragraph>Биеийн байдал</Paragraph>
+                  </Box>
+                  <Box left top width={"60px"} >
+                     <Paragraph>Ирэх үед</Paragraph>
+                  </Box>
+                  <Box left top right width={"50px"} >
+                     <Paragraph style={{ textAlign: "center", alignItems: "center" }}>Гарах үед</Paragraph>
+                  </Box>
+                  <Box width={"20px"}></Box>
+                  <Box left top right width={"300px"} >
+                     <Paragraph style={{ textAlign: "center" }}>Хийгдсэн шинжилгээ</Paragraph>
+                  </Box>
+               </FlexRow>
+               <FlexRow>
+                  <Box left top width={"110px"} >
+                     <Paragraph>Хөнгөн</Paragraph>
+                  </Box>
+                  <Box left top width={"60px"} >
+                     <Paragraph>Ирэх үед</Paragraph>
+                  </Box>
+                  <Box left top right width={"50px"} >
+                     <Paragraph style={{ textAlign: "center", alignItems: "center" }}>1</Paragraph>
+                  </Box>
+                  <Box width={"20px"}></Box>
+                  <Box left top width={"80px"} >
+                     <Paragraph style={{ textAlign: "center" }}>Эмнэл зүйн</Paragraph>
+                  </Box>
+                  <Box left top width={"50px"} >
+                     <Paragraph style={{ textAlign: "center" }}>1</Paragraph>
+                  </Box>
+                  <Box left top width={"81px"} >
+                     <Paragraph style={{ textAlign: "center" }}>Гэрлийн</Paragraph>
+                  </Box>
+                  <Box left top right width={"50px"} >
+                     <Paragraph style={{ textAlign: "center" }}>8</Paragraph>
+                  </Box>
+               </FlexRow>
+               <FlexRow>
+                  <Box left top width={"110px"} >
+                     <Paragraph>Дунд</Paragraph>
+                  </Box>
+                  <Box left top width={"60px"} >
+                     <Paragraph>1</Paragraph>
+                  </Box>
+                  <Box left top right width={"50px"} >
+                     <Paragraph style={{ textAlign: "center", alignItems: "center" }}>2</Paragraph>
+                  </Box>
+                  <Box width={"20px"}></Box>
+                  <Box left top width={"80px"} >
+                     <Paragraph style={{ textAlign: "center" }}>Биохими </Paragraph>
+                  </Box>
+                  <Box left top width={"50px"} >
+                     <Paragraph style={{ textAlign: "center" }}>2</Paragraph>
+                  </Box>
+                  <Box left top width={"81px"} >
+                     <Paragraph style={{ textAlign: "center" }}>ЭКГ</Paragraph>
+                  </Box>
+                  <Box left top right width={"50px"} >
+                     <Paragraph style={{ textAlign: "center" }}>9</Paragraph>
+                  </Box>
+               </FlexRow>
+               <FlexRow>
+                  <Box left top width={"110px"} >
+                     <Paragraph>Хүндэвтэр</Paragraph>
+                  </Box>
+                  <Box left top width={"60px"} >
+                     <Paragraph>2</Paragraph>
+                  </Box>
+                  <Box left top right width={"50px"} >
+                     <Paragraph style={{ textAlign: "center", alignItems: "center" }}>3</Paragraph>
+                  </Box>
+                  <Box width={"20px"}></Box>
+                  <Box left top width={"80px"} >
+                     <Paragraph style={{ textAlign: "center" }}>Нян судлал </Paragraph>
+                  </Box>
+                  <Box left top width={"50px"} >
+                     <Paragraph style={{ textAlign: "center" }}>3</Paragraph>
+                  </Box>
+                  <Box left top width={"81px"} >
+                     <Paragraph style={{ textAlign: "center" }}>ЭХО</Paragraph>
+                  </Box>
+                  <Box left top right width={"50px"} >
+                     <Paragraph style={{ textAlign: "center" }}>10</Paragraph>
+                  </Box>
+               </FlexRow>
+               <FlexRow>
+                  <Box left top width={"110px"} >
+                     <Paragraph>Хүнд</Paragraph>
+                  </Box>
+                  <Box left top width={"60px"} >
+                     <Paragraph>3</Paragraph>
+                  </Box>
+                  <Box left top right width={"50px"} >
+                     <Paragraph style={{ textAlign: "center", alignItems: "center" }}>4</Paragraph>
+                  </Box>
+                  <Box width={"20px"}></Box>
+                  <Box left top width={"80px"} >
+                     <Paragraph style={{ textAlign: "center" }}>Вирус </Paragraph>
+                  </Box>
+                  <Box left top width={"50px"} >
+                     <Paragraph style={{ textAlign: "center" }}>4</Paragraph>
+                  </Box>
+                  <Box left top width={"81px"} >
+                     <Paragraph style={{ textAlign: "center" }}>Уян дуран</Paragraph>
+                  </Box>
+                  <Box left top right width={"50px"} >
+                     <Paragraph style={{ textAlign: "center" }}>11</Paragraph>
+                  </Box>
+               </FlexRow>
+               <FlexRow>
+                  <Box left top bottom width={"110px"} >
+                     <Paragraph>Маш хүнд</Paragraph>
+                  </Box>
+                  <Box left top bottom width={"60px"} >
+                     <Paragraph>4</Paragraph>
+                  </Box>
+                  <Box left top right bottom width={"50px"} >
+                     <Paragraph style={{ textAlign: "center", alignItems: "center" }}>5</Paragraph>
+                  </Box>
+                  <Box width={"20px"}></Box>
+                  <Box left top width={"80px"} >
+                     <Paragraph style={{ textAlign: "center" }}>Эд, эсийн </Paragraph>
+                  </Box>
+                  <Box left top width={"50px"} >
+                     <Paragraph style={{ textAlign: "center" }}>5</Paragraph>
+                  </Box>
+                  <Box left top width={"81px"} >
+                     <Paragraph style={{ textAlign: "center" }}>Компьютер томографи</Paragraph>
+                  </Box>
+                  <Box left top right width={"50px"} >
+                     <Paragraph style={{ textAlign: "center" }}>12</Paragraph>
+                  </Box>
+               </FlexRow>
+               <FlexRow>
+                  <Box width={"110px"} >
+                     <Paragraph></Paragraph>
+                  </Box>
+                  <Box width={"60px"} >
+                     <Paragraph></Paragraph>
+                  </Box>
+                  <Box width={"50px"} >
+                     <Paragraph style={{ textAlign: "center", alignItems: "center" }}></Paragraph>
+                  </Box>
+                  <Box width={"24px"}></Box>
+                  <Box left top width={"80px"} >
+                     <Paragraph style={{ textAlign: "center" }}>Эд, эсийн </Paragraph>
+                  </Box>
+                  <Box left top width={"50px"} >
+                     <Paragraph style={{ textAlign: "center" }}>5</Paragraph>
+                  </Box>
+                  <Box left top width={"81px"} >
+                     <Paragraph style={{ textAlign: "center" }}>Компьютер томографи</Paragraph>
+                  </Box>
+                  <Box left top right width={"50px"} >
+                     <Paragraph style={{ textAlign: "center" }}>12</Paragraph>
+                  </Box>
+               </FlexRow>
+               <FlexRow>
+                  <Box width={"110px"} >
+                     <Paragraph></Paragraph>
+                  </Box>
+                  <Box width={"60px"} >
+                     <Paragraph></Paragraph>
+                  </Box>
+                  <Box width={"50px"} >
+                     <Paragraph style={{ textAlign: "center", alignItems: "center" }}></Paragraph>
+                  </Box>
+                  <Box width={"24px"}></Box>
+                  <Box left top bottom width={"80px"} >
+                     <Paragraph style={{ textAlign: "center" }}>Иммунологи
+                     </Paragraph>
+                  </Box>
+                  <Box left top bottom width={"50px"} >
+                     <Paragraph style={{ textAlign: "center" }}>6</Paragraph>
+                  </Box>
+                  <Box left top bottom width={"81px"} >
+                     <Paragraph style={{ textAlign: "center" }}>Соронзон томографи</Paragraph>
+                  </Box>
+                  <Box left top right bottom width={"50px"} >
+                     <Paragraph style={{ textAlign: "center" }}>13</Paragraph>
+                  </Box>
+               </FlexRow>
+            </FlexCol>
             <Box>
                Үндсэн онош:<span className='p-10 underline text-center'>{getDiagnose()}</span>
             </Box>
@@ -112,16 +289,29 @@ const CT1End = (props) => {
             <Box>
                Вирүс, маркерийн шинжилгээ: <span className='p-10 underline  text-center'>{formData?.q14}</span>
             </Box>
-
-
-
-
-
-
-
-
-
-
+            <FlexRow>
+               <FlexCol>
+                  <Box left top style={{}} >Хийгдсэн эмчилгээ</Box>
+               </FlexCol>
+               <FlexCol>
+                  <Box left top>Эмийн</Box>
+                  <Box left top>Эмийн бус</Box>
+                  <Box left top>Мэс заслын</Box>
+                  <Box left top>Бусад</Box>
+               </FlexCol>
+               <FlexCol>
+                  <Box left top>1</Box>
+                  <Box left top>2</Box>
+                  <Box left top>3</Box>
+                  <Box left top>4</Box>
+               </FlexCol>
+               <FlexCol>
+                  <Box left top right>q</Box>
+                  <Box left top>q</Box>
+                  <Box left top>q</Box>
+                  <Box left top>q</Box>
+               </FlexCol>
+            </FlexRow>
             <Box>
                <Paragraph>Мэс заслын эмчилгээ -хийсэн,үгүй/зур/Мэс заслын нэр{formData?.q18}</Paragraph>
             </Box>
@@ -138,192 +328,6 @@ const CT1End = (props) => {
                <Paragraph>Эмчлэгч эмч _________________________</Paragraph>
                <Paragraph> __________ он ______ сар ______ өдөр</Paragraph>
             </Box>
-            {/* <Row className="flex justify-between">
-               <Col span={8}>
-                  <table
-                     style={{
-                        borderWidth: '1px',
-                        borderColor: '#aaaaaa',
-                        borderStyle: 'solid',
-                        width: '100%',
-                        marginTop: 20
-                     }}
-                     className="border-collapse border border-slate-500"
-                  >
-                     <thead>
-                        <tr>
-                           <th className="border border-slate-600 font-normal">Биеийн байдал</th>
-                           <th className="border border-slate-600 font-normal">Ирэх үед</th>
-                           <th className="border border-slate-600 font-normal">Гарах үед</th>
-                        </tr>
-                     </thead>
-                     <tbody>
-                        <tr>
-                           <td className="border border-slate-600">Хөнгөн</td>
-                           <td className="border border-slate-600 text-center"></td>
-                           <td className="border border-slate-600 text-center">{getBodyCondition(formData?.q6, 1)}</td>
-                        </tr>
-                        <tr>
-                           <td className="border border-slate-600">Дунд</td>
-                           <td className="border border-slate-600 text-center">{getBodyCondition(formData?.q5, 1)}</td>
-                           <td className="border border-slate-600 text-center">{getBodyCondition(formData?.q6, 2)}</td>
-                        </tr>
-                        <tr>
-                           <td className="border border-slate-600">Хүндэвтэр</td>
-                           <td className="border border-slate-600 text-center">{getBodyCondition(formData?.q5, 2)}</td>
-                           <td className="border border-slate-600 text-center">{getBodyCondition(formData?.q6, 3)}</td>
-                        </tr>
-                        <tr>
-                           <td className="border border-slate-600">Хүнд</td>
-                           <td className="border border-slate-600 text-center">{getBodyCondition(formData?.q5, 3)}</td>
-                           <td className="border border-slate-600 text-center">{getBodyCondition(formData?.q6, 4)}</td>
-                        </tr>
-                        <tr>
-                           <td className="border border-slate-600">Маш хүнд</td>
-                           <td className="border border-slate-600 text-center">{getBodyCondition(formData?.q5, 4)}</td>
-                           <td className="border border-slate-600 text-center">{getBodyCondition(formData?.q6, 5)}</td>
-                        </tr>
-                     </tbody>
-                  </table>
-               </Col>
-               <Col span={13}>
-                  <table
-                     style={{
-                        borderWidth: '1px',
-                        borderColor: '#aaaaaa',
-                        borderStyle: 'solid',
-                        width: '100%',
-                        marginTop: 20
-                     }}
-                     className="border-collapse border border-slate-500"
-                  >
-                     <thead>
-                        <tr>
-                           <th colSpan="4" className="border border-slate-600 font-normal text-center">
-                              Хийгдсэн шинжилгээ
-                           </th>
-                        </tr>
-                     </thead>
-                     <tbody>
-                        <tr>
-                           <td className="border border-slate-600 font-normal">Эмнэл зүйн</td>
-                           <td className="border border-slate-600 text-center">{getBodyCondition(formData?.q7, 1)}</td>
-                           <td className="border border-slate-600">Гэрлийн</td>
-                           <td className="border border-slate-600 text-center">{getBodyCondition(formData?.q7, 8)}</td>
-                        </tr>
-                        <tr>
-                           <td className="border border-slate-600">Биохими</td>
-                           <td className="border border-slate-600 text-center">{getBodyCondition(formData?.q7, 2)}</td>
-                           <td className="border border-slate-600">ЭКГ</td>
-                           <td className="border border-slate-600 text-center">{getBodyCondition(formData?.q7, 9)}</td>
-                        </tr>
-                        <tr>
-                           <td className="border border-slate-600">Нян судлал</td>
-                           <td className="border border-slate-600 text-center">{getBodyCondition(formData?.q7, 3)}</td>
-                           <td className="border border-slate-600">ЭХО</td>
-                           <td className="border border-slate-600 text-center">{getBodyCondition(formData?.q7, 10)}</td>
-                        </tr>
-                        <tr>
-                           <td className="border border-slate-600">Вирус</td>
-                           <td className="border border-slate-600 text-center">{getBodyCondition(formData?.q7, 4)}</td>
-                           <td className="border border-slate-600">ЭХО</td>
-                           <td className="border border-slate-600 text-center">{getBodyCondition(formData?.q7, 11)}</td>
-                        </tr>
-                        <tr>
-                           <td className="border border-slate-600">Эд, эсийн</td>
-                           <td className="border border-slate-600 text-center">{getBodyCondition(formData?.q7, 5)}</td>
-                           <td className="border border-slate-600">Компьютер томографи</td>
-                           <td className="border border-slate-600 text-center">{getBodyCondition(formData?.q7, 12)}</td>
-                        </tr>
-                        <tr>
-                           <td className="border border-slate-600">Иммунологи</td>
-                           <td className="border border-slate-600 text-center">{getBodyCondition(formData?.q7, 6)}</td>
-                           <td className="border border-slate-600">Соронзон томографи</td>
-                           <td className="border border-slate-600 text-center">{getBodyCondition(formData?.q7, 13)}</td>
-                        </tr>
-                        <tr>
-                           <td className="border border-slate-600">Шимэгч хорхойн өндөг үзэх</td>
-                           <td className="border border-slate-600 text-center">{getBodyCondition(formData?.q7, 7)}</td>
-                           <td className="border border-slate-600">Хийгдээгүй</td>
-                           <td className="border border-slate-600 text-center">{getBodyCondition(formData?.q7, 14)}</td>
-                        </tr>
-                     </tbody>
-                  </table>
-               </Col>
-            </Row> */}
-         </div>
-         {/* <Row className="flex justify-between">
-            {/* <Col span={8}>
-               <table
-                  style={{
-                     borderWidth: '1px',
-                     borderColor: '#aaaaaa',
-                     borderStyle: 'solid',
-                     width: '100%',
-                     marginTop: 20
-                  }}
-                  className="border-collapse border border-slate-500"
-               >
-                  <tbody>
-                     <tr>
-                        <td
-                           rowSpan={5}
-                           className="border border-slate-600"
-                           style={{
-                              writingMode: 'vertical-rl',
-                              textAlign: 'center',
-                              verticalAlign: 'middle',
-                              transform: 'rotate(180deg)',
-                              height: 120
-                           }}
-                        >
-                           Хийгдсэн эмчилгээ
-                        </td>
-                     </tr>
-                     <tr>
-                        <td className="border border-slate-600">Эмийн</td>
-                        <td className="border border-slate-600 text-center">{getBodyCondition(formData?.q15, 1)}</td>
-                     </tr>
-                     <tr>
-                        <td className="border border-slate-600">Эмийн бус</td>
-                        <td className="border border-slate-600 text-center">{getBodyCondition(formData?.q15, 2)}</td>
-                     </tr>
-                     <tr>
-                        <td className="border border-slate-600">Мэс заслын</td>
-                        <td className="border border-slate-600 text-center">{getBodyCondition(formData?.q15, 3)}</td>
-                     </tr>
-                     <tr>
-                        <td className="border border-slate-600">Бусад</td>
-                        <td className="border border-slate-600 text-center">{getBodyCondition(formData?.q15, 4)}</td>
-                     </tr>
-                  </tbody>
-               </table>
-            </Col> */}
-         {/* <Col span={14}>
-            <div className="border border-black mt-[20px]">
-               <div className="flex flex-wrap">
-                  <p className="mt-2">
-                     {`Бусад эмчилгээ: `}
-                     <span className="underline">{formData?.q16}</span>
-                  </p>
-               </div>
-               <Checkbox.Group className="story" value={[formData?.q17]}>
-                  {`Цус, цусан бүтээгдэхүүн сэлбэсэн эсэх `}
-                  <Checkbox value={'q17-1'} className="test">
-                     <span className="text-[13px]">тийм</span>
-                  </Checkbox>
-                  ,
-                  <Checkbox value={'q17-2'} className="test">
-                     <span className="text-[13px]">үгүй</span>
-                  </Checkbox>
-                  - /зур/
-               </Checkbox.Group>
-            </div>
-         </Col>
-      </Row> * /} */}
-         <div className="flex flex-col gap-1 items-center">
-            <p>Эмчлэгч эмч _________________________</p>
-            <p>__________ он ______ сар ______ өдөр</p>
          </div>
       </div >
    );

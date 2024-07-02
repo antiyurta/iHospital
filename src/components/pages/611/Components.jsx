@@ -11,25 +11,27 @@ const GridColTwo = ({ children }) => (
    </div>
 );
 
-const GridColThree = ({ gap, children }) => (
+const GridColThree = ({ children }) => (
    <div
       style={{
          display: 'grid',
-         gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
-         gap: gap || 0
+         gridTemplateColumns: 'repeat(3, minmax(0, 1fr)) '
       }}
    >
       {children}
    </div>
 );
 
-const FlexRow = ({ gap, justify, children }) => (
+
+
+const FlexRow = ({ gap, justify, children, style }) => (
    <div
       style={{
          display: 'flex',
          flexDirection: 'row',
          gap: gap || 0,
-         justifyContent: justify || ''
+         justifyContent: justify || '',
+         ...style
       }}
    >
       {children}
@@ -80,7 +82,7 @@ const DocumentCheckbox = ({ value, title, groupValue }) => {
    );
 };
 
-const DocumentCheckboxGroup = ({ value, children }) => {
+const DocumentCheckboxGroup = ({ value, children, style }) => {
    const entireChild = (child) => {
       if (child.props?.children?.length > 0) {
          return child.props?.children?.map((prop) => entireChild(prop));
@@ -92,7 +94,8 @@ const DocumentCheckboxGroup = ({ value, children }) => {
          style={{
             display: 'flex',
             flexDirection: 'column',
-            gap: 0
+            gap: 0,
+            ...style
          }}
       >
          {React.Children.map(children, (child) => entireChild(child))}
@@ -147,14 +150,14 @@ const TextUnderline = ({ value, title, groupValue }) => {
 
    return (
       <div>
-         <Paragraph style={{ textDecoration: isChecked ? 'underline' : 'none' }}>{title}</Paragraph>
+         <Paragraph style={{ textDecoration: isChecked ? 'underline' : 'none', }}>{title}</Paragraph>
       </div>
    );
 };
 const TextUnderlineGroup = ({ value, children, style }) => {
    const entireChild = (child) => {
       if (child.props?.children?.length > 0) {
-         return child.props?.children?.map((prop) => entireChild(prop));
+         return (child.props?.children)?.map((prop) => entireChild(prop));
       }
       return React.cloneElement(child, { groupValue: value });
    };
@@ -168,21 +171,16 @@ const TextUnderlineGroup = ({ value, children, style }) => {
          {React.Children.map(children, (child) => entireChild(child))}
       </div>
    );
-};
-const TextWithUnderline = ({ children }) => {
-   return <span className="px-2 border-b border-black h-fit"> {children}</span>;
-};
+}; const TextWithUnderline = ({ children }) => {
+   return (
+      <span style={{ padding: "0 8px", border: "1px solid black", borderLeft: 0, borderTop: 0, borderRight: 0, height: "fit-content" }} > {children}</span>
+   );
+}
 
-export {
-   FlexRow,
-   FlexCol,
-   GridColTwo,
-   GridColThree,
-   Paragraph,
-   DocumentCheckbox,
-   DocumentCheckboxGroup,
-   Box,
-   TextUnderline,
-   TextUnderlineGroup,
-   TextWithUnderline
-};
+const TextWithUnderline2 = ({ value }) => {
+   return (
+      <input value={value} style={{ padding: ' 0 8px', border: '1px solid black', borderLeft: 0, borderRight: 0, borderTop: 0, height: 'fit-content', width: '60px', outlineOffset: 'none', outline: 'none' }} />
+   );
+}
+
+export { FlexRow, FlexCol, GridColTwo, GridColThree, Paragraph, DocumentCheckbox, DocumentCheckboxGroup, Box, TextUnderline, TextUnderlineGroup, TextWithUnderline, TextWithUnderline2 };
