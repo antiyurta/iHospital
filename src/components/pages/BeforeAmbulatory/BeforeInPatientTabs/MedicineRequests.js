@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Col, DatePicker, Dropdown, Menu, Modal, Popconfirm, Row, Table } from 'antd';
+import { Button, Checkbox, Col, DatePicker, Dropdown, Menu, Modal, Popconfirm, Row, Select, Table } from 'antd';
 import {
    PauseCircleOutlined,
    CloseCircleOutlined,
    WarningOutlined,
    CheckCircleOutlined,
    ReloadOutlined,
-   EditOutlined
+   EditOutlined,
+   SaveOutlined,
+   AlignLeftOutlined,
+   EyeOutlined
 } from '@ant-design/icons';
 import moment from 'moment';
 import mnMN from 'antd/es/calendar/locale/mn_MN';
@@ -23,8 +26,20 @@ function MedicineRequests({ PatientId, ListId }) {
    const [requestId, setRequestId] = useState(Number);
 
    const [openModal, setOpenModal] = useState(false);
+   const [confirmModal, setConfirmModal] = useState(false);
 
    const [histories, setHistories] = useState([]);
+
+   const [groupIDS, setGroupIDS] = useState([]);
+
+   const [activeStatus, setActiveStatus] = useState('willDone');
+
+   useEffect(() => {
+      setGroupIDS([]);
+   }, []);
+
+   const hideConfirmModal = () => setConfirmModal(false);
+   const openConfirmModal = () => setConfirmModal(true);
 
    const handleMenuClick = async (key) => {
       var data = {};
@@ -96,6 +111,7 @@ function MedicineRequests({ PatientId, ListId }) {
          ]}
       />
    );
+
    const getRequestInfo = (text) => {
       if (text === 'implemented') {
          return (
@@ -127,7 +143,26 @@ function MedicineRequests({ PatientId, ListId }) {
          );
       }
    };
+
    const columns = [
+      {
+         title: '',
+         dataIndex: 'id',
+         render: (id, second) => {
+            return (
+               <Checkbox
+                  checked={!!groupIDS.find((ids) => ids === id)}
+                  onChange={(e) => {
+                     setGroupIDS((prev) =>
+                        e.target.checked
+                           ? [...prev.filter((prevItem) => prevItem !== id), id]
+                           : prev.filter((prevItem) => prevItem !== id)
+                     );
+                  }}
+               />
+            );
+         }
+      },
       {
          title: '№',
          render: (_, _record, index) => {
@@ -153,26 +188,26 @@ function MedicineRequests({ PatientId, ListId }) {
          title: 'Тайлбар',
          dataIndex: 'description'
       },
+      // {
+      //    title: 'Төлөв',
+      //    dataIndex: ['histories'],
+      //    render: (data) => {
+      //       return (
+      //          <Button
+      //             size="small"
+      //             className="text-sm underline border-none shadow-none outline-none bg-transparent"
+      //             onClick={() => {
+      //                setOpenModal(true);
+      //                setHistories(data);
+      //             }}
+      //          >
+      //             Харах
+      //          </Button>
+      //       );
+      //    }
+      // },
       {
-         title: 'Хэрэгжүүлэлт',
-         dataIndex: ['histories'],
-         render: (data) => {
-            return (
-               <Button
-                  size="small"
-                  className="text-sm underline border-none shadow-none outline-none bg-transparent"
-                  onClick={() => {
-                     setOpenModal(true);
-                     setHistories(data);
-                  }}
-               >
-                  Харах
-               </Button>
-            );
-         }
-      },
-      {
-         title: 'Төлөв',
+         title: 'Үйлдэл',
          dataIndex: 'state',
          render: (text, row) => {
             return (
@@ -193,11 +228,20 @@ function MedicineRequests({ PatientId, ListId }) {
                         />
                      </Button>
                   </Dropdown>
+                  <Button>
+                     <EyeOutlined
+                        onClick={() => {
+                           setOpenModal(true);
+                           setHistories(row);
+                        }}
+                     />
+                  </Button>
                </>
             );
          }
       }
    ];
+
    const getMedicineRequests = async (page, pageSize, start, end) => {
       setSpinner(true);
       start = moment(start).set({ hour: 0, minute: 0, second: 0 });
@@ -225,82 +269,85 @@ function MedicineRequests({ PatientId, ListId }) {
          setSpinner(false);
       });
    };
+
    useEffect(() => {
       getMedicineRequests(1, 15, today, today);
    }, []);
+
    return (
       <div className="flex flex-wrap">
+         <Modal
+            title="Modal"
+            open={confirmModal}
+            onOk={hideConfirmModal}
+            onCancel={hideConfirmModal}
+            okText="Ok"
+            cancelText="Cancel"
+         >
+            <p>Bla bla ...</p>
+            <p>Bla bla ...</p>
+            <p>Bla bla ...</p>
+         </Modal>
          <div className="w-full p-1 flex justify-between">
-            <DatePicker
-               className="w-1/3"
-               locale={mnMN}
-               onChange={(e, dateString) => {
-                  if (e != null) {
-                     getMedicineRequests(1, 15, dateString, dateString);
-                  }
-               }}
-            />
-            <Button
-               type="primary"
-               title="Сэргээх"
-               icon={<ReloadOutlined spin={spinner} />}
-               onClick={() => getMedicineRequests(1, 20, start, end)}
-            />
+            <div className="flex gap-3">
+               <div className="flex gap-3 items-center">
+                  {weekFilterOptions.map((item, idx) => {
+                     return (
+                        <div key={idx} className="flex gap-1">
+                           <Checkbox />
+                           {item.label}
+                        </div>
+                     );
+                  })}
+               </div>
+               {/* <DatePicker
+                  className="w-[300px]"
+                  locale={mnMN}
+                  onChange={(e, dateString) => {
+                     if (e != null) {
+                        getMedicineRequests(1, 15, dateString, dateString);
+                     }
+                  }}
+               /> */}
+            </div>
+            <div className="flex gap-1 items-center">
+               {groupIDS.length > 0 && (
+                  <>
+                     {/* <Select size="middle" className="!w-fit min-w-[140px]" defaultValue={'willDone'}>
+                        {statusOptions.map((option) => (
+                           <Option key={option.value} value={option.value} className={option.className}>
+                              {option.label}
+                           </Option>
+                        ))}
+                     </Select> */}
+                     <Button type="primary" icon={<SaveOutlined />} iconPosition="start" onClick={openConfirmModal}>
+                        Хадгалах
+                     </Button>
+                  </>
+               )}
+               <Button
+                  type="primary"
+                  title="Сэргээх"
+                  icon={<ReloadOutlined spin={spinner} />}
+                  onClick={() => getMedicineRequests(1, 20, start, end)}
+                  className="w-[32px] h-[32px]"
+               />
+            </div>
          </div>
-         {/* <div className="w-full p-1">
-            <div className="flex float-left">
+         <div className="w-full flex my-2">
+            {statuses.map((status, idx) => (
                <div
-                  className="p-1 mr-1 text-sm text-white bg-[#818787] rounded-lg dark:bg-blue-200 dark:text-blue-800"
-                  role="alert"
+                  key={idx}
+                  className={`px-2 py-1 text-sm font-semibold uppercase text-white cursor-pointer ${status.color} ${
+                     status.value === activeStatus && ``
+                  }`}
+                  onClick={() => setActiveStatus(status.value)}
                >
-                  <span className="font-medium mx-1">
-                     <EditOutlined style={{ marginTop: '-2px', marginRight: 4 }} />
-                     Төлөв сонгох
-                  </span>
+                  {status.icon}
+                  {status.title}
                </div>
-               <div
-                  className="p-1 mx-1 text-sm text-white bg-[#5cb85c] rounded-lg dark:bg-blue-200 dark:text-blue-800"
-                  role="alert"
-               >
-                  <span className="font-medium mx-1">
-                     <CheckCircleOutlined style={{ marginTop: '-2px', marginRight: 4 }} />
-                     Хэрэгжүүлсэн
-                  </span>
-               </div>
-               <div
-                  className="p-1 mx-1 text-sm text-white bg-[#f0ad4e] rounded-lg dark:bg-blue-200 dark:text-blue-800"
-                  role="alert"
-               >
-                  <span className="font-medium mx-1">
-                     <WarningOutlined style={{ marginTop: '-2px', marginRight: 4 }} />
-                     Цуцалсан
-                  </span>
-               </div>
-               <div
-                  className="p-1 mx-1 text-sm text-white bg-[#dd4b39] rounded-lg dark:bg-blue-200 dark:text-blue-800"
-                  role="alert"
-               >
-                  <span className="font-medium mx-1">
-                     <CloseCircleOutlined style={{ marginTop: '-2px', marginRight: 4 }} />
-                     Зогсоосон
-                  </span>
-               </div>
-               <div
-                  className="p-1 mx-1 text-sm text-white bg-[#5bc0de] rounded-lg dark:bg-blue-200 dark:text-blue-800"
-                  role="alert"
-               >
-                  <span className="font-medium mx-2">
-                     <PauseCircleOutlined style={{ marginTop: '-2px', marginRight: 4 }} />
-                     Татгалзсан
-                  </span>
-               </div>
-            </div>
-            <div className="float-right">
-               <Button title="Сэргээх" type="primary" onClick={() => getMedicineRequests(1, 20, start, end)}>
-                  <ReloadOutlined spin={spinner} />
-               </Button>
-            </div>
-         </div> */}
+            ))}
+         </div>
          <div className="w-full p-1">
             <Table
                bordered
@@ -345,3 +392,78 @@ function MedicineRequests({ PatientId, ListId }) {
    );
 }
 export default MedicineRequests;
+
+const statuses = [
+   {
+      icon: <AlignLeftOutlined style={{ marginTop: '-2px', marginRight: 4 }} />,
+      title: 'Бүгд',
+      color: 'bg-gray-400',
+      value: 'all'
+   },
+   {
+      icon: <CheckCircleOutlined style={{ marginTop: '-2px', marginRight: 4 }} />,
+      title: 'Гүйцэтгэх',
+      color: 'bg-[#5bc0de]',
+      value: 'willDone'
+   },
+   {
+      icon: <CheckCircleOutlined style={{ marginTop: '-2px', marginRight: 4 }} />,
+      title: 'Хэрэгжүүлсэн',
+      color: 'bg-green-500',
+      value: 'done'
+   },
+   {
+      icon: <WarningOutlined style={{ marginTop: '-2px', marginRight: 4 }} />,
+      title: 'Цуцалсан',
+      color: 'bg-[#f0ad4e]',
+      value: 'cancelled'
+   },
+   {
+      icon: <PauseCircleOutlined style={{ marginTop: '-2px', marginRight: 4 }} />,
+      title: 'Татгалзсан',
+      color: 'bg-[#dd4b39]',
+      value: 'refused'
+   }
+];
+
+const statusOptions = [
+   {
+      label: 'Гүйцэтгэх',
+      value: 'willDone',
+      className: 'bg-[#5bc0de] text-white mt-1'
+   },
+   {
+      label: 'Хэрэгжүүлсэн',
+      value: 'done',
+      className: 'bg-green-500 text-white mt-1'
+   },
+   {
+      label: 'Цуцалсан',
+      value: 'paused',
+      className: 'bg-[#f0ad4e] text-white mt-1'
+   },
+   {
+      label: 'Татгалзсан',
+      value: 'canceled',
+      className: 'bg-[#dd4b39] text-white mt-1'
+   }
+];
+
+const weekFilterOptions = [
+   {
+      label: 'Өнөөдөр',
+      value: 'day'
+   },
+   {
+      label: '7-хоног',
+      value: 'week'
+   },
+   {
+      label: '14-хоног',
+      value: 'twoWeek'
+   },
+   {
+      label: 'Сар',
+      value: 'month'
+   }
+];
