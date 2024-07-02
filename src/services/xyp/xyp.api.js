@@ -6,11 +6,11 @@ class XypApi {
       return await jwtInterceopter.post('xyp/citizen-card', data);
    }
    /** OTP үүсгэх хүсэлт бүртгэх сервис */
-   async registerOtp(regnum, phoneNum) {
+   async registerOtp(regnum, phoneNum, jsonWSList) {
       return await axios.post(`${process.env.REACT_APP_DEV_URL}xyp/register-otp/`, {
          regnum,
-         jsonWSList: [{ ws: 'WS100101_getCitizenIDCardInfo' }],
-         phoneNum: phoneNum,
+         jsonWSList,
+         phoneNum,
          isEmail: 0,
          isSms: 1,
          isKiosk: 0,
@@ -22,15 +22,11 @@ class XypApi {
       return await axios.post(`${process.env.REACT_APP_DEV_URL}xyp/check-otp/`, { regnum, otp });
    }
    /** OTP Иргэн рүү үүсгэх хүсэлт бүртгэх сервис */
-   async registerOtpByCitizen(regnum, phoneNum) {
+   async registerOtpByCitizen(regnum, phoneNum, jsonWSList) {
       return await axios.post(`${process.env.REACT_APP_DEV_URL}xyp/register-otp-by-citizen/`, {
          regnum,
          phoneNum,
-         jsonWSList: [
-            {
-               ws: 'WS100104_getCitizenMarriageInfo'
-            }
-         ]
+         jsonWSList
       });
    }
    /** Иргэний 130092 баталгаажуулах OTP шалгах сервис */
@@ -103,21 +99,9 @@ class XypApi {
          responseType: 'blob'
       });
    }
-   /** Хэрэглэгчид нэг удаагийн нууц үг үүсгэж өгөх сервис */
-   async registerOtpByCitizen(regnum, phoneNum, jsonWSList) {
-      return await jwtInterceopter.post('xyp/register-otp-by-citizen', {
-         regnum,
-         phoneNum,
-         jsonWSList
-      });
-   }
-   /** Хэрэглэгч нэг удаагийн нууц үг илгээсэн эсэхийг шалгах сервис */
-   async checkOtpByCitizen(phoneNum, otp) {
-      return await jwtInterceopter.post('xyp/check-otp-by-citizen', { phoneNum, otp });
-   }
    /** ХУР лог OTP баталгаажуулалт шалгах сервис  */
    async verifyLog(requestId) {
-      return await jwtInterceopter.get(`xyp/verify-log/${requestId}`);
+      return await axios.get(`${process.env.REACT_APP_DEV_URL}xyp/verify-log/${requestId}`);
    }
 }
 export default new XypApi();
