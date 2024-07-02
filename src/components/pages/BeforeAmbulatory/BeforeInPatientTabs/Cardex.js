@@ -195,7 +195,7 @@ function Cardex() {
       setEnd(end);
       const response = {};
       // const response = await Get('service/erequest', token, conf);
-      if (response.data.length > 0) {
+      if (response.data?.length > 0) {
          setSelectedRequestDtl([]);
          setSelectedRequestDtlMeta(response.meta);
          response?.data?.map((el) => {

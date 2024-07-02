@@ -24,6 +24,15 @@ const EnrTabs = ({ incomeENRData }) => {
    const AppIds = useSelector(selectCurrentAppId);
    const [selectedDocument, setSelectedDocument] = useState(Number);
 
+   function includesSubArray(mainArray, subArray) {
+      for (let i = 0; i <= mainArray.length - subArray.length; i++) {
+         if (mainArray.slice(i, i + subArray.length).join() === subArray.join()) {
+            return true;
+         }
+      }
+      return false;
+   }
+
    const getDocuments = async () => {
       await DocumentRoleApi.getByPageFilterShow({
          params: {
@@ -38,12 +47,14 @@ const EnrTabs = ({ incomeENRData }) => {
                openNofi('info', 'Анхааруулга', 'Таньд маягт алга');
             } else {
                var data = [];
-               response?.map((item) =>
-                  item?.documents?.map((document) => {
-                     data.push(document);
-                  })
-               );
-               // setDocuments(data);
+               response.filter((item) => {
+                  if (includesSubArray(item.employeePositionIds, AppIds)) {
+                     item?.documents?.map((document) => {
+                        data.push(document);
+                     });
+                  }
+               });
+               setDocuments(data);
             }
             if (incomeENRData.reasonComming === 2) {
                setDocuments([

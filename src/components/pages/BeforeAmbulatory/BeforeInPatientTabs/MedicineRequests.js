@@ -224,7 +224,7 @@ function MedicineRequests({ PatientId, ListId }) {
          setMeta(response.meta);
          setSpinner(false);
       });
-   };f
+   };
    useEffect(() => {
       getMedicineRequests(1, 15, today, today);
    }, []);
