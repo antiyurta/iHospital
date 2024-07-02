@@ -35,7 +35,7 @@ const MainESB = () => {
    }
 
    return (
-      <Spin spinning={isLoading}>
+      <>
          <div className="h-screen f-wull content-center bg-[#f5f6f7]">
             {isView ? (
                <iframe src={pdfUrl} height={'100%'} width={'100%'} />
@@ -49,27 +49,28 @@ const MainESB = () => {
                            <Button
                               type="primary"
                               onClick={() => {
-                                 setSelected('OTP');
+                                 setSelected('OTP-CITIZEN');
+                              }}
+                              icon={<MessageOutlined />}
+                              size="large"
+                           >
+                              130092
+                           </Button>
+                           <Button
+                              type="primary"
+                              onClick={() => {
+                                 setSelected('OTP-COMPANY');
                               }}
                               icon={<MessageOutlined />}
                               size="large"
                            >
                               Мессеж
                            </Button>
-                           <Button
-                              type="primary"
-                              onClick={() => {
-                                 setSelected('gsign');
-                              }}
-                              icon={<LockOutlined />}
-                              size="large"
-                           >
-                              Тоон гарын үсэг
-                           </Button>
                         </div>
                         <div className="w-full h-[1px] bg-gray-400" />
-                        {selected === 'OTP' ? (
+                        {selected === 'OTP-CITIZEN' || selected === 'OTP-COMPANY' ? (
                            <OTPPage
+                              selected={selected}
                               id={id}
                               regNo={regNo}
                               signature={signature}
@@ -83,7 +84,8 @@ const MainESB = () => {
                </div>
             )}
          </div>
-      </Spin>
+         <Spin spinning={isLoading} fullscreen tip="Уншиж байна..."></Spin>
+      </>
    );
 };
 export default MainESB;

@@ -8,7 +8,7 @@ const isRequireHicsServiceIds = [20340, 20820];
 const InpatientGroupIds = [208, 212];
 
 export { RequireTenMinIds, RequireCreateSealIds, InpatientGroupIds, isRequireHicsServiceIds };
-import { openNofi } from '@Comman/common';
+import { getAgeYear, openNofi } from '@Comman/common';
 //api
 import insuranceApi from '@ApiServices/healt-insurance/insurance';
 import healtInsurance from '@ApiServices/healt-insurance/healtInsurance';
@@ -43,7 +43,7 @@ export const isPayAmountCit = (freeTypeId, hicsSeal, amounts) => {
    };
 };
 
-const getAddHics = async (id) => {
+export const getAddHics = async (id) => {
    if (id) {
       return await insuranceApi
          .getByIdAddHics(id)
@@ -57,7 +57,7 @@ const getAddHics = async (id) => {
    };
 };
 
-const getHicsSeal = async (id) => {
+export const getHicsSeal = async (id) => {
    if (id) {
       return await insuranceApi
          .getByIdHicsSeals(id)
@@ -74,19 +74,18 @@ const getHicsSeal = async (id) => {
 export const noteToString = (note) => {
    return Object.entries(note)
       ?.map(([_key, value]) => {
-         console.log('value', value);
          let jsonString = JSON.stringify(value);
          let formattedString = jsonString.replace(/[{}"']/g, '');
          return formattedString;
       })
-      ?.join('\n');
+      ?.join(' ');
 };
 
-export const setSealForHics = async (patient, hicsSealId, values, isInsurance, addHicsId, medicalLinks, note) => {
+export const setSealForHics = async (patient, hicsSealId, values, isInsurance, addHicsId, note) => {
    try {
       const hicsSeal = await getHicsSeal(hicsSealId);
       const addHics = await getAddHics(addHicsId);
-      const currentHics = hicsSeal.diagnosis || addHics.diagnosis;
+      const currentHics = findInclueDiagnosis(hicsSeal, addHics);
       const newNote = noteToString(note);
       const data = {
          patientRegno: patient.registerNumber,
@@ -103,12 +102,12 @@ export const setSealForHics = async (patient, hicsSealId, values, isInsurance, a
          departNo: hicsSeal.department?.id,
          departName: hicsSeal.department?.name,
          isForeign: 0,
-         freeTypeId: patient.freeTypeId,
+         freeTypeId: patient.freeTypeId || 0,
          historyCode: hicsSeal.patientHistoryCode,
          phoneNo: patient.phoneNo,
          bloodType: hicsSeal.bloodType,
          diagnosis: {
-            ...currentHics,
+            ...currentHics.diagnosis,
             description: hicsSeal.description || newNote
          },
          isLiver: patient.isLiver ? 1 : 2,
@@ -120,8 +119,8 @@ export const setSealForHics = async (patient, hicsSealId, values, isInsurance, a
          personalInfo: getPersonalInfo(patient),
          employment: {
             ...hicsSeal.employment,
-            employmentId: patient.employmentId || '1',
-            employmentName: patient.employmentName || '- Цалин хөлстэй ажиллагч',
+            employmentId: patient.employmentId,
+            employmentName: patient.employmentName,
             isEmployment: patient.isEmployment,
             emplessDescriptionId: patient.emplessDescriptionId,
             emplessDescription: patient.emplessDescription
@@ -136,8 +135,7 @@ export const setSealForHics = async (patient, hicsSealId, values, isInsurance, a
                .requestHicsSeal(hicsSeal.id, {
                   ...hicsSeal,
                   hicsSealCode: data.result.serviceNumber,
-                  process: 1,
-                  medicalLinks: medicalLinks
+                  process: 1
                })
                .then(async ({ data: { response: ourHicsResponse } }) => {
                   return ourHicsResponse;
@@ -152,30 +150,32 @@ export const setSealForHics = async (patient, hicsSealId, values, isInsurance, a
 };
 
 export const getPersonalInfo = (patient) => {
-   const {
-      civilId: patientCivilId,
-      familyName: patientSurname,
-      aimagCityCode: patientAimagCode,
-      aimagCityName: patientAimagName,
-      soumDistrictCode: patientSoumCode,
-      soumDistrictName: patientSoumName,
-      contacts: patientContacts,
-      ...otherInfoPatient
-   } = patient;
    return {
-      patientCivilId: patientCivilId,
+      patientCivilId: patient.civilId,
+      workplace: '1',
+      // workplace: patient.workplace,
+      positionId: patient.positionId,
+      positionName: patient.positionName,
+      occupationId: patient.occupationId,
+      occupationName: patient.occupationName,
       isRaped: 2,
-      surname: patientSurname,
-      aimagCode: patientAimagCode,
-      aimgName: patientAimagName,
-      soumCode: patientSoumCode,
-      soumName: patientSoumName,
-      parentPhoneNo: parseInt(patientContacts?.[0]?.contactPhoneNo) || null,
-      ...otherInfoPatient,
-      age: 27,
-      workplace: '1'
-      // isDonor: 2
-      // donorTypeId
-      // donorTypeName
+      gender: patient.gender,
+      age: getAgeYear(patient.registerNumber),
+      aimagCode: patient.aimagCityCode,
+      aimagName: patient.aimagCityName,
+      soumCode: patient.soumDistrictCode,
+      soumName: patient.soumDistrictName,
+      bagKhorooCode: patient.bagKhorooCode,
+      bagKhorooName: patient.bagKhorooName,
+      educationId: patient.educationId,
+      educationName: patient.educationName,
+      nationality: patient.nationality || 'Халх',
+      ethnicity: patient.ethnicity || 'Монгол',
+      communicationLanguage: 'Монгол',
+      surname: patient.familyName,
+      parentPhoneNo: parseInt(patient?.[0]?.contactPhoneNo) || null,
+      isDonor: 2,
+      donorTypeId: null,
+      donorTypeName: null
    };
 };

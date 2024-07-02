@@ -34,7 +34,7 @@ const EmrTimer = ({ startDate, endDate, inspection }) => {
    const addHics = useSelector(selectCurrentAddHics);
    const currentPatient = useSelector(selectPatient);
    const incomeEmrData = useSelector(selectCurrentEmrData);
-   const { inspectionNoteId, appointmentId, appointmentType } = incomeEmrData;
+   const { inspectionNoteId, appointmentId, appointmentType, hicsSealId, addHicsId } = incomeEmrData;
    const userId = useSelector(selectCurrentUserId);
    const isInsurance = useSelector(selectCurrentInsurance);
    const [isOpenModal, setIsOpenModal] = useState(false);
@@ -52,58 +52,57 @@ const EmrTimer = ({ startDate, endDate, inspection }) => {
    // uzleg duusgah
    const endInspection = async (values) => {
       try {
-         setLoading(true);
+         // setLoading(true);
+         console.log('hicsSealId', hicsSealId);
+         console.log('addHicsId', addHicsId);
          const isEndEMD = values.conclusion?.includes('confirmed');
-         let note = null;
-         let DocumentId = null;
-         let medicalLinkType = null;
-         if (appointmentType === 0) {
-            const inspectionNote = await getInspectionNote();
-            note = await inspectionTOJSON(inspectionNote);
-            const structure = inspectionNote?.structures;
-            DocumentId = await DoctorNoteToPDF(currentPatient, currentHospitalName, structure, note);
-            medicalLinkType = 3;
-         } else if (!appointmentType && inspection === 11) {
-            const inspectionNote = await getInspectionNote();
-            note = await inspectionTOJSON(inspectionNote);
-            const structure = inspectionNote?.structures;
-            DocumentId = await XrayNoteToPDF(currentPatient, currentHospitalName, structure, note);
-            medicalLinkType = 1;
-         }
-         const medicalLinks = [
-            {
-               medicalFileId: DocumentId,
-               inDate: new Date(),
-               medicalLinkType: medicalLinkType
-            }
-         ];
+         const inspectionNote = await getInspectionNote();
+         const note = inspectionTOJSON(inspectionNote);
          if (isInsurance) {
-            console.log('hicsSeal', hicsSeal);
-            console.log('hicsSeal', hicsSeal);
-            if (hicsSeal.hicsServiceId === 20120 && !addHics.isSent) {
-               await addHicsService(hicsSeal.hicsSealCode, note);
-            } else {
-               if (hicsSeal.process === 0) {
-                  const ourHicsResponse = await setSealForHics(
-                     currentPatient,
-                     hicsSeal.id,
-                     values,
-                     isInsurance,
-                     addHics.id,
-                     medicalLinks,
-                     note
-                  );
-                  if (ourHicsResponse) {
-                     dispatch(setHicsSeal(ourHicsResponse));
-                  }
-                  if (ourHicsResponse?.hicsServiceId === 20120) {
-                     await addHicsService(ourHicsResponse.hicsSealCode, note);
-                  }
+            if (hicsSeal.process === 0 && appointmentType === 0) {
+               console.log(':currentPatient', currentPatient);
+               const ourHicsResponse = await setSealForHics(
+                  currentPatient,
+                  hicsSeal.id,
+                  values,
+                  isInsurance,
+                  addHics.id,
+                  note
+               );
+               if (ourHicsResponse) {
+                  dispatch(setHicsSeal(ourHicsResponse));
                }
             }
+            if (
+               hicsSeal.hicsServiceId === 20120 &&
+               hicsSeal.process === 1 &&
+               addHics.isSent === false &&
+               appointmentType === 0
+            ) {
+               await addHicsService(hicsSeal.hicsSealCode, note);
+            }
             if (isEndEMD) {
-               const { isConfirm, obsDuration, obsDate } = values;
+               //1-дүрс оношлогоо дүгнэлт,
+               //2-шинжилгээ,
+               //3-үзлэгийн бүртгэл,
+               //4-дүрс оношлогоо зураг
                if (appointmentType === 0) {
+                  const isIncludePDF = hicsSeal.medicalLinks?.some((link) => link.medicalLinkType === 3) || false;
+                  if (!isIncludePDF) {
+                     const structure = inspectionNote?.structures;
+                     const documentId = await DoctorNoteToPDF(currentPatient, currentHospitalName, structure, note);
+                     await insuranceApi.requestHicsSeal(hicsSeal.id, {
+                        medicalLinks: [
+                           ...(hicsSeal.medicalLinks || []),
+                           {
+                              medicalFileId: documentId,
+                              inDate: new Date(),
+                              medicalLinkType: 3
+                           }
+                        ]
+                     });
+                  }
+                  const { isConfirm, obsDuration, obsDate } = values;
                   const sentHicsSealResponse = await insuranceApi.requestHicsSealSent(hicsSeal.id, {
                      patientFingerprint: values?.finger,
                      addHicsId: addHics?.id,
@@ -115,14 +114,26 @@ const EmrTimer = ({ startDate, endDate, inspection }) => {
                      openNofi('success', 'Амжиллтай', 'Үзлэг амжиллтай хадгалагдлаа ');
                   }
                } else if (!appointmentType && inspection === 11) {
-                  await insuranceApi.requestHicsSeal(hicsSeal.id, {
-                     medicalLinks: [...hicsSeal.medicalLinks, ...medicalLinks]
-                  });
+                  const isIncludePDF = hicsSeal.medicalLinks?.some((link) => link.medicalLinkType === 1) || false;
+                  if (!isIncludePDF) {
+                     const structure = inspectionNote?.structures;
+                     const documentId = await XrayNoteToPDF(currentPatient, currentHospitalName, structure, note);
+                     await insuranceApi.requestHicsSeal(hicsSeal.id, {
+                        medicalLinks: [
+                           ...(hicsSeal.medicalLinks || []),
+                           {
+                              medicalFileId: documentId,
+                              inDate: new Date(),
+                              medicalLinkType: 1
+                           }
+                        ]
+                     });
+                  }
                   navigate(-1);
                }
             } else {
-               console.log('hicsSeal.medicalLinks', hicsSeal.medicalLinks);
-               console.log('medicalLinks', medicalLinks);
+               // console.log('hicsSeal.medicalLinks', hicsSeal.medicalLinks);
+               // console.log('medicalLinks', medicalLinks);
             }
          } else {
             await patchAppointment({
@@ -201,6 +212,9 @@ const EmrTimer = ({ startDate, endDate, inspection }) => {
       }
    }, [watchedConclusion]);
 
+   console.log('appointmentType', appointmentType);
+   console.log('inspection', inspection);
+
    return (
       <>
          <div className="emr-timer">
@@ -210,7 +224,7 @@ const EmrTimer = ({ startDate, endDate, inspection }) => {
                endDate={endDate}
                isDisable={(state) => {
                   if (RequireTenMinIds.includes(hicsSeal.hicsServiceId)) {
-                     setDisable(state);
+                     setDisable(false);
                   } else {
                      setDisable(false);
                   }
@@ -281,7 +295,7 @@ const EmrTimer = ({ startDate, endDate, inspection }) => {
                               </Checkbox.Group>
                            </Form.Item>
                         </div>
-                        {watchedConclusion?.includes('confirmed') ? (
+                        {watchedConclusion?.includes('confirmed') && appointmentType === 0 ? (
                            <div className="bg-[#F2F3F5] p-2 rounded-lg flex flex-col gap-1">
                               <p
                                  style={{

@@ -21,6 +21,22 @@ class XypApi {
    async checkOtp(regnum, otp) {
       return await axios.post(`${process.env.REACT_APP_DEV_URL}xyp/check-otp/`, { regnum, otp });
    }
+   /** OTP Иргэн рүү үүсгэх хүсэлт бүртгэх сервис */
+   async registerOtpByCitizen(regnum, phoneNum) {
+      return await axios.post(`${process.env.REACT_APP_DEV_URL}xyp/register-otp-by-citizen/`, {
+         regnum,
+         phoneNum,
+         jsonWSList: [
+            {
+               ws: 'WS100104_getCitizenMarriageInfo'
+            }
+         ]
+      });
+   }
+   /** Иргэний 130092 баталгаажуулах OTP шалгах сервис */
+   async checkOtpByCitizen(phoneNum, otp) {
+      return await axios.post(`${process.env.REACT_APP_DEV_URL}xyp/check-otp-by-citizen/`, { phoneNum, otp });
+   }
    /** Эцэг эсвэл эхийн регистрээр  хүүхдүүдийн мэдээлэл харуулах */
    async childrenInfo(regnum, searchType) {
       return await jwtInterceopter.get('xyp/children-info', { params: { regnum, searchType } });

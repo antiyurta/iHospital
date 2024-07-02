@@ -7,6 +7,9 @@ import patientDiagnose from '../../../../../services/emr/patientDiagnose';
 import Finger from '@Comman/Finger/Finger';
 import { ListPatientInfo } from '@Comman/ListInjection';
 import { openNofi } from '@Comman/common';
+import { selectCurrentAddHics, selectCurrentHicsSeal } from '@Features/emrReducer';
+import { findInclueDiagnosis } from '@Utils/config/insurance';
+import { message } from '@Features/AppGlobal';
 
 const labelstyle = {
    fontSize: 14,
@@ -16,8 +19,9 @@ const labelstyle = {
 
 export const types = [
    { value: 1, label: 'Хөнгөлөлттэй эмийн жор', name: 'aTables' },
-   { value: 2, label: 'Энгийн эмийн жор', name: 'bTables' },
-   { value: 3, label: 'Сэтгэцэд нөлөөлөх эмийн жор', name: 'cTables' }
+   { value: 2, label: 'Сэтгэцэд нөлөөлөх эмийн жор', name: 'bTables' },
+   { value: 3, label: 'Хөнгөлөлтгүй энгийн эмийн жор', name: 'cTables' },
+   { value: 4, label: 'Мансууруулах төрлийн эмийн жор', name: 'dTables' }
 ];
 
 const { TextArea } = Input;
@@ -39,19 +43,9 @@ const TitleRenderer = ({ title }) => {
 export const SendPrescription = (props) => {
    const { form } = props;
    const patient = useSelector(selectPatient);
-   const [selectedDiagnose, setSelectedDiagnose] = useState({});
    const [diagnosis, setDiagnosis] = useState([]);
-   const [tablets, setTablets] = useState({
-      1: [],
-      2: [],
-      3: []
-   });
-
-   const [selectedValue, setSelectedValue] = useState(null);
-
-   const handleRadioChange = (e) => {
-      setSelectedValue(e.target.value);
-   };
+   const [tablets, setTablets] = useState([]);
+   const [discountTablets, setDiscountTablets] = useState([]);
 
    const getPatientDiagnosis = async () => {
       await patientDiagnose.getByPageFilter({ patientId: patient.id }).then(({ data }) => {
@@ -80,7 +74,12 @@ export const SendPrescription = (props) => {
       });
    };
    const setTablet = (index, value, type, formNAme) => {
-      const tablet = tablets[type]?.find((tablet) => tablet.tbltId == value);
+      let tablet;
+      if (type === 1) {
+         tablet = discountTablets.find((tablet) => tablet.tbltId === value);
+      } else {
+         tablet = tablets.find((tablet) => tablet.tbltId === value);
+      }
       form.setFieldsValue({
          [`${formNAme}`]: {
             [`${index}`]: {
@@ -107,31 +106,22 @@ export const SendPrescription = (props) => {
       });
    };
 
-   const getTablesByIcd = async (value, name) => {
-      if (tablets[value]?.length === 0) {
-         await healthInsurance
-            .getTabletByDiagnosis({
-               diagCode: selectedDiagnose,
-               regNo: patient.registerNumber,
-               receiptType: value
-            })
-            .then(({ data }) => {
-               setTablets((prevTablets) => ({
-                  ...prevTablets,
-                  [value]: data.listTabletModel
-               }));
-               openNofi('success', 'Амжилттай', 'Татав');
-            })
-            .catch((error) => {
-               setTablets((prevTablets) => ({
-                  ...prevTablets,
-                  [value]: []
-               }));
-               if (error.response.status === 400) {
-                  openNofi('error', 'Амжилтгүй', 'Тухайн утгуудаар мэдээлэл олдохгүй байна');
-               }
-            });
-      }
+   const getTablesByIcd = async (value, name, receiptDiag) => {
+      await healthInsurance
+         .getTabletByDiagnosis({
+            diagCode: receiptDiag,
+            regNo: patient.registerNumber,
+            receiptType: value
+         })
+         .then(({ data }) => {
+            setDiscountTablets(data.listTabletModel);
+            openNofi('success', 'Амжилттай', 'Татав');
+         })
+         .catch((error) => {
+            if (error.response.status === 400) {
+               openNofi('error', 'Амжилтгүй', 'Тухайн утгуудаар мэдээлэл олдохгүй байна');
+            }
+         });
 
       // form.resetFields([
       //    ['tablets', name, 'tbltId'],
@@ -150,33 +140,36 @@ export const SendPrescription = (props) => {
    useEffect(() => {
       setPatient();
       getPatientDiagnosis();
-      // getTabletByGroups();
+      getTabletByGroups();
    }, []);
 
    return (
       <div className="space-y-3">
          <div className="flex flex-col gap-2">
             <div className="grid grid-cols-2 gap-2">
-               <BgRenderer>
-                  <div>
+               <div className="flex flex-col gap-1 justify-between">
+                  <BgRenderer>
                      <p style={labelstyle}>Өвчтөний мэдээлэл:</p>
                      <ListPatientInfo patientData={patient} />
-                  </div>
-                  <Finger
-                     form={form}
-                     insurance={true}
-                     noStyle
-                     name={['patient', 'fingerImage']}
-                     rules={[
-                        {
-                           required: true,
-                           message: 'Иргэний хурууны хээ заавал'
-                        }
-                     ]}
-                  >
-                     <Input />
-                  </Finger>
-               </BgRenderer>
+                  </BgRenderer>
+                  <BgRenderer>
+                     <p style={labelstyle}>Өвчтөний хуруу хээ:</p>
+                     <Finger
+                        form={form}
+                        insurance={true}
+                        noStyle
+                        name={['patient', 'fingerImage']}
+                        rules={[
+                           {
+                              required: true,
+                              message: 'Иргэний хурууны хээ заавал'
+                           }
+                        ]}
+                     >
+                        <Input />
+                     </Finger>
+                  </BgRenderer>
+               </div>
                <div className="flex flex-col gap-2">
                   <BgRenderer>
                      <Form.Item
@@ -197,9 +190,6 @@ export const SendPrescription = (props) => {
                               value: diagnose.code,
                               label: `${diagnose.code}-${diagnose.nameMn}`
                            }))}
-                           onChange={(value) => {
-                              setSelectedDiagnose(value);
-                           }}
                         />
                      </Form.Item>
                   </BgRenderer>
@@ -223,7 +213,7 @@ export const SendPrescription = (props) => {
                </div>
             </div>
             <BgRenderer>
-               <p style={labelstyle}>Үзлэгийн мэдээлэл:</p>
+               <p style={labelstyle}>Үзлэгийн:</p>
                <Form.Item
                   label="Эмийн тэмдэглэл"
                   name="desc"
@@ -324,10 +314,13 @@ export const SendPrescription = (props) => {
                                           filterOption={(input, option) =>
                                              option.label.toLowerCase().includes(input.toLowerCase())
                                           }
-                                          options={tablets[type.value]?.map((tablet) => ({
+                                          options={(type.value === 1 ? discountTablets : tablets)?.map((tablet) => ({
                                              value: tablet.tbltId,
                                              label: tablet.tbltNameInter
                                           }))}
+                                          onClear={() => {
+                                             form.resetFields([[type.name]]);
+                                          }}
                                           onSelect={(value) => {
                                              setTablet(name, value, type.value, type.name);
                                           }}
@@ -403,8 +396,19 @@ export const SendPrescription = (props) => {
                               <Button
                                  type="dashed"
                                  onClick={() => {
-                                    add();
-                                    getTablesByIcd(type.value, type.name);
+                                    if (type.value === 1) {
+                                       form
+                                          .validateFields(['receiptDiag'])
+                                          .then((values) => {
+                                             getTablesByIcd(type.value, type.name, values.receiptDiag);
+                                             add();
+                                          })
+                                          .catch(({ errorFields }) => {
+                                             errorFields?.map((error) => message.error(error.errors[0]));
+                                          });
+                                    } else {
+                                       add();
+                                    }
                                  }}
                                  style={{ width: '100%' }}
                               >

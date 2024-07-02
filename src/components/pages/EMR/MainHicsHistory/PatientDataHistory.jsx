@@ -14,9 +14,10 @@ const labelstyle = {
 };
 
 const labelMap = {
-   1: 'asd',
-   2: 'sad',
-   3: 'Үзлэгийн бүртгэл'
+   1: 'Дүрс оношлогоо дүгнэлт',
+   2: 'Шинжилгээ',
+   3: 'Үзлэгийн бүртгэл',
+   4: 'Дүрс оношлогоо зураг'
 };
 
 const PatientDataHistory = ({ registerNumber }) => {
@@ -70,17 +71,30 @@ const PatientDataHistory = ({ registerNumber }) => {
                         {data.serviceId === 20160 ? (
                            <p style={labelstyle}>Жирэмсний 7 хоног: {data.pregnantWeek}</p>
                         ) : null}
-                        <p>Төлөв: {data.status}</p>
                         {data.listExamCode != null ? (
                            <>
+                              <div className="w-full h-[1px] bg-black" />
                               <p style={labelstyle}>Оношилгооо, Шинжилгээ:</p>
-                              <ol className="list-decimal">
-                                 {data.listExamCode?.map((exam, idx) => (
-                                    <li className="" key={idx}>
-                                       {exam.examName}
-                                    </li>
-                                 ))}
-                              </ol>
+                              <Table
+                                 bordered
+                                 columns={[
+                                    {
+                                       title: 'Төрөл',
+                                       dataIndex: 'packTypeName'
+                                    },
+                                    {
+                                       title: 'Огноо',
+                                       dataIndex: 'indate',
+                                       render: (indate) => dayjs(indate).format('YYYY/MM/DD')
+                                    },
+                                    {
+                                       title: '',
+                                       dataIndex: 'icd10'
+                                    }
+                                 ]}
+                                 pagination={false}
+                                 dataSource={data.listExamCode}
+                              />
                            </>
                         ) : null}
                         {data.medicalLinks?.length > 0 ? (

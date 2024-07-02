@@ -9,6 +9,7 @@ import { openNofi } from '@Comman/common';
 import InsuranceApi from '@ApiServices/healt-insurance/insurance';
 //redux
 import { setHicsSeal, selectCurrentHicsSeal } from '@Features/emrReducer';
+import dayjs from 'dayjs';
 const labelstyle = {
    fontSize: 14,
    color: 'black',
@@ -74,6 +75,19 @@ const HealtInfo = () => {
                               value: type.valueName.toString()
                            }))}
                         />
+                     </Form.Item>
+                     <Form.Item
+                        label="Сүүлийн сарын тэмдэг ирсэн хугацаа"
+                        name={['healthInfo', 'lastPeriod']}
+                        getValueProps={(i) => {
+                           if (i) {
+                              return { value: dayjs(i) };
+                           } else {
+                              return;
+                           }
+                        }}
+                     >
+                        <DatePicker />
                      </Form.Item>
                      <Form.Item className="white-radio" label="Жирэмсэн эсэх" name={['healthInfo', 'isPregnancy']}>
                         <Radio.Group
