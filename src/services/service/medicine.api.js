@@ -8,12 +8,13 @@ class MedicineApi {
    }
    /** plan */
    async getMedicinePlan(params) {
-      return await jwtInterceopter.get('medicine-plan', {
+      return await jwtInterceopter.get('service/material-request', {
          params
       });
    }
-   async patchMedicinePlan(id, body) {
-      return await jwtInterceopter.patch('medicine-plan/' + id, body);
+   async postMedicinePlan(params) {
+      return await jwtInterceopter.post('material-request-history/', params);
    }
 }
+
 export default new MedicineApi();

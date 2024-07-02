@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, DatePicker, Dropdown, Menu, Table } from 'antd';
+import { Button, Col, DatePicker, Dropdown, Menu, Modal, Popconfirm, Row, Table } from 'antd';
 import {
    PauseCircleOutlined,
    CloseCircleOutlined,
@@ -21,32 +21,49 @@ function MedicineRequests({ PatientId, ListId }) {
    const [start, setStart] = useState('');
    const [end, setEnd] = useState('');
    const [requestId, setRequestId] = useState(Number);
+
+   const [openModal, setOpenModal] = useState(false);
+
+   const [histories, setHistories] = useState([]);
+
    const handleMenuClick = async (key) => {
       var data = {};
       if (Number(key) === 1) {
-         data['state'] = 'implemented';
+         data['status'] = 'implemented';
       } else if (Number(key) === 2) {
-         data['state'] = 'cancelled';
+         data['status'] = 'cancelled';
       } else if (Number(key) === 3) {
-         data['state'] = 'stopped';
+         data['status'] = 'stopped';
       } else {
-         data['state'] = 'refused';
+         data['status'] = 'refused';
       }
-      await MedicineApi.patchMedicinePlan(requestId, data).then(() => {
-         getMedicineRequests(1, 15, start, end);
+      await MedicineApi.postMedicinePlan({
+         ...data,
+         materialRequestId: requestId
+      }).then(() => {
+         setTimeout(() => {
+            getMedicineRequests(1, 15, start, end);
+         }, 1000);
       });
    };
+
    const items = (
       <Menu
-         onClick={(e) => handleMenuClick(e.key)}
          items={[
             {
                key: 1,
                label: (
-                  <p className="bg-[#5cb85c] text-white p-1">
-                     <CheckCircleOutlined style={{ marginTop: '-2px', marginRight: 4 }} />
-                     Хэрэгжүүлсэн
-                  </p>
+                  <Popconfirm
+                     title={false}
+                     description="Хэрэгжүүлсэн төлөврүү шилжүүлэх"
+                     onConfirm={() => handleMenuClick(1)}
+                     trigger={'click'}
+                  >
+                     <p className="bg-[#5cb85c] text-white p-1">
+                        <CheckCircleOutlined style={{ marginTop: '-2px', marginRight: 4 }} />
+                        Хэрэгжүүлсэн
+                     </p>
+                  </Popconfirm>
                )
             },
             {
@@ -81,13 +98,33 @@ function MedicineRequests({ PatientId, ListId }) {
    );
    const getRequestInfo = (text) => {
       if (text === 'implemented') {
-         return <CheckCircleOutlined style={{ color: 'green' }} />;
+         return (
+            <div className="flex justify-center items-center gap-1.5 text-sm text-green-500 font-semibold">
+               Хэрэгжүүлсэн
+               <CheckCircleOutlined className="mt-0.5" />
+            </div>
+         );
       } else if (text === 'cancelled') {
-         return <WarningOutlined style={{ color: '#f0ad4e' }} />;
-      } else if (text === 'cancelled') {
-         return <CloseCircleOutlined style={{ color: '#dd4b39' }} />;
+         return (
+            <div className="flex justify-center items-center gap-1.5 text-sm text-[#f0ad4e] font-semibold">
+               Цуцалсан
+               <WarningOutlined className="mt-0.5" />
+            </div>
+         );
+      } else if (text === 'stopped') {
+         return (
+            <div className="flex justify-center items-center gap-1.5 text-sm text-[#dd4b39] font-semibold">
+               Зогсоосон
+               <CloseCircleOutlined className="mt-0.5" />
+            </div>
+         );
       } else if (text === 'refused') {
-         return <PauseCircleOutlined style={{ color: '#5bc0de' }} />;
+         return (
+            <div className="flex justify-center items-center gap-1.5 text-sm text-[#5bc0de] font-semibold">
+               Татгалзсан
+               <PauseCircleOutlined className="mt-0.5" />
+            </div>
+         );
       }
    };
    const columns = [
@@ -99,28 +136,46 @@ function MedicineRequests({ PatientId, ListId }) {
       },
       {
          title: 'Хэрэгжүүлэх',
-         dataIndex: 'date',
+         dataIndex: 'startAt',
          render: (text) => {
-            return moment(text).format('YYYY-MM-DD HH:mm');
+            return moment(text).format('YYYY-MM-DD');
          }
       },
       {
          title: 'Захиалгын нэр',
-         dataIndex: 'medicineName'
+         dataIndex: ['material', 'name']
       },
       {
          title: 'DOSE',
-         dataIndex: ['medicineRequest', 'dose']
+         dataIndex: ['material', 'measurement', 'name']
       },
       {
          title: 'Тайлбар',
-         dataIndex: ['medicineRequest', 'description']
+         dataIndex: 'description'
       },
       {
-         title: 'Хэрэгжүүлэл',
+         title: 'Хэрэгжүүлэлт',
+         dataIndex: ['histories'],
+         render: (data) => {
+            return (
+               <Button
+                  size="small"
+                  className="text-sm underline border-none shadow-none outline-none bg-transparent"
+                  onClick={() => {
+                     setOpenModal(true);
+                     setHistories(data);
+                  }}
+               >
+                  Харах
+               </Button>
+            );
+         }
+      },
+      {
+         title: 'Төлөв',
          dataIndex: 'state',
          render: (text, row) => {
-            return text === null ? (
+            return (
                <>
                   <Dropdown
                      overlay={items}
@@ -139,19 +194,17 @@ function MedicineRequests({ PatientId, ListId }) {
                      </Button>
                   </Dropdown>
                </>
-            ) : (
-               getRequestInfo(text)
             );
          }
       }
    ];
    const getMedicineRequests = async (page, pageSize, start, end) => {
       setSpinner(true);
-      console.log(start);
       start = moment(start).set({ hour: 0, minute: 0, second: 0 });
       end = moment(end).set({ hour: 23, minute: 59, second: 59 });
       setStart(start);
       setEnd(end);
+
       await MedicineApi.getMedicinePlan({
          page: page,
          limit: pageSize,
@@ -159,27 +212,42 @@ function MedicineRequests({ PatientId, ListId }) {
          startDate: moment(start).format('YYYY-MM-DD HH:mm'),
          endDate: moment(end).format('YYYY-MM-DD HH:mm')
       }).then(({ data: { response } }) => {
-         setDatas(response.data);
+         setDatas(
+            (response.data || []).map((data) => {
+               return {
+                  ...data,
+                  history: data.histories[data.histories.length - 1]
+               };
+            })
+         );
+
          setMeta(response.meta);
          setSpinner(false);
       });
-   };
+   };f
    useEffect(() => {
       getMedicineRequests(1, 15, today, today);
    }, []);
    return (
       <div className="flex flex-wrap">
-         <div className="w-1/3 p-1">
+         <div className="w-full p-1 flex justify-between">
             <DatePicker
+               className="w-1/3"
                locale={mnMN}
-               onChange={(e) => {
+               onChange={(e, dateString) => {
                   if (e != null) {
-                     getMedicineRequests(1, 15, e, e);
+                     getMedicineRequests(1, 15, dateString, dateString);
                   }
                }}
             />
+            <Button
+               type="primary"
+               title="Сэргээх"
+               icon={<ReloadOutlined spin={spinner} />}
+               onClick={() => getMedicineRequests(1, 20, start, end)}
+            />
          </div>
-         <div className="w-full p-1">
+         {/* <div className="w-full p-1">
             <div className="flex float-left">
                <div
                   className="p-1 mr-1 text-sm text-white bg-[#818787] rounded-lg dark:bg-blue-200 dark:text-blue-800"
@@ -232,7 +300,7 @@ function MedicineRequests({ PatientId, ListId }) {
                   <ReloadOutlined spin={spinner} />
                </Button>
             </div>
-         </div>
+         </div> */}
          <div className="w-full p-1">
             <Table
                bordered
@@ -254,6 +322,25 @@ function MedicineRequests({ PatientId, ListId }) {
                }}
             />
          </div>
+         <Modal
+            open={openModal}
+            title="Хэрэгжүүлэлт"
+            onCancel={() => setOpenModal(false)}
+            forceRender={true}
+            footer={false}
+            style={{ maxHeight: '800px', overflowY: 'scroll' }}
+         >
+            <Row gutter={[12, 12]}>
+               {(histories || []).map((history, idx) => (
+                  <Col key={idx} span={24} className="w-full flex justify-between items-center border-b pb-2">
+                     <p className="text-sm font-normal text-gray-600">
+                        {moment(history.createdAt).format('YYYY/MM/DD HH:MM')}
+                     </p>
+                     {getRequestInfo(history.status)}
+                  </Col>
+               ))}
+            </Row>
+         </Modal>
       </div>
    );
 }
