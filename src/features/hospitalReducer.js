@@ -13,7 +13,8 @@ export const hospital = createSlice({
       registerNumber: '',
       isXyp: false,
       isActive: false,
-      isInsurance: false
+      isInsurance: false,
+      isCitizenByOtp: false
    },
    reducers: {
       set: (state, action) => {
@@ -27,6 +28,7 @@ export const hospital = createSlice({
          state.isXyp = action.payload.isXyp;
          state.isActive = action.payload.isActive;
          state.isInsurance = action.payload.isInsurance;
+         state.isCitizenByOtp = action.payload.isCitizenByOtp;
       },
       remove: (state) => {
          state.id = null;
@@ -39,6 +41,7 @@ export const hospital = createSlice({
          state.isXyp = false;
          state.isActive = false;
          state.isInsurance = false;
+         state.isCitizenByOtp = false;
       }
    }
 });

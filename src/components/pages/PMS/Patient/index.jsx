@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Form, Input, Radio, Select, Steps } from 'antd';
+import { Button, Form, Input, InputNumber, Radio, Select, Steps } from 'antd';
 //common
 import { openNofi } from '@Comman/common';
 import Finger from '@Comman/Finger/Finger';
@@ -19,14 +19,18 @@ import dayjs from 'dayjs';
 import { useSelector } from 'react-redux';
 import { selectHospitalIsXyp } from '@Features/hospitalReducer';
 import { message } from '@Features/AppGlobal';
+import OTPInput from 'react-otp-input';
 
 const RegisterPatient = ({ patientId, onFinish, editMode }) => {
    const [form] = Form.useForm();
+   const isCitizenByOtp = useSelector(({ hospitalReducer }) => hospitalReducer.isCitizenByOtp);
    const isXyp = useSelector(selectHospitalIsXyp);
    const registerType = Form.useWatch('registerType', form);
+   const authType = Form.useWatch('authType', form);
    const [isLoading, setIsLoading] = useState(false);
    const [current, setCurrent] = useState(isXyp ? 0 : 2);
    const [childrens, setChildrens] = useState([]);
+   const [citizenPhone, setCitizenPhone] = useState('');
 
    useEffect(() => {
       !editMode && form.resetFields();
@@ -66,15 +70,9 @@ const RegisterPatient = ({ patientId, onFinish, editMode }) => {
                   >
                      <Radio.Group>
                         <Radio.Button value={0}>Үйлчилүүлэгчээр бөглүүлэх</Radio.Button>
-                        <Radio.Button value={1} disabled={form.getFieldValue('registerType') !== 'citizen'}>
-                           OTP
-                        </Radio.Button>
-                        <Radio.Button value={2} disabled={form.getFieldValue('registerType') !== 'citizen'}>
-                           Тоон гарын үсэг
-                        </Radio.Button>
-                        <Radio.Button value={3} disabled={form.getFieldValue('registerType') !== 'citizen'}>
-                           Хурууны хээ
-                        </Radio.Button>
+                        <Radio.Button value={1}>OTP</Radio.Button>
+                        <Radio.Button value={2}>Тоон гарын үсэг</Radio.Button>
+                        <Radio.Button value={3}>Хурууны хээ</Radio.Button>
                      </Radio.Group>
                   </Form.Item>
                )}
@@ -108,6 +106,15 @@ const RegisterPatient = ({ patientId, onFinish, editMode }) => {
                      </Form.Item>
                   </>
                )}
+               {authType == 1 && (
+                  <Form.Item
+                     name="phoneNum"
+                     label="Утасны дугаар"
+                     rules={[{ required: true, message: 'Утасны дугаар оруулна уу!' }]}
+                  >
+                     <InputNumber />
+                  </Form.Item>
+               )}
             </>
          )
       },
@@ -116,10 +123,26 @@ const RegisterPatient = ({ patientId, onFinish, editMode }) => {
          icon: <SolutionOutlined />,
          content: (
             <>
+               Утас: {citizenPhone}
                {form.getFieldValue('authType') == 1 && (
-                  <Form.Item name="otp" label="OTP" rules={[{ required: true, message: 'OTP кодоо оруулна уу!' }]}>
-                     <Input onChange={(e) => e.target.value.length == 6 && checkOtp(e.target.value)} />
-                  </Form.Item>
+                  <>
+                     <Form.Item name="otp" label="OTP" rules={[{ required: true, message: 'OTP кодоо оруулна уу!' }]}>
+                        <OTPInput
+                           inputStyle={{
+                              height: 50,
+                              width: 50,
+                              margin: 6,
+                              border: '1px solid #2D8CFF',
+                              borderRadius: 8,
+                              fontSize: 24
+                           }}
+                           inputType="number"
+                           numInputs={6}
+                           renderSeparator={<span>-</span>}
+                           renderInput={(props) => <Input {...props} />}
+                        />
+                     </Form.Item>
+                  </>
                )}
                {form.getFieldValue('authType') == 2 && (
                   <Form.Item
@@ -197,30 +220,38 @@ const RegisterPatient = ({ patientId, onFinish, editMode }) => {
       }
    ];
 
-   const next = () => {
+   const next = async () => {
       form
          .validateFields()
-         .then(() => {
+         .then(async () => {
             const registerType = form.getFieldValue('registerType');
             const authType = form.getFieldValue('authType');
             const regnum = form.getFieldValue('regnum');
+            const phoneNum = form.getFieldValue('phoneNum');
             if (current === 0) {
-               authType == 1 && registerOtp(regnum);
+               authType == 1 && registerOtp(regnum, phoneNum);
                registerType == 'children' && childrenInfo();
                registerType == 'foreignCitizen' && foreignPersonInfo();
+               setCurrent(current + 1);
             } else if (current === 1) {
                if (authType === 0) {
                   // manual registration
                   getByRegno(regnum);
                } else if (authType == 1) {
-                  // otp registration
-                  sentXyp({
-                     regnum,
-                     authType,
-                     otp: form.getFieldValue('otp')
-                  });
+                  const isCheck = await checkOtp();
+                  if (!isCheck) {
+                     setIsLoading(false);
+                  } else {
+                     sentXyp({
+                        regnum,
+                        authType,
+                        otp: form.getFieldValue('otp')
+                     });
+                     setCurrent(current + 1);
+                  }
                } else if (authType == 2) {
                   // siganture registration
+                  setCurrent(current + 1);
                } else if (authType == 3) {
                   // finger registration
                   sentXyp({
@@ -232,12 +263,13 @@ const RegisterPatient = ({ patientId, onFinish, editMode }) => {
                         fingerprint: form.getFieldValue('operatorFinger')
                      }
                   });
+                  setCurrent(current + 1);
                }
                if (registerType == 'children') {
                   childByCivildId(form.getFieldValue('currentChildCivildId'));
+                  setCurrent(current + 1);
                }
             }
-            setCurrent(current + 1);
          })
          .catch((info) => {
             info.errorFields?.map((errorMsg) => {
@@ -260,39 +292,81 @@ const RegisterPatient = ({ patientId, onFinish, editMode }) => {
          })
          .finally(() => setIsLoading(false));
    };
-   const registerOtp = (regnum) => {
-      xypApi.registerOtp(regnum, 0).then(({ data: { response } }) => {
-         if (response.return.resultCode != 0) {
-            openNofi('warning', 'ХУР-сервис', response.return.resultMessage);
-         } else {
-            openNofi('success', 'ХУР-сервис', response.return.resultMessage);
-         }
-      });
+   const registerOtp = (regnum, phoneNum) => {
+      setIsLoading(true);
+      if (isCitizenByOtp) {
+         xypApi
+            .registerOtpByCitizen(regnum, phoneNum, [{ ws: 'WS100101_getCitizenIDCardInfo' }])
+            .then(({ data: { response } }) => {
+               if (response.return.resultCode != 0) {
+                  openNofi('warning', 'ХУР-сервис', response.return.resultMessage);
+               } else {
+                  form.setFieldValue('otp', response.return.response.otp);
+                  setCitizenPhone(response.return.response.phoneNum);
+                  openNofi('success', 'ХУР-сервис', response.return.resultMessage);
+               }
+            })
+            .finally(() => setIsLoading(false));
+      } else {
+         xypApi
+            .registerOtp(regnum, phoneNum)
+            .then(({ data: { response } }) => {
+               if (response.return.resultCode != 0) {
+                  openNofi('warning', 'ХУР-сервис', response.return.resultMessage);
+               } else {
+                  openNofi('success', 'ХУР-сервис', response.return.resultMessage);
+               }
+            })
+            .finally(() => setIsLoading(false));
+      }
    };
-   const checkOtp = async (otp) => {
+   const checkOtp = async () => {
+      setIsLoading(true);
+      const otp = form.getFieldValue('otp');
       const regnum = form.getFieldValue('regnum');
-      xypApi.checkOtp(regnum, otp).then(({ data: { response } }) => {
-         if (response.return.resultCode != 0) {
+      const phoneNum = form.getFieldValue('phoneNum');
+      let result = false;
+      try {
+         let response;
+         if (isCitizenByOtp) {
+            const { data } = await xypApi.checkOtpByCitizen(String(phoneNum), otp);
+            response = data.response;
+         } else {
+            const { data } = await xypApi.checkOtp(regnum, otp);
+            response = data.response;
+         }
+         if (response.return.resultCode !== 0) {
             openNofi('warning', 'ХУР-сервис', response.return.resultMessage);
          } else {
             openNofi('success', 'ХУР-сервис', response.return.returnMessage);
+            result = true;
          }
-      });
+      } catch (error) {
+         openNofi('warning', 'OTP шалгах явцад алдаа гарлаа:', error);
+      } finally {
+         setIsLoading(false);
+      }
+      return result;
    };
    const childrenInfo = async () => {
+      setIsLoading(true);
       const regnum = form.getFieldValue('regnum');
       const searchType = form.getFieldValue('searchType');
-      xypApi.childrenInfo(regnum, searchType).then(({ data: { response } }) => {
-         if (response.return.resultCode != 0) {
-            openNofi('warning', 'ХУР-сервис', response.return.resultMessage);
-         } else {
-            form.setFieldValue('requestId', response.return.requestId);
-            setChildrens(response.return.response.listData);
-            openNofi('success', 'ХУР-сервис', response.return.resultMessage);
-         }
-      });
+      xypApi
+         .childrenInfo(regnum, searchType)
+         .then(({ data: { response } }) => {
+            if (response.return.resultCode != 0) {
+               openNofi('warning', 'ХУР-сервис', response.return.resultMessage);
+            } else {
+               form.setFieldValue('requestId', response.return.requestId);
+               setChildrens(response.return.response.listData);
+               openNofi('success', 'ХУР-сервис', response.return.resultMessage);
+            }
+         })
+         .finally(() => setIsLoading(false));
    };
    const foreignPersonInfo = async () => {
+      setIsLoading(true);
       xypApi
          .foreignPersonInfo(
             form.getFieldValue('regnum'),
@@ -306,7 +380,8 @@ const RegisterPatient = ({ patientId, onFinish, editMode }) => {
                setChildrens(response.return.response.listData);
                openNofi('success', 'ХУР-сервис', response.return.resultMessage);
             }
-         });
+         })
+         .finally(() => setIsLoading(false));
    };
    const sentXyp = async (values) => {
       setIsLoading(true);

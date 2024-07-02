@@ -103,5 +103,21 @@ class XypApi {
          responseType: 'blob'
       });
    }
+   /** Хэрэглэгчид нэг удаагийн нууц үг үүсгэж өгөх сервис */
+   async registerOtpByCitizen(regnum, phoneNum, jsonWSList) {
+      return await jwtInterceopter.post('xyp/register-otp-by-citizen', {
+         regnum,
+         phoneNum,
+         jsonWSList
+      });
+   }
+   /** Хэрэглэгч нэг удаагийн нууц үг илгээсэн эсэхийг шалгах сервис */
+   async checkOtpByCitizen(phoneNum, otp) {
+      return await jwtInterceopter.post('xyp/check-otp-by-citizen', { phoneNum, otp });
+   }
+   /** ХУР лог OTP баталгаажуулалт шалгах сервис  */
+   async verifyLog(requestId) {
+      return await jwtInterceopter.get(`xyp/verify-log/${requestId}`);
+   }
 }
 export default new XypApi();
