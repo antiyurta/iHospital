@@ -502,484 +502,355 @@ const CT_1_Tsus = (props) => {
                      <Box width={"60%"} left right ></Box>
                   </FlexRow>
                </FlexCol> */}
+               <div style={{ display: "flex" }}>
+                  <FlexCol>
+                     <FlexRow>
+                        <Box width={'150px'} left top>Огноо</Box>
+                        <Box width={'50px'} left top></Box>
+                        <Box width={'50px'} left top></Box>
+                     </FlexRow>
+                     <FlexRow>
+                        <Box width={'150px'} left top>Бласт</Box>
+                        <Box width={'50px'} left top></Box>
+                        <Box width={'50px'} left top></Box>
+                     </FlexRow>
+                     <FlexRow>
+                        <Box width={'150px'} left top>Бүх нейтрофиль</Box>
+                        <Box width={'50px'} left top></Box>
+                        <Box width={'50px'} left top></Box>
+                     </FlexRow>
+                     <FlexRow>
+                        <Box width={'150px'} left top>Бүх эритриод эс</Box>
+                        <Box width={'50px'} left top></Box>
+                        <Box width={'50px'} left top></Box>
+                     </FlexRow>
+                     <FlexRow>
+                        <Box width={'150px'} left top>Лимфоцит</Box>
+                        <Box width={'50px'} left top></Box>
+                        <Box width={'50px'} left top></Box>
+                     </FlexRow>
+                     <FlexRow>
+                        <Box width={'150px'} left top>Плазмоцит</Box>
+                        <Box width={'50px'} left top></Box>
+                        <Box width={'50px'} left top></Box>
+                     </FlexRow>
+                     <FlexRow>
+                        <Box width={'150px'} left top>Мегакариоцит</Box>
+                        <Box width={'50px'} left top></Box>
+                        <Box width={'50px'} left top></Box>
+                     </FlexRow>
+                  </FlexCol>
+                  <FlexCol >
+                     <Box style={{ width: "400px", height: "132px" }} left top right>
+                        Дүгнэлт:
+                        <TextWithUnderline>{formData?.q}</TextWithUnderline>
+                     </Box>
+                  </FlexCol>
+               </div>
                <Box left top right>
                   Цито химийн урвал
                </Box>
-               <Table bordered className="story mb-0">
-                  <thead>
-                     <tr className="border-t-0">
-                        <th id="cls" className="w-[25%]">
-                           Огноо
-                        </th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                        <th id="cls" className="w-[60%]" colSpan={4} rowSpan={7}>
-                           Дүгнэлт:
-                           <Input className="w-[370px] mb-1" style={{ textAlign: 'center' }} />
-                           <Input className="w-full " style={{ textAlign: 'center' }} />
-                           <Input className="w-full " style={{ textAlign: 'center' }} />
-                           <Input className="w-full " style={{ textAlign: 'center' }} />
-                           <Input className="w-full " style={{ textAlign: 'center' }} />
-                           <Input className="w-full " style={{ textAlign: 'center' }} />
-                        </th>
-                     </tr>
-                     <tr>
-                        <th id="cls" className="w-[25%]">
-                           Бласт
-                        </th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                     </tr>
-                     <tr>
-                        <th id="cls" className="w-[25%]">
-                           Бүх нейтрофиль
-                        </th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                     </tr>
-                     <tr>
-                        <th id="cls" className="w-[25%]">
-                           Бүх эритриод эс
-                        </th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                     </tr>
-                     <tr>
-                        <th id="cls" className="w-[25%]">
-                           Лимфоцит
-                        </th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                     </tr>
-                     <tr>
-                        <th id="cls" className="w-[25%]">
-                           Плазмоцит
-                        </th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                     </tr>
-                     <tr>
-                        <th id="cls" className="w-[25%]">
-                           Мегакариоцит
-                        </th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                     </tr>
-                  </thead>
-               </Table>
-               <Table bordered className="story mb-0">
-                  <thead>
-                     <tr className="border-t-0">
-                        <th id="cls" className="w-[50%]">
-                           Цито химийн урвал :
-                        </th>
-                     </tr>
-                  </thead>
-               </Table>
-               <Table bordered className="story mb-0">
-                  <thead>
-                     <tr className="border-t-0">
-                        <th id="cls" className="w-[20%]"></th>
-                        <th id="cls">Эерэг</th>
-                        <th id="cls">Сөрөг</th>
-                        <th id="cls" className="w-[20%]">
-                           Огноо
-                        </th>
-                        <th id="cls" className="w-[20%]"></th>
-                        <th id="cls" className="w-[20%]"></th>
-                     </tr>
-                     <tr>
-                        <th id="cls">MPO</th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                        <th id="cls">APTT</th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                     </tr>
-                     <tr>
-                        <th id="cls">PAS</th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                        <th id="cls">PT</th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                     </tr>
-                     <tr>
-                        <th id="cls">DAB</th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                        <th id="cls">INR</th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                     </tr>
-                     <tr>
-                        <th id="cls">NS</th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                        <th id="cls">TT</th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                     </tr>
-                     <tr>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                        <th id="cls">Fibrinogen</th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                     </tr>
-                  </thead>
-               </Table>
-               <Table bordered className="story mb-0">
-                  <thead>
-                     <tr className="border-t-0">
-                        <th className="w-[50%]">Биохими</th>
-                     </tr>
-                  </thead>
-               </Table>
-               <Table bordered className="story mb-0">
-                  <thead>
-                     <tr className="border-t-0">
-                        <th id="cls" className="w-[25%]">
-                           Огноо
-                        </th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                        <th id="cls" className="w-[60%]" colSpan={4} rowSpan={15}>
-                           Дүгнэлт:
-                           <Input className=" w-[370px] mb-1" style={{ textAlign: 'center' }} />
-                           <Input className=" w-full " style={{ textAlign: 'center' }} />
-                           <Input className=" w-full " style={{ textAlign: 'center' }} />
-                           <Input className=" w-full " style={{ textAlign: 'center' }} />
-                           <Input className=" w-full " style={{ textAlign: 'center' }} />
-                           <Input className=" w-full " style={{ textAlign: 'center' }} />
-                           <Input className=" w-full " style={{ textAlign: 'center' }} />
-                           <Input className=" w-full " style={{ textAlign: 'center' }} />
-                           <Input className=" w-full " style={{ textAlign: 'center' }} />
-                           <Input className=" w-full " style={{ textAlign: 'center' }} />
-                           <Input className=" w-full " style={{ textAlign: 'center' }} />
-                           <Input className=" w-full " style={{ textAlign: 'center' }} />
-                           <Input className=" w-full " style={{ textAlign: 'center' }} />
-                           <Input className=" w-full " style={{ textAlign: 'center' }} />
-                        </th>
-                     </tr>
-                     <tr>
-                        <th id="cls">Нийт билирубин</th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                     </tr>
-                     <tr>
-                        <th id="cls">Шууд бус билирубин</th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                     </tr>
-                     <tr>
-                        <th id="cls">Алат</th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                     </tr>
-                     <tr>
-                        <th id="cls">Асат</th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                     </tr>
-                     <tr>
-                        <th id="cls">Шүлт Фосфатаза</th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                     </tr>
-                     <tr>
-                        <th id="cls">ЛДГ</th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                     </tr>
-                     <tr>
-                        <th id="cls">Кальци</th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                     </tr>
-                     <tr>
-                        <th id="cls">Кали</th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                     </tr>
-                     <tr>
-                        <th id="cls">Креатинин</th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                     </tr>
-                     <tr>
-                        <th id="cls">Төмөр</th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                     </tr>
-                     <tr>
-                        <th id="cls">Ферритин</th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                     </tr>
-                     <tr>
-                        <th id="cls">Төмөр хол/ чадвар</th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                     </tr>
-                     <tr>
-                        <th id="cls">Витамин В12</th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                     </tr>
-                     <tr>
-                        <th id="cls">Фолийн хүчил</th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                     </tr>
-                  </thead>
-               </Table>
+               <FlexRow>
+                  <Box width={'20%'} left top></Box>
+                  <Box width={'10%'} left top>Эерэг</Box>
+                  <Box width={'10%'} left top>Сөрөг</Box>
+                  <Box width={'20%'} left top>Огноо</Box>
+                  <Box width={'20%'} left top></Box>
+                  <Box width={'20%'} left top right></Box>
+               </FlexRow>
+               <FlexRow>
+                  <Box width={'20%'} left top>MPO</Box>
+                  <Box width={'10%'} left top></Box>
+                  <Box width={'10%'} left top></Box>
+                  <Box width={'20%'} left top>APTT</Box>
+                  <Box width={'20%'} left top></Box>
+                  <Box width={'20%'} left top right></Box>
+               </FlexRow>
+               <FlexRow>
+                  <Box width={'20%'} left top>PAS</Box>
+                  <Box width={'10%'} left top></Box>
+                  <Box width={'10%'} left top></Box>
+                  <Box width={'20%'} left top>PT</Box>
+                  <Box width={'20%'} left top></Box>
+                  <Box width={'20%'} left top right></Box>
+               </FlexRow>
+               <FlexRow>
+                  <Box width={'20%'} left top>DAB</Box>
+                  <Box width={'10%'} left top></Box>
+                  <Box width={'10%'} left top></Box>
+                  <Box width={'20%'} left top>INR</Box>
+                  <Box width={'20%'} left top></Box>
+                  <Box width={'20%'} left top right></Box>
+               </FlexRow>
+               <FlexRow>
+                  <Box width={'20%'} left top>NS</Box>
+                  <Box width={'10%'} left top></Box>
+                  <Box width={'10%'} left top></Box>
+                  <Box width={'20%'} left top>TT</Box>
+                  <Box width={'20%'} left top></Box>
+                  <Box width={'20%'} left top right></Box>
+               </FlexRow>
+               <FlexRow>
+                  <Box width={'20%'} left top></Box>
+                  <Box width={'10%'} left top></Box>
+                  <Box width={'10%'} left top></Box>
+                  <Box width={'20%'} left top>Fibrinogen</Box>
+                  <Box width={'20%'} left top></Box>
+                  <Box width={'20%'} left top right></Box>
+               </FlexRow>
+               <Box left top right>Биохими</Box>
+               <div style={{ display: "flex" }}>
+                  <FlexCol>
+                     <FlexRow>
+                        <Box width={'150px'} left top>Огноо</Box>
+                        <Box width={'50px'} left top></Box>
+                        <Box width={'50px'} left top></Box>
+                     </FlexRow>
+                     <FlexRow>
+                        <Box width={'150px'} left top>Нийт билирубин</Box>
+                        <Box width={'50px'} left top></Box>
+                        <Box width={'50px'} left top></Box>
+                     </FlexRow>
+                     <FlexRow>
+                        <Box width={'150px'} left top>Шууд бус билирубин</Box>
+                        <Box width={'50px'} left top></Box>
+                        <Box width={'50px'} left top></Box>
+                     </FlexRow>
+                     <FlexRow>
+                        <Box width={'150px'} left top>Алат</Box>
+                        <Box width={'50px'} left top></Box>
+                        <Box width={'50px'} left top></Box>
+                     </FlexRow>
+                     <FlexRow>
+                        <Box width={'150px'} left top>Асат</Box>
+                        <Box width={'50px'} left top></Box>
+                        <Box width={'50px'} left top></Box>
+                     </FlexRow>
+                     <FlexRow>
+                        <Box width={'150px'} left top>Шүлт Фосфатаза</Box>
+                        <Box width={'50px'} left top></Box>
+                        <Box width={'50px'} left top></Box>
+                     </FlexRow>
+                     <FlexRow>
+                        <Box width={'150px'} left top bottom>ЛДГ</Box>
+                        <Box width={'50px'} left top bottom></Box>
+                        <Box width={'50px'} left top bottom></Box>
+                     </FlexRow>
+                  </FlexCol>
+                  <FlexCol >
+                     <Box style={{ width: "400px", height: "132px" }} left top right bottom>
+                        Дүгнэлт:
+                        <TextWithUnderline>{formData?.q}</TextWithUnderline>
+                     </Box>
+                  </FlexCol>
+               </div>
             </div>
          </div>
          <div className="page">
             <div className="subpage">
-               <Table bordered className="story mb-0">
-                  <thead>
-                     <tr>
-                        <th id="cls" className="w-[50%]">
-                           Бактер, вирус, маркерийн шинжилгээ:
-                           <Input className=" w-full " style={{ textAlign: 'center' }} />
-                           <Input className=" w-full mb-1" style={{ textAlign: 'center' }} />
-                        </th>
-                        <th id="cls" className="w-[50%]">
-                           Дүгнэлт:
-                           <Input className=" w-full " style={{ textAlign: 'center' }} />
-                           <Input className=" w-full mb-1" style={{ textAlign: 'center' }} />
-                        </th>
-                     </tr>
-                  </thead>
-               </Table>
-               <Table bordered className="story mb-0">
-                  <thead>
-                     <tr className="border-t-0">
-                        <th id="cls" className="w-[50%]" colSpan={4} rowSpan={15}>
-                           Шээсэнд:
-                        </th>
-                     </tr>
-                  </thead>
-               </Table>
-               <Table bordered className="story mb-0">
-                  <thead>
-                     <tr className="border-t-0">
-                        <th id="cls" className="w-[25%]">
-                           Огноо
-                        </th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                        <th id="cls" className="w-[60%]" colSpan={4} rowSpan={15}>
-                           Дүгнэлт:
-                           <Input className=" w-[370px] mb-1" style={{ textAlign: 'center' }} />
-                           <Input className=" w-full " style={{ textAlign: 'center' }} />
-                           <Input className=" w-full " style={{ textAlign: 'center' }} />
-                           <Input className=" w-full " style={{ textAlign: 'center' }} />
-                           <Input className=" w-full " style={{ textAlign: 'center' }} />
-                           <Input className=" w-full " style={{ textAlign: 'center' }} />
-                           <Input className=" w-full " style={{ textAlign: 'center' }} />
-                           <Input className=" w-full " style={{ textAlign: 'center' }} />
-                           <Input className=" w-full " style={{ textAlign: 'center' }} />
-                        </th>
-                     </tr>
-                     <tr>
-                        <th id="cls">Сахар</th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                     </tr>
-                     <tr>
-                        <th id="cls">pH</th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                     </tr>
-                     <tr>
-                        <th id="cls">Уураг</th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                     </tr>
-                     <tr>
-                        <th id="cls">Цагаан эс</th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                     </tr>
-                     <tr>
-                        <th id="cls">Улаан эс</th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                     </tr>
-                     <tr>
-                        <th id="cls">Хувийн жин</th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                     </tr>
-                     <tr>
-                        <th id="cls">гемосидерин</th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                     </tr>
-                     <tr>
-                        <th id="cls">Бенс-жонс уураг</th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                     </tr>
-                     <tr>
-                        <th id="cls">Гемоглобин</th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                     </tr>
-                  </thead>
-               </Table>
-               <Table bordered className="story mb-0">
-                  <thead>
-                     <tr className="border-t-0">
-                        <th id="cls" className="w-[50%]" colSpan={4} rowSpan={15}>
-                           Цусанд: :
-                        </th>
-                     </tr>
-                  </thead>
-               </Table>
-               <Table bordered className="story mb-0">
-                  <thead>
-                     <tr className="border-t-0">
-                        <th id="cls" className="w-[25%]">
-                           Огноо
-                        </th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                        <th id="cls" className="w-[60%]" colSpan={4} rowSpan={15}>
-                           Дүгнэлт:
-                           <Input className=" w-[370px] mb-1" style={{ textAlign: 'center' }} />
-                           <Input className=" w-full " style={{ textAlign: 'center' }} />
-                        </th>
-                     </tr>
-                     <tr>
-                        <th id="cls">Кумбсын шууд урвал</th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                     </tr>
-                     <tr>
-                        <th id="cls">Кумбсын шууд бус урвал</th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                     </tr>
-                  </thead>
-               </Table>
-               <Table bordered className="story mb-0">
-                  <thead>
-                     <tr className="border-t-0">
-                        <th id="cls" className="w-[50%]" colSpan={4} rowSpan={15}>
-                           Бусад(PCR, молекул генетик цитогенетик, урсгал цитометр):
-                           <Input className=" w-full " style={{ textAlign: 'center' }} />
-                           <Input className=" w-full mb-1" style={{ textAlign: 'center' }} />
-                        </th>
-                        <th id="cls" className="w-[50%]" colSpan={4} rowSpan={15}>
-                           Дүгнэлт:
-                           <Input className=" w-full " style={{ textAlign: 'center' }} />
-                           <Input className=" w-full mb-1" style={{ textAlign: 'center' }} />
-                        </th>
-                     </tr>
-                  </thead>
-               </Table>
-               <Table bordered className="story mb-0">
-                  <thead>
-                     <tr className="border-t-0">
-                        <th id="cls" className="w-[50%]" colSpan={4} rowSpan={15}>
-                           Иммунологи
-                        </th>
-                        <th className="w-[50%]" colSpan={4} rowSpan={15}></th>
-                     </tr>
-                  </thead>
-               </Table>
-               <Table bordered className="story mb-0">
-                  <thead>
-                     <tr className="border-t-0">
-                        <th id="cls" className="w-[25%]">
-                           Огноо
-                        </th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                        <th id="cls" className="w-[60%]" colSpan={4} rowSpan={15}>
-                           Дүгнэлт:
-                           <Input className=" w-full " style={{ textAlign: 'center' }} />
-                           <Input className=" w-full " style={{ textAlign: 'center' }} />
-                        </th>
-                     </tr>
-                     <tr>
-                        <th id="cls">IgG</th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                     </tr>
-                     <tr>
-                        <th id="cls">IgM</th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                     </tr>
-                     <tr>
-                        <th id="cls">IgA</th>
-                        <th id="cls"></th>
-                        <th id="cls"></th>
-                     </tr>
-                  </thead>
-               </Table>
-               <Table bordered className="story mb-0">
-                  <thead>
-                     <tr className="border-t-0">
-                        <th id="cls" className="h-6">
-                           Үйл онош:
-                        </th>
-                     </tr>
-                  </thead>
-               </Table>
-               <Table bordered className="story mb-0">
-                  <thead>
-                     <tr className="border-t-0">
-                        <th className="h-[100px]">Цусны бусад эмгэг өөрчлөлтүүд:</th>
-                     </tr>
-                  </thead>
-               </Table>
-               <Table bordered className="story mb-0">
-                  <thead>
-                     <tr className="border-t-0">
-                        <th className="h-[120px]">Эмнэл зүйн онош:</th>
-                     </tr>
-                  </thead>
-               </Table>
-               <Table bordered className="story mb-0">
-                  <thead>
-                     <tr className="border-t-0">
-                        <th className="h-[150px]">Зөвлөгөө, эмчилгээ:</th>
-                     </tr>
-                  </thead>
-               </Table>
-               <Table bordered className="story mb-0">
-                  <thead>
-                     <tr className="border-t-0">
-                        <th className="h-8 border-r-0 w-[25%]">
-                           <p className="mt-3">Эмчийн нэр:</p>
-                        </th>
-                        <th className="h-8 border-l-0 mr-4 w-[35%]">
-                           <p className="mt-3">Гарын үсэг:</p>
-                        </th>
-                        <th className="h-8">
-                           <p className="mt-2 flex gap-2 justify-center">
-                              <p>он</p>
-                              <p>сар</p>
-                              <p>өдөр</p>
-                           </p>
-                           <p className="flex gap-4 justify-center">
-                              <p>/</p>
-                              <p>/</p>
-                           </p>
-                        </th>
-                     </tr>
-                  </thead>
-               </Table>
+               <div style={{ display: "flex" }}>
+                  <FlexCol>
+                     <FlexRow>
+                        <Box width={'150px'} left top>Кальци</Box>
+                        <Box width={'50px'} left top></Box>
+                        <Box width={'50px'} left top></Box>
+                     </FlexRow>
+                     <FlexRow>
+                        <Box width={'150px'} left top>Кали</Box>
+                        <Box width={'50px'} left top></Box>
+                        <Box width={'50px'} left top></Box>
+                     </FlexRow>
+                     <FlexRow>
+                        <Box width={'150px'} left top>Креатинин</Box>
+                        <Box width={'50px'} left top></Box>
+                        <Box width={'50px'} left top></Box>
+                     </FlexRow>
+                     <FlexRow>
+                        <Box width={'150px'} left top>Төмөр</Box>
+                        <Box width={'50px'} left top></Box>
+                        <Box width={'50px'} left top></Box>
+                     </FlexRow>
+                     <FlexRow>
+                        <Box width={'150px'} left top>Ферритин</Box>
+                        <Box width={'50px'} left top></Box>
+                        <Box width={'50px'} left top></Box>
+                     </FlexRow>
+                     <FlexRow>
+                        <Box width={'150px'} left top>Төмөр хол/ чадвар</Box>
+                        <Box width={'50px'} left top></Box>
+                        <Box width={'50px'} left top></Box>
+                     </FlexRow>
+                     <FlexRow>
+                        <Box width={'150px'} left top>Витамин В12</Box>
+                        <Box width={'50px'} left top></Box>
+                        <Box width={'50px'} left top></Box>
+                     </FlexRow>
+                     <FlexRow>
+                        <Box width={'150px'} left top>Фолийн хүчил</Box>
+                        <Box width={'50px'} left top></Box>
+                        <Box width={'50px'} left top ></Box>
+                     </FlexRow>
+                  </FlexCol>
+                  <FlexCol >
+                     <Box style={{ width: "400px", height: "150px" }} left top right>
+                     </Box>
+                  </FlexCol>
+               </div>
+               <FlexRow>
+                  <Box left top width={"50%"}>Бактер, вирус, маркерийн шинжилгээ:
+                     <TextWithUnderline></TextWithUnderline>
+                  </Box>
+                  <Box left top right width={"50%"}>Дүгнэлт:
+                     <TextWithUnderline></TextWithUnderline>
+                  </Box>
+               </FlexRow>
+               <Box left top right>Шээсэнд:</Box>
+               <div style={{ display: "flex" }}>
+                  <FlexCol>
+                     <FlexRow>
+                        <Box width={'150px'} left top>Огноо</Box>
+                        <Box width={'81px'} left top></Box>
+                        <Box width={'81px'} left top></Box>
+                     </FlexRow>
+                     <FlexRow>
+                        <Box width={'150px'} left top>Сахар</Box>
+                        <Box width={'81px'} left top></Box>
+                        <Box width={'81px'} left top></Box>
+                     </FlexRow>
+                     <FlexRow>
+                        <Box width={'150px'} left top>pH</Box>
+                        <Box width={'81px'} left top></Box>
+                        <Box width={'81px'} left top></Box>
+                     </FlexRow>
+                     <FlexRow>
+                        <Box width={'150px'} left top>Цагаан эс</Box>
+                        <Box width={'81px'} left top></Box>
+                        <Box width={'81px'} left top></Box>
+                     </FlexRow>
+                     <FlexRow>
+                        <Box width={'150px'} left top>Улаан эс</Box>
+                        <Box width={'81px'} left top></Box>
+                        <Box width={'81px'} left top></Box>
+                     </FlexRow>
+                     <FlexRow>
+                        <Box width={'150px'} left top>Хувийн жин</Box>
+                        <Box width={'81px'} left top></Box>
+                        <Box width={'81px'} left top></Box>
+                     </FlexRow>
+                     <FlexRow>
+                        <Box width={'150px'} left top>гемосидерин</Box>
+                        <Box width={'81px'} left top></Box>
+                        <Box width={'81px'} left top></Box>
+                     </FlexRow>
+                     <FlexRow>
+                        <Box width={'150px'} left top>Бенс-жонс уураг</Box>
+                        <Box width={'81px'} left top></Box>
+                        <Box width={'81px'} left top ></Box>
+                     </FlexRow>
+                     <FlexRow>
+                        <Box width={'150px'} left top>Гемоглобин </Box>
+                        <Box width={'81px'} left top></Box>
+                        <Box width={'81px'} left top ></Box>
+                     </FlexRow>
+                  </FlexCol>
+                  <FlexCol >
+                     <Box style={{ width: "338px", height: "170px" }} left top right>
+                     </Box>
+                  </FlexCol>
+               </div>
+               <Box left top right>Цусанд:</Box>
+               <div style={{ display: "flex" }}>
+                  <FlexCol>
+                     <FlexRow>
+                        <Box width={'150px'} left top>Огноо</Box>
+                        <Box width={'81px'} left top></Box>
+                        <Box width={'81px'} left top></Box>
+                     </FlexRow>
+                     <FlexRow>
+                        <Box width={'150px'} left top>Кумбсын шууд урвал</Box>
+                        <Box width={'81px'} left top></Box>
+                        <Box width={'81px'} left top></Box>
+                     </FlexRow>
+                     <FlexRow>
+                        <Box width={'150px'} left top>Кумбсын шууд бус урвал</Box>
+                        <Box width={'81px'} left top></Box>
+                        <Box width={'81px'} left top></Box>
+                     </FlexRow>
+                  </FlexCol>
+                  <FlexCol >
+                     <Box style={{ width: "338px", height: "75px" }} left top right>
+                     </Box>
+                  </FlexCol>
+               </div>
+               <FlexRow>
+                  <Box left top width={"50%"}>
+                     Бусад(PCR, молекул генетик цитогенетик, урсгал
+                     цитометр):
+                     <TextWithUnderline>{ }</TextWithUnderline>
+                  </Box>
+                  <Box left top right width={"50%"}>Дүгнэлт<TextWithUnderline>{ }</TextWithUnderline>
+                  </Box>
+               </FlexRow>
+               <FlexRow>
+                  <Box left top right width={"50%"}>Иммунологи</Box>
+                  <Box top right width={"50%"}></Box>
+               </FlexRow>
+               <div style={{ display: "flex" }}>
+                  <FlexCol>
+                     <FlexRow>
+                        <Box width={'150px'} left top>Огноо</Box>
+                        <Box width={'81px'} left top></Box>
+                        <Box width={'81px'} left top></Box>
+                     </FlexRow>
+                     <FlexRow>
+                        <Box width={'150px'} left top>IgG</Box>
+                        <Box width={'81px'} left top></Box>
+                        <Box width={'81px'} left top></Box>
+                     </FlexRow>
+                     <FlexRow>
+                        <Box width={'150px'} left top>IgM</Box>
+                        <Box width={'81px'} left top></Box>
+                        <Box width={'81px'} left top></Box>
+                     </FlexRow>
+                     <FlexRow>
+                        <Box width={'150px'} left top>IgA</Box>
+                        <Box width={'81px'} left top></Box>
+                        <Box width={'81px'} left top></Box>
+                     </FlexRow>
+                  </FlexCol>
+                  <FlexCol >
+                     <Box style={{ width: "338px", height: "75px" }} left top right>
+                     </Box>
+                  </FlexCol>
+               </div>
+               <Box left top right style={{ height: "30px" }}>
+                  Үйл онош:
+                  <TextWithUnderline>{formData?.q}</TextWithUnderline>
+               </Box>
+               <Box left top right style={{ height: "100px" }}>
+                  Цусны бусад эмгэг өөрчлөлтүүд:
+                  <TextWithUnderline>{formData?.q}</TextWithUnderline>
+               </Box>
+               <Box left top right style={{ height: "100px" }}>
+                  Эмнэл зүйн онош:
+                  <TextWithUnderline>{formData?.q}</TextWithUnderline>
+               </Box>
+               <Box left top right style={{ height: "120px" }}>
+                  Зөвлөгөө, эмчилгээ:
+                  <TextWithUnderline>{formData?.q}</TextWithUnderline>
+               </Box>
+               <FlexRow>
+                  <Box style={{ height: "30px" }} left top bottom width={'30%'}>Эмчийн нэр:</Box>
+                  <Box style={{ height: "30px" }} top right bottom width={'30%'}>Гарын үсэг:</Box>
+                  <Box top right bottom width={"40%"} style={{ display: "flex", gap: "20px", justifyContent: "center", height: "30px" }}>
+                     <Paragraph>он</Paragraph>
+                     <Paragraph>сар</Paragraph>
+                     <Paragraph>өдөр</Paragraph>
+                  </Box>
+               </FlexRow>
             </div>
          </div>
-      </div>
+      </div >
    );
 };
 export default CT_1_Tsus;
